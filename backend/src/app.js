@@ -1,0 +1,36 @@
+import express from 'express'
+import cors from 'cors'
+import dotenv from 'dotenv'
+
+import authRoutes from './routes/auth.js'
+import productRoutes from './routes/products.js'
+import categoryRoutes from './routes/categories.js'
+import cartRoutes from './routes/cart.js'
+import orderRoutes from './routes/orders.js'
+import adminRoutes from './routes/admin.js'
+import blogRoutes from './routes/blogs.js'
+import paymentRoutes from './routes/payments.js'
+
+dotenv.config()
+
+const app = express()
+app.use(express.json({ limit: '1mb' }))
+// Allow common frontend dev ports; prefer explicit env but include 3001 fallback for port conflicts
+const allowedOrigins = [
+  process.env.FRONTEND_URL || 'http://localhost:3000',
+  'http://localhost:3001',
+]
+app.use(cors({ origin: allowedOrigins }))
+
+app.get('/health', (_, res) => res.json({ ok: true }))
+
+app.use('/api/auth', authRoutes)
+app.use('/api/products', productRoutes)
+app.use('/api/categories', categoryRoutes)
+app.use('/api/cart', cartRoutes)
+app.use('/api/orders', orderRoutes)
+app.use('/api/admin', adminRoutes)
+app.use('/api/blogs', blogRoutes)
+app.use('/api/payments', paymentRoutes)
+
+export default app
