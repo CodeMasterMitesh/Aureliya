@@ -56,3 +56,102 @@ r.post('/merge-cart', async (req, res) => {
 })
 
 export default r
+// Authenticated user profile endpoints
+r.get('/me', async (req, res) => {
+  try {
+    const header = req.headers.authorization || ''
+    const token = header.startsWith('Bearer ') ? header.slice(7) : null
+    if (!token) return res.status(401).json({ error: 'Unauthorized' })
+    const payload = jwt.verify(token, process.env.JWT_SECRET || 'dev_secret')
+    const user = await User.findById(payload.id).lean()
+    if (!user) return res.status(404).json({ error: 'User not found' })
+    const { _id, name, email, role, profileImage, addresses, createdAt } = user
+    return res.json({ id: _id, name, email, role, profileImage, addresses, createdAt })
+  } catch (e) {
+    return res.status(401).json({ error: 'Unauthorized' })
+  }
+})
+
+r.put('/me', async (req, res) => {
+  try {
+    const header = req.headers.authorization || ''
+    const token = header.startsWith('Bearer ') ? header.slice(7) : null
+    if (!token) return res.status(401).json({ error: 'Unauthorized' })
+    const payload = jwt.verify(token, process.env.JWT_SECRET || 'dev_secret')
+    const { name, email, profileImage } = req.body
+    const user = await User.findByIdAndUpdate(payload.id, { $set: { name, email, profileImage } }, { new: true })
+    return res.json({ id: user._id, name: user.name, email: user.email, role: user.role, profileImage: user.profileImage, addresses: user.addresses })
+  } catch (e) {
+    return res.status(400).json({ error: 'Update failed' })
+  }
+})
+
+r.put('/change-password', async (req, res) => {
+  try {
+    const header = req.headers.authorization || ''
+    const token = header.startsWith('Bearer ') ? header.slice(7) : null
+    if (!token) return res.status(401).json({ error: 'Unauthorized' })
+    const payload = jwt.verify(token, process.env.JWT_SECRET || 'dev_secret')
+    const { oldPassword, newPassword } = req.body
+    const user = await User.findById(payload.id)
+    if (!user) return res.status(404).json({ error: 'User not found' })
+    const ok = await user.comparePassword(oldPassword)
+    if (!ok) return res.status(400).json({ error: 'Invalid current password' })
+    user.password = newPassword
+    await user.save()
+    return res.json({ ok: true })
+  } catch (e) {
+    return res.status(400).json({ error: 'Change password failed' })
+  }
+})
+
+// Addresses
+r.post('/me/addresses', async (req, res) => {
+  try {
+    const header = req.headers.authorization || ''
+    const token = header.startsWith('Bearer ') ? header.slice(7) : null
+    if (!token) return res.status(401).json({ error: 'Unauthorized' })
+    const payload = jwt.verify(token, process.env.JWT_SECRET || 'dev_secret')
+    const user = await User.findById(payload.id)
+    if (!user) return res.status(404).json({ error: 'User not found' })
+    user.addresses.push(req.body)
+    await user.save()
+    res.status(201).json(user.addresses[user.addresses.length - 1])
+  } catch (e) {
+    res.status(400).json({ error: 'Add address failed' })
+  }
+})
+
+r.put('/me/addresses/:id', async (req, res) => {
+  try {
+    const header = req.headers.authorization || ''
+    const token = header.startsWith('Bearer ') ? header.slice(7) : null
+    if (!token) return res.status(401).json({ error: 'Unauthorized' })
+    const payload = jwt.verify(token, process.env.JWT_SECRET || 'dev_secret')
+    const user = await User.findById(payload.id)
+    const addr = user.addresses.id(req.params.id)
+    if (!addr) return res.status(404).json({ error: 'Address not found' })
+    Object.assign(addr, req.body)
+    await user.save()
+    res.json(addr)
+  } catch (e) {
+    res.status(400).json({ error: 'Update address failed' })
+  }
+})
+
+r.delete('/me/addresses/:id', async (req, res) => {
+  try {
+    const header = req.headers.authorization || ''
+    const token = header.startsWith('Bearer ') ? header.slice(7) : null
+    if (!token) return res.status(401).json({ error: 'Unauthorized' })
+    const payload = jwt.verify(token, process.env.JWT_SECRET || 'dev_secret')
+    const user = await User.findById(payload.id)
+    const addr = user.addresses.id(req.params.id)
+    if (!addr) return res.status(404).json({ error: 'Address not found' })
+    addr.deleteOne()
+    await user.save()
+    res.json({ ok: true })
+  } catch (e) {
+    res.status(400).json({ error: 'Delete address failed' })
+  }
+})

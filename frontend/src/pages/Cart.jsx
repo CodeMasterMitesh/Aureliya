@@ -1,9 +1,12 @@
-import { useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import Button from '../components/ui/Button.jsx'
 import { useCart } from '../store/cart.js'
 import { useAuth } from '../store/auth.js'
 import { fetchCart, addToCart, setCartQty as apiSetQty, clearCart as apiClear } from '../api/cart.js'
+import api from '../api/axios.js'
+import { login, register } from '../api/auth.js'
+import { fetchProduct } from '../api/products.js'
 
 export default function Cart() {
   const items = useCart((s) => s.items)
@@ -14,6 +17,12 @@ export default function Cart() {
   const clear = useCart((s) => s.clear)
   const total = useCart((s) => s.total())
   const token = useAuth((s)=>s.token)
+  // const authUser = useAuth((s)=>s.user)
+  const setAuth = useAuth((s)=>s.login)
+  const navigate = useNavigate()
+  const [loginOpen, setLoginOpen] = useState(false)
+  const [mode, setMode] = useState('login')
+  const [form, setForm] = useState({ name: '', email: '', password: '' })
 
   useEffect(()=>{
     if (!token) return
@@ -77,9 +86,69 @@ export default function Cart() {
               <span>Total</span>
               <span>₹{total.toLocaleString('en-IN')}</span>
             </div>
-            <Button as={Link} to="/checkout" variant="solid" className="mt-6 w-full">Checkout</Button>
+            <Button
+              variant="solid"
+              className="mt-6 w-full"
+              onClick={async()=>{
+                if (!token){ setLoginOpen(true); return }
+                navigate('/checkout')
+              }}
+            >
+              Checkout
+            </Button>
             <button className="mt-3 w-full text-sm text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300" onClick={async()=>{ if (token) await apiClear(); clear() }}>Clear cart</button>
           </aside>
+        </div>
+      )}
+      {/* Auth Modal for checkout */}
+      {loginOpen && (
+        <div role="dialog" aria-modal="true" className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <button className="absolute inset-0 bg-black/50" aria-label="Close" onClick={()=>setLoginOpen(false)} />
+          <div className="relative z-10 w-full max-w-md rounded-xl border border-neutral-200/70 dark:border-neutral-800 bg-white dark:bg-neutral-950 p-6">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-semibold">{mode==='login' ? 'Login' : 'Register'}</h3>
+              <button className="text-sm text-blue-600" onClick={()=>setMode(mode==='login' ? 'register' : 'login')}>
+                {mode==='login' ? 'Create account' : 'Have an account? Login'}
+              </button>
+            </div>
+            <form className="mt-4 grid gap-3" onSubmit={async(e)=>{
+              e.preventDefault()
+              try {
+                let data
+                if (mode==='login') {
+                  data = await login({ email: form.email, password: form.password })
+                } else {
+                  data = await register({ name: form.name, email: form.email, password: form.password })
+                }
+                // Save auth in store
+                setAuth(data)
+                // Merge local cart to server
+                const itemsLocal = items
+                const payload = await Promise.all(itemsLocal.map(async it=>{
+                  const p = await fetchProduct(it.slug)
+                  return { product: p._id, qty: it.qty || 1, price: it.price || 0 }
+                }))
+                if (payload.length > 0) {
+                  await api.post('/auth/merge-cart', { userId: data.user.id, items: payload })
+                }
+                // Refresh server cart and hydrate
+                const serverCart = await fetchCart()
+                const mapped = (serverCart.items||[]).map(it=>({ slug: it.product.slug, title: it.product.title, image: it.product.image, price: it.product.price, qty: it.qty }))
+                setItems(mapped)
+                setLoginOpen(false)
+                navigate('/checkout')
+              } catch (err) {
+                alert('Authentication failed')
+              }
+            }}>
+              {mode==='register' && (
+                <input value={form.name} onChange={(e)=>setForm({...form, name: e.target.value})} placeholder="Name" className="rounded-md border border-neutral-300 dark:border-neutral-700 bg-transparent px-3 py-2 text-sm" required />
+              )}
+              <input type="email" value={form.email} onChange={(e)=>setForm({...form, email: e.target.value})} placeholder="Email" className="rounded-md border border-neutral-300 dark:border-neutral-700 bg-transparent px-3 py-2 text-sm" required />
+              <input type="password" value={form.password} onChange={(e)=>setForm({...form, password: e.target.value})} placeholder="Password" className="rounded-md border border-neutral-300 dark:border-neutral-700 bg-transparent px-3 py-2 text-sm" required />
+              <Button type="submit" variant="solid">{mode==='login' ? 'Login' : 'Register'}</Button>
+            </form>
+          </div>
         </div>
       )}
     </section>

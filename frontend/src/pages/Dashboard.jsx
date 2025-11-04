@@ -12,17 +12,21 @@ export default function Dashboard() {
   const [stats, setStats] = useState(null)
   const [form, setForm] = useState({ title: '', slug: '', price: 999, category: '', image: '' })
   const [cats, setCats] = useState([])
+  const [orders, setOrders] = useState([])
+  const [loadingOrders, setLoadingOrders] = useState(false)
 
   useEffect(()=>{
     if (!token) return
     ;(async()=>{
       try {
-        const [{ data: s }, { data: c }] = await Promise.all([
+        const [{ data: s }, { data: c }, { data: allOrders }] = await Promise.all([
           api.get('/admin/dashboard'),
-          api.get('/categories')
+          api.get('/categories'),
+          api.get('/admin/orders'),
         ])
         setStats(s)
         setCats(c.items || [])
+        setOrders(allOrders.items || [])
       } catch (e) {
         console.error('Admin fetch failed', e)
       }
@@ -41,6 +45,15 @@ export default function Dashboard() {
     await api.post('/products', body)
     alert('Product created')
     setForm({ title: '', slug: '', price: 999, category: '', image: '' })
+  }
+
+  async function updateOrderStatus(id, status){
+    try {
+      const { data } = await api.put(`/admin/orders/${id}`, { status })
+      setOrders(prev => prev.map(o => o._id === id ? data : o))
+    } catch (e) {
+      alert('Failed to update order')
+    }
   }
 
   return (
@@ -78,6 +91,45 @@ export default function Dashboard() {
               <input value={form.image} onChange={(e)=>setForm({...form, image: e.target.value})} placeholder="Image URL" className="rounded-md border border-neutral-300 dark:border-neutral-700 bg-transparent px-3 py-2 text-sm" />
               <Button type="submit" variant="solid">Create</Button>
             </form>
+          </div>
+          <div className="rounded-xl border border-neutral-200/70 dark:border-neutral-800 p-6 md:col-span-2">
+            <h2 className="text-lg font-semibold">Orders</h2>
+            {!orders.length ? (
+              <p className="mt-3 text-neutral-500 text-sm">No orders yet.</p>
+            ) : (
+              <div className="mt-4 overflow-auto">
+                <table className="min-w-full text-sm">
+                  <thead>
+                    <tr className="text-left border-b border-neutral-200 dark:border-neutral-800">
+                      <th className="py-2 pr-4">Order ID</th>
+                      <th className="py-2 pr-4">User</th>
+                      <th className="py-2 pr-4">Items</th>
+                      <th className="py-2 pr-4">Subtotal</th>
+                      <th className="py-2 pr-4">Status</th>
+                      <th className="py-2 pr-4">Payment</th>
+                      <th className="py-2 pr-4">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {orders.map(o => (
+                      <tr key={o._id} className="border-b border-neutral-100 dark:border-neutral-900">
+                        <td className="py-2 pr-4 font-mono text-xs">{o._id}</td>
+                        <td className="py-2 pr-4">{o.user}</td>
+                        <td className="py-2 pr-4">{o.items?.length || 0}</td>
+                        <td className="py-2 pr-4">₹{(o.subtotal||0).toLocaleString('en-IN')}</td>
+                        <td className="py-2 pr-4">
+                          <select value={o.status} onChange={(e)=>updateOrderStatus(o._id, e.target.value)} className="rounded-md border border-neutral-300 dark:border-neutral-700 bg-transparent px-2 py-1">
+                            {['pending','paid','shipped','delivered','cancelled'].map(s => <option key={s} value={s}>{s}</option>)}
+                          </select>
+                        </td>
+                        <td className="py-2 pr-4">{o.paymentStatus}</td>
+                        <td className="py-2 pr-4"><a className="text-blue-600 hover:underline" href={`#/orders/${o._id}`}>View</a></td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         </div>
       )}

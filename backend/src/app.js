@@ -1,4 +1,6 @@
 import express from 'express'
+import path from 'path'
+import { fileURLToPath } from 'url'
 import cors from 'cors'
 import dotenv from 'dotenv'
 
@@ -10,6 +12,7 @@ import orderRoutes from './routes/orders.js'
 import adminRoutes from './routes/admin.js'
 import blogRoutes from './routes/blogs.js'
 import paymentRoutes from './routes/payments.js'
+import uploadRoutes from './routes/uploads.js'
 
 dotenv.config()
 
@@ -24,6 +27,11 @@ app.use(cors({ origin: allowedOrigins }))
 
 app.get('/health', (_, res) => res.json({ ok: true }))
 
+// Static uploads directory
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const rootDir = path.resolve(__dirname, '..')
+app.use('/uploads', express.static(path.join(rootDir, 'uploads')))
+
 app.use('/api/auth', authRoutes)
 app.use('/api/products', productRoutes)
 app.use('/api/categories', categoryRoutes)
@@ -32,5 +40,6 @@ app.use('/api/orders', orderRoutes)
 app.use('/api/admin', adminRoutes)
 app.use('/api/blogs', blogRoutes)
 app.use('/api/payments', paymentRoutes)
+app.use('/api/uploads', uploadRoutes)
 
 export default app

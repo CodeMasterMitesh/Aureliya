@@ -37,6 +37,10 @@ r.put('/orders/:id', auth, admin, async (req, res) => {
   const { status } = req.body
   const allowed = ['pending', 'paid', 'shipped', 'delivered', 'cancelled']
   if (status && !allowed.includes(status)) return res.status(400).json({ error: 'Invalid status' })
-  const updated = await Order.findByIdAndUpdate(req.params.id, { status }, { new: true })
-  res.json(updated)
+  const order = await Order.findById(req.params.id)
+  if (!order) return res.status(404).json({ error: 'Order not found' })
+  order.status = status
+  order.timeline = [...(order.timeline||[]), { status, at: new Date() }]
+  await order.save()
+  res.json(order)
 })

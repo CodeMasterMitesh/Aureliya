@@ -1,11 +1,23 @@
 import mongoose from 'mongoose'
 import bcrypt from 'bcryptjs'
 
+const AddressSchema = new mongoose.Schema({
+  label: { type: String, default: 'Home' },
+  line1: { type: String, required: true },
+  city: { type: String, required: true },
+  zip: { type: String, required: true },
+  country: { type: String, default: 'India' },
+  phone: { type: String },
+  isDefault: { type: Boolean, default: false },
+}, { _id: true, timestamps: false })
+
 const UserSchema = new mongoose.Schema({
   name: { type: String, required: true, trim: true },
   email: { type: String, required: true, unique: true, lowercase: true, index: true },
   password: { type: String, required: true },
   role: { type: String, enum: ['user', 'admin'], default: 'user', index: true },
+  profileImage: { type: String },
+  addresses: [AddressSchema],
 }, { timestamps: true })
 
 UserSchema.pre('save', async function(next) {

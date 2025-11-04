@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import { auth } from '../middleware/auth.js'
 import Order from '../models/Order.js'
+import Cart from '../models/Cart.js'
 import Payment from '../models/Payment.js'
 
 const r = Router()
@@ -27,7 +28,10 @@ r.post('/confirm', auth, async (req, res) => {
   order.paymentStatus = 'paid'
   order.status = 'paid'
   order.paymentRef = payment.ref
+  order.timeline = [...(order.timeline||[]), { status: 'paid', at: new Date() }]
   await order.save()
+  // Clear cart after successful payment
+  await Cart.updateOne({ user: req.user.id }, { $set: { items: [] } })
   res.json({ ok: true })
 })
 
