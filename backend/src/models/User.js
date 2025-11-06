@@ -21,6 +21,19 @@ const UserSchema = new mongoose.Schema({
   branch: { type: mongoose.Schema.Types.ObjectId, ref: 'Branch' },
   profileImage: { type: String },
   addresses: [AddressSchema],
+  // Optional embedded ledger info snapshot (denormalized for quick access)
+  ledger: {
+    ledger_ref: { type: mongoose.Schema.Types.ObjectId, ref: 'Ledger' },
+    title: { type: String, trim: true },
+    account_group_id: { type: mongoose.Schema.Types.ObjectId, ref: 'AccountGroup' },
+    account_group_name: { type: String, trim: true },
+    ledger_type: { type: String, trim: true },
+    category: { type: String, trim: true },
+    gstin: { type: String, trim: true },
+    pan_no: { type: String, trim: true },
+    is_active: { type: Boolean, default: true },
+    updated_at: { type: Date },
+  },
 }, { timestamps: true })
 
 UserSchema.pre('save', async function(next) {

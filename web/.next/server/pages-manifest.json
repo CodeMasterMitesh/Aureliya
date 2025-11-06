@@ -1,1 +1,6 @@
-{"/admin/login":"pages/admin/login.html","/admin/dashboard":"pages/admin/dashboard.html","/_app":"pages/_app.js","/checkout":"pages/checkout.html","/menus/[main]/[...slug]":"pages/menus/[main]/[...slug].html","/_error":"pages/_error.js","/cart":"pages/cart.html","/":"pages/index.html","/orders/[id]":"pages/orders/[id].html","/orders/success":"pages/orders/success.html","/product/[slug]":"pages/product/[slug].html","/invoice/[id]":"pages/invoice/[id].html","/products":"pages/products.html","/profile":"pages/profile.html","/_document":"pages/_document.js","/404":"pages/404.html"}
+{
+  "/_app": "pages/_app.js",
+  "/_error": "pages/_error.js",
+  "/_document": "pages/_document.js",
+  "/admin/login": "pages/admin/login.js"
+}

@@ -1,0 +1,47 @@
+import mongoose from 'mongoose'
+
+const LedgerSchema = new mongoose.Schema({
+	ledger_type: { type: String, trim: true },
+	category: { type: String, trim: true },
+	account_group_id: { type: mongoose.Schema.Types.ObjectId, ref: 'AccountGroup', index: true },
+	account_group_name: { type: String, trim: true },
+	title: { type: String, trim: true, required: true, index: true },
+	company_name: { type: String, trim: true },
+	mobile_no: { type: String, trim: true },
+	email: { type: String, trim: true },
+	alias_name: { type: String, trim: true },
+	registration_type: { type: String, trim: true },
+	gstin: { type: String, trim: true },
+	pan_no: { type: String, trim: true },
+	birth_date: { type: Date },
+	swift_code: { type: String, trim: true },
+	ifsc_code: { type: String, trim: true },
+	bank_name: { type: String, trim: true },
+	branch_name: { type: String, trim: true },
+	account_no: { type: String, trim: true },
+	tan_no: { type: String, trim: true },
+	country: { type: String, trim: true },
+	tds_percentage: { type: Number, default: 0 },
+	address_line1: { type: String, trim: true },
+	address_line2: { type: String, trim: true },
+	address_line3: { type: String, trim: true },
+	address_line4: { type: String, trim: true },
+	address_line5: { type: String, trim: true },
+	area: { type: String, trim: true },
+	city: { type: String, trim: true },
+	pincode: { type: String, trim: true },
+	state: { type: String, trim: true },
+	is_active: { type: Boolean, default: true },
+	contact_person_name: { type: String, trim: true },
+	contact_person_number: { type: String, trim: true },
+	credit_period_days: { type: Number, default: 0 },
+	is_rcm_applicable: { type: Boolean, default: false },
+	is_msme_registered: { type: Boolean, default: false },
+	attachments: [{ type: String }],
+	company: { type: mongoose.Schema.Types.ObjectId, ref: 'Company', index: true },
+	branch: { type: mongoose.Schema.Types.ObjectId, ref: 'Branch', index: true },
+}, { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } })
+
+LedgerSchema.index({ title: 1, company: 1, branch: 1 })
+
+export default mongoose.model('Ledger', LedgerSchema)

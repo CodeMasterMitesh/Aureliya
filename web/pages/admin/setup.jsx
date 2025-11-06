@@ -10,6 +10,8 @@ const cards = [
   { href: '/admin/branches', title: 'Branches', desc: 'Manage branches under companies.', icon: '🏬' },
   { href: '/admin/main-menus', title: 'Main Menus', desc: 'Top-level navigation groups.', icon: '🧭' },
   { href: '/admin/sub-menus', title: 'Sub Menus', desc: 'Nested navigation items.', icon: '🗂️' },
+  { href: '/admin/masters/accounts/groups', title: 'Account Groups', desc: 'Ledger grouping (filtering and classification).', icon: '📁' },
+  { href: '/admin/masters/accounts/ledger', title: 'Ledgers', desc: 'Full ledger master data management.', icon: '📒' },
 ]
 
 export default function AdminSetup(){

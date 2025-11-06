@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
-const backendOrigin = process.env.BACKEND_ORIGIN || 'http://localhost:4100'
+// Default to 5000 for local dev since docker-compose maps backend to 5000
+const backendOrigin = process.env.BACKEND_ORIGIN || 'http://localhost:5000'
 
 const nextConfig = {
   reactStrictMode: true,

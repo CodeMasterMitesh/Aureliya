@@ -15,6 +15,8 @@ import paymentRoutes from './routes/payments.js'
 import uploadRoutes from './routes/uploads.js'
 import menuRoutes from './routes/menus.js'
 import companyRoutes from './routes/companies.js'
+import accountGroupRoutes from './routes/accountGroups.js'
+import ledgerRoutes from './routes/ledgers.js'
 
 dotenv.config()
 
@@ -45,5 +47,7 @@ app.use('/api/payments', paymentRoutes)
 app.use('/api/uploads', uploadRoutes)
 app.use('/api', menuRoutes)
 app.use('/api', companyRoutes)
+app.use('/api', accountGroupRoutes)
+app.use('/api', ledgerRoutes)
 
 export default app
