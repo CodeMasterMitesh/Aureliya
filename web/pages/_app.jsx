@@ -2,11 +2,13 @@ import '@/styles/globals.css'
 import TopBar from '@/components/TopBar'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
+import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { useAuth } from '@/src/store/auth'
 import { getMe } from '@/src/api/profile'
 
 export default function MyApp({ Component, pageProps }){
+  const router = useRouter()
   const setUser = useAuth((s)=>s.setUser)
   const token = useAuth((s)=>s.token)
 
@@ -25,6 +27,18 @@ export default function MyApp({ Component, pageProps }){
     hydrate()
     return ()=>{ mounted = false }
   }, [token, setUser])
+
+  // Hide global chrome on specific routes (e.g., admin login)
+  // Hide site chrome on all admin routes
+  const hideChrome = router.pathname.startsWith('/admin')
+
+  if (hideChrome) {
+    return (
+      <main className="min-h-screen">
+        <Component {...pageProps} />
+      </main>
+    )
+  }
 
   return (
     <div className="min-h-screen flex flex-col">

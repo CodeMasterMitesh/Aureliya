@@ -26,8 +26,12 @@ services:
         condition: service_healthy
       seed:
         condition: service_completed_successfully
+      seed_menus:
+        condition: service_completed_successfully
     ports:
       - "5000:5000"
+    volumes:
+      - ./industry_standard_menu.csv:/app/industry_standard_menu.csv:ro
     restart: unless-stopped
 
   web:
@@ -41,6 +45,8 @@ services:
     depends_on:
       backend:
         condition: service_healthy
+      seed_menus:
+        condition: service_completed_successfully
     ports:
       - "3000:3000"
     restart: unless-stopped
@@ -55,6 +61,23 @@ services:
       mongo:
         condition: service_healthy
     command: ["npm", "run", "seed"]
+    restart: "no"
+
+  seed_menus:
+    build:
+      context: ./backend
+    container_name: aureliya-seed-menus
+    environment:
+      MONGODB_URI: mongodb://mongo:27017/aureliya_ecom
+      CSV_PATH: /app/industry_standard_menu.csv
+    depends_on:
+      mongo:
+        condition: service_healthy
+      seed:
+        condition: service_completed_successfully
+    volumes:
+      - ./industry_standard_menu.csv:/app/industry_standard_menu.csv:ro
+    command: ["npm", "run", "seed:menus"]
     restart: "no"
 
 volumes:

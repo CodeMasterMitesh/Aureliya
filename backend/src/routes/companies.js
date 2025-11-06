@@ -10,14 +10,27 @@ function handleValidation(req, res){
   if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() })
 }
 
-// List companies
+// List companies with pagination and per-field filters
 r.get('/companies', [
-  query('search').optional().isString()
+  query('page').optional().isInt({ min:1 }),
+  query('limit').optional().isInt({ min:1, max:200 }),
+  query('search').optional().isString(),
+  query('name').optional().isString(),
+  query('code').optional().isString(),
 ], async (req, res) => {
   handleValidation(req,res)
-  const q = req.query.search ? { name: { $regex: req.query.search, $options: 'i' } } : {}
-  const items = await Company.find(q).sort({ name: 1 }).lean()
-  res.json({ items })
+  const page = parseInt(req.query.page||'1')
+  const limit = parseInt(req.query.limit||'20')
+  const { search, name, code } = req.query
+  const q = {}
+  if (search) q.$or = [{ name: { $regex: search, $options:'i' } }, { code: { $regex: search, $options:'i' } }]
+  if (name) q.name = { $regex: name, $options:'i' }
+  if (code) q.code = { $regex: code, $options:'i' }
+  const [items, total] = await Promise.all([
+    Company.find(q).sort({ name: 1 }).skip((page-1)*limit).limit(limit).lean(),
+    Company.countDocuments(q)
+  ])
+  res.json({ items, total, page, pages: Math.ceil(total/limit) })
 })
 
 // List branches by company
@@ -43,4 +56,105 @@ r.post('/branches', [
   res.status(201).json(b)
 })
 
+// Company detail
+r.get('/companies/:id', [param('id').isMongoId()], async (req,res)=>{
+  handleValidation(req,res)
+  const c = await Company.findById(req.params.id)
+  if (!c) return res.status(404).json({ error: 'Not found' })
+  res.json(c)
+})
+
+r.put('/companies/:id', [
+  param('id').isMongoId(),
+  body('name').optional().isString(),
+  body('code').optional().isString(),
+  body('address').optional().isString(),
+  body('meta').optional().isObject(),
+], async (req,res)=>{
+  handleValidation(req,res)
+  const c = await Company.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
+  if (!c) return res.status(404).json({ error: 'Not found' })
+  res.json(c)
+})
+
+r.delete('/companies/:id', [param('id').isMongoId()], async (req,res)=>{
+  handleValidation(req,res)
+  // Prevent delete if branches exist
+  const branches = await Branch.countDocuments({ company: req.params.id })
+  if (branches > 0) return res.status(400).json({ error: 'Delete branches first' })
+  const out = await Company.findByIdAndDelete(req.params.id)
+  if (!out) return res.status(404).json({ error: 'Not found' })
+  res.json({ ok: true })
+})
+
+// Multi-delete companies
+r.delete('/companies', [body('ids').isArray({ min:1 })], async (req,res)=>{
+  handleValidation(req,res)
+  const ids = req.body.ids
+  const blocked = await Branch.find({ company: { $in: ids } }).limit(1).lean()
+  if (blocked.length) return res.status(400).json({ error: 'Some companies have branches. Delete branches first.' })
+  await Company.deleteMany({ _id: { $in: ids } })
+  res.json({ ok: true })
+})
+
+// Branches listing (paginated)
+r.get('/branches', [
+  query('page').optional().isInt({ min:1 }),
+  query('limit').optional().isInt({ min:1, max:200 }),
+  query('search').optional().isString(),
+  query('name').optional().isString(),
+  query('code').optional().isString(),
+  query('company').optional().isMongoId(),
+], async (req,res)=>{
+  handleValidation(req,res)
+  const page = parseInt(req.query.page||'1')
+  const limit = parseInt(req.query.limit||'20')
+  const { search, name, code, company } = req.query
+  const q = {}
+  if (company) q.company = company
+  if (search) q.$or = [{ name: { $regex: search, $options:'i' } }, { code: { $regex: search, $options:'i' } }]
+  if (name) q.name = { $regex: name, $options:'i' }
+  if (code) q.code = { $regex: code, $options:'i' }
+  const [items, total] = await Promise.all([
+    Branch.find(q).sort({ name: 1 }).skip((page-1)*limit).limit(limit).populate('company','name code').lean(),
+    Branch.countDocuments(q)
+  ])
+  res.json({ items, total, page, pages: Math.ceil(total/limit) })
+})
+
+// Branch detail
+r.get('/branches/:id', [param('id').isMongoId()], async (req,res)=>{
+  handleValidation(req,res)
+  const b = await Branch.findById(req.params.id)
+  if (!b) return res.status(404).json({ error: 'Not found' })
+  res.json(b)
+})
+
+r.put('/branches/:id', [
+  param('id').isMongoId(),
+  body('company').optional().isMongoId(),
+  body('name').optional().isString(),
+  body('code').optional().isString(),
+  body('address').optional().isString(),
+  body('meta').optional().isObject(),
+], async (req,res)=>{
+  handleValidation(req,res)
+  const b = await Branch.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
+  if (!b) return res.status(404).json({ error: 'Not found' })
+  res.json(b)
+})
+
+r.delete('/branches/:id', [param('id').isMongoId()], async (req,res)=>{
+  handleValidation(req,res)
+  const out = await Branch.findByIdAndDelete(req.params.id)
+  if (!out) return res.status(404).json({ error: 'Not found' })
+  res.json({ ok: true })
+})
+
+// Multi-delete branches
+r.delete('/branches', [body('ids').isArray({ min:1 })], async (req,res)=>{
+  handleValidation(req,res)
+  await Branch.deleteMany({ _id: { $in: req.body.ids } })
+  res.json({ ok: true })
+})
 export default r

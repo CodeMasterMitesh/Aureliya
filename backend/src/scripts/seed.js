@@ -17,12 +17,22 @@ async function run(){
   const existing = await Product.countDocuments()
   if (existing > 0){
     console.log('Seed skipped: products already exist.')
+    // Ensure default company/branch exist
+    let company = await Company.findOne({ name: 'Aureliya Inc' })
+    if (!company) company = await Company.create({ name: 'Aureliya Inc', code: 'AUR' })
+    let branch = await Branch.findOne({ company: company._id, name: 'HQ' })
+    if (!branch) branch = await Branch.create({ company: company._id, name: 'HQ', code: 'HQ' })
     // Ensure admin user/cart still exist
     const adminEmail = 'admin@aureliya.test'
     let admin = await User.findOne({ email: adminEmail })
     if (!admin){
-      admin = await User.create({ name: 'Admin', email: adminEmail, password: 'admin123', role: 'admin' })
+      admin = await User.create({ name: 'Admin', email: adminEmail, password: 'admin123', role: 'admin', username: 'admin', company: company._id, branch: branch._id })
       console.log('Created admin user:', adminEmail, 'password: admin123')
+    }
+    if (!admin.company || !admin.branch){
+      admin.company = company._id
+      admin.branch = branch._id
+      await admin.save()
     }
     const adminCart = await Cart.findOne({ user: admin._id })
     if (!adminCart) await Cart.create({ user: admin._id, items: [] })

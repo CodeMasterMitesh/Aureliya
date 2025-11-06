@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
 import Sidebar from '../../components/Sidebar'
+import AdminTopBar from '../../components/AdminTopBar'
 import { adminDashboard } from '../../src/api/admin'
+import { useAuth } from '../../src/store/auth'
 
 function BarChart({ data }){
   // data: [{ day, total }]
@@ -35,15 +38,37 @@ function Donut({ data }){
 
 export default function AdminDashboard(){
   const [data, setData] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const router = useRouter()
+  const token = useAuth(s=>s.token)
 
   useEffect(()=>{
-    adminDashboard().then(setData).catch(()=>{})
-  }, [])
+    let mounted = true
+    async function load(){
+      // if no token at all, send to login
+      if (!token) { router.replace('/admin/login'); return }
+      try {
+        const d = await adminDashboard()
+        if (mounted) setData(d)
+      } catch (e){
+        const code = e?.response?.status
+        if (code === 401 || code === 403) router.replace('/admin/login')
+      } finally {
+        if (mounted) setLoading(false)
+      }
+    }
+    load()
+    return ()=>{ mounted = false }
+  }, [token])
+
+  if (loading) return <div className="min-h-[70vh] flex items-center justify-center">Loading...</div>
 
   return (
     <div className="min-h-[70vh] flex">
       <Sidebar />
-      <main className="flex-1 p-4 space-y-4">
+      <main className="flex-1">
+        <AdminTopBar />
+        <div className="p-4 space-y-4">
         <h1 className="text-2xl font-semibold">Admin Dashboard</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           <div className="p-4 border rounded bg-white">
@@ -73,6 +98,7 @@ export default function AdminDashboard(){
             <div className="font-semibold mb-2">Orders by Status</div>
             {data ? <Donut data={data.charts.ordersByStatus} /> : <div className="h-40 bg-gray-50 rounded" />}
           </div>
+        </div>
         </div>
       </main>
     </div>

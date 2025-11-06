@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { fetchCompanies, fetchBranches } from '../../src/api/companies'
 import api from '../../src/api/axios'
+import { useAuth } from '../../src/store/auth'
 
 export default function AdminLogin(){
   const router = useRouter()
+  const loginStore = useAuth(s=>s.login)
   const [companies, setCompanies] = useState([])
   const [branches, setBranches] = useState([])
   const [form, setForm] = useState({ identifier:'', password:'', companyId:'', branchId:'' })
@@ -25,7 +27,8 @@ export default function AdminLogin(){
     setLoading(true); setError('')
     try {
       const { data } = await api.post('/auth/login', form)
-      localStorage.setItem('access_token', data.token)
+      // set token in store and localStorage
+      loginStore({ user: data.user, token: data.token })
       router.push('/admin/dashboard')
     } catch (e) {
       setError(e?.response?.data?.error || 'Login failed')

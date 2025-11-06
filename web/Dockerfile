@@ -2,7 +2,8 @@
 FROM node:18-alpine AS deps
 WORKDIR /app
 COPY package.json package-lock.json* ./
-RUN npm ci
+# Use npm ci when lockfile matches; fall back to npm install if dependency additions not yet reflected.
+RUN npm ci || npm install --no-audit --no-fund
 
 FROM node:18-alpine AS builder
 WORKDIR /app

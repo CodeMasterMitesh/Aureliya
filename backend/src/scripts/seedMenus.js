@@ -1,6 +1,7 @@
 import dotenv from 'dotenv'
 import fs from 'fs'
 import path from 'path'
+import { fileURLToPath } from 'url'
 import mongoose from 'mongoose'
 import MainMenu from '../models/MainMenu.js'
 import SubMenu from '../models/SubMenu.js'
@@ -19,11 +20,25 @@ function slugify(str=''){
 }
 
 async function main(){
-  const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../../..')
-  // Windows path fix
-  const csvPath = path.resolve(root, 'industry_standard_menu.csv')
-  if (!fs.existsSync(csvPath)) {
-    console.error('CSV not found at', csvPath)
+  const __filename = fileURLToPath(import.meta.url)
+  const __dirname = path.dirname(__filename)
+  const repoRoot = path.resolve(__dirname, '../../..')
+
+  // Resolve CSV via priority: env CSV_PATH -> /app/industry_standard_menu.csv (container mount) -> repo root
+  const tryPaths = [
+    process.env.CSV_PATH,
+    '/app/industry_standard_menu.csv',
+    path.resolve(repoRoot, 'industry_standard_menu.csv')
+  ].filter(Boolean)
+
+  let csvPath = null
+  for (const p of tryPaths){
+    try { if (fs.existsSync(p)) { csvPath = p; break } } catch {}
+  }
+
+  if (!csvPath) {
+    console.error('CSV not found. Tried paths:', tryPaths.join(', '))
+    console.error('Hint: mount the CSV into the backend container or set CSV_PATH env.')
     process.exit(1)
   }
   await mongoose.connect(MONGODB_URI)
