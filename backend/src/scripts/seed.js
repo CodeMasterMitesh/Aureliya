@@ -4,6 +4,8 @@ import Category from '../models/Category.js'
 import Product from '../models/Product.js'
 import Blog from '../models/Blog.js'
 import User from '../models/User.js'
+import Company from '../models/Company.js'
+import Branch from '../models/Branch.js'
 import Cart from '../models/Cart.js'
 
 dotenv.config()
@@ -59,7 +61,12 @@ async function run(){
   const adminEmail = 'admin@aureliya.test'
   let admin = await User.findOne({ email: adminEmail })
   if (!admin){
-    admin = await User.create({ name: 'Admin', email: adminEmail, password: 'admin123', role: 'admin' })
+    // Ensure a default company/branch exist
+    let company = await Company.findOne({ name: 'Aureliya Inc' })
+    if (!company) company = await Company.create({ name: 'Aureliya Inc', code: 'AUR' })
+    let branch = await Branch.findOne({ company: company._id, name: 'HQ' })
+    if (!branch) branch = await Branch.create({ company: company._id, name: 'HQ', code: 'HQ' })
+    admin = await User.create({ name: 'Admin', email: adminEmail, password: 'admin123', role: 'admin', company: company._id, branch: branch._id, username: 'admin' })
     console.log('Created admin user:', adminEmail, 'password: admin123')
   }
   // Ensure admin has a cart document

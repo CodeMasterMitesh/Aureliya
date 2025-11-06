@@ -6,17 +6,51 @@ import Product from '../models/Product.js'
 const r = Router()
 
 r.get('/dashboard', auth, admin, async (req, res) => {
-  const since = new Date(Date.now() - 24 * 60 * 60 * 1000)
-  const [orders24, totalOrders, users, lowStock] = await Promise.all([
-    Order.aggregate([
-      { $match: { createdAt: { $gte: since } } },
-      { $group: { _id: null, sales: { $sum: '$subtotal' }, count: { $sum: 1 } } },
-    ]),
-    Order.countDocuments(),
+  const now = new Date()
+  const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+  const dayOfWeek = (startOfDay.getDay() + 6) % 7 // Monday=0
+  const startOfWeek = new Date(startOfDay); startOfWeek.setDate(startOfDay.getDate() - dayOfWeek)
+  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
+
+  const [todayAgg, weekAgg, monthAgg, users, lowStock, monthSeries, statusAgg] = await Promise.all([
+    Order.countDocuments({ createdAt: { $gte: startOfDay } }),
+    Order.countDocuments({ createdAt: { $gte: startOfWeek } }),
+    Order.countDocuments({ createdAt: { $gte: startOfMonth } }),
     User.countDocuments(),
     Product.countDocuments({ stock: { $lt: 5 } }),
+    // sales by day for current month
+    Order.aggregate([
+      { $match: { createdAt: { $gte: startOfMonth } } },
+      { $group: { _id: { d: { $dayOfMonth: '$createdAt' } }, total: { $sum: '$subtotal' }, count: { $sum: 1 } } },
+      { $sort: { '_id.d': 1 } }
+    ]),
+    // orders by status
+    Order.aggregate([
+      { $group: { _id: '$status', count: { $sum: 1 } } }
+    ])
   ])
-  res.json({ sales24h: orders24[0]?.sales || 0, orders: totalOrders, users, lowStock })
+
+  const daysInMonth = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate()
+  const series = Array.from({ length: daysInMonth }, (_, i) => ({ day: i+1, total: 0, count: 0 }))
+  for (const row of monthSeries) {
+    const index = row._id.d - 1
+    if (series[index]) { series[index].total = row.total; series[index].count = row.count }
+  }
+  const status = statusAgg.reduce((acc, s) => { acc[s._id||'unknown'] = s.count; return acc }, {})
+
+  res.json({
+    cards: {
+      todayOrders: todayAgg,
+      weekOrders: weekAgg,
+      monthOrders: monthAgg,
+      users,
+      lowStock
+    },
+    charts: {
+      salesByDay: series,
+      ordersByStatus: status
+    }
+  })
 })
 
 export default r

@@ -13,6 +13,8 @@ import adminRoutes from './routes/admin.js'
 import blogRoutes from './routes/blogs.js'
 import paymentRoutes from './routes/payments.js'
 import uploadRoutes from './routes/uploads.js'
+import menuRoutes from './routes/menus.js'
+import companyRoutes from './routes/companies.js'
 
 dotenv.config()
 
@@ -41,5 +43,7 @@ app.use('/api/admin', adminRoutes)
 app.use('/api/blogs', blogRoutes)
 app.use('/api/payments', paymentRoutes)
 app.use('/api/uploads', uploadRoutes)
+app.use('/api', menuRoutes)
+app.use('/api', companyRoutes)
 
 export default app

@@ -13,9 +13,12 @@ const AddressSchema = new mongoose.Schema({
 
 const UserSchema = new mongoose.Schema({
   name: { type: String, required: true, trim: true },
+  username: { type: String, trim: true, unique: true, sparse: true, index: true },
   email: { type: String, required: true, unique: true, lowercase: true, index: true },
   password: { type: String, required: true },
-  role: { type: String, enum: ['user', 'admin'], default: 'user', index: true },
+  role: { type: String, enum: ['user', 'employee', 'admin'], default: 'user', index: true },
+  company: { type: mongoose.Schema.Types.ObjectId, ref: 'Company' },
+  branch: { type: mongoose.Schema.Types.ObjectId, ref: 'Branch' },
   profileImage: { type: String },
   addresses: [AddressSchema],
 }, { timestamps: true })

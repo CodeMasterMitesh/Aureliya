@@ -1,0 +1,14 @@
+[
+  {
+    "main_menu": "Analytics",
+    "sub_menu": "",
+    "module_name": "Kanban",
+    "full_path": "/analytics/kanban"
+  },
+  {
+    "main_menu": "Accounts",
+    "sub_menu": "Purchase",
+    "module_name": "Inward Checklist",
+    "full_path": "/accounts/purchase/inward-checklist"
+  }
+]

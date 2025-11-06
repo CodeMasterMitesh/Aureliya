@@ -26,11 +26,28 @@ r.post('/register', async (req, res) => {
 
 r.post('/login', async (req, res) => {
   try {
-    const { email, password } = req.body
-    const user = await User.findOne({ email })
+    const { email, username, identifier, password, companyId, branchId } = req.body
+    const query = identifier ? { $or: [ { email: identifier }, { username: identifier } ] } : (username ? { username } : { email })
+    const user = await User.findOne(query)
     if (!user) return res.status(401).json({ error: 'Invalid credentials' })
     const ok = await user.comparePassword(password)
     if (!ok) return res.status(401).json({ error: 'Invalid credentials' })
+    // If company/branch provided, ensure match or set on user for employees
+    if (companyId || branchId) {
+      if (user.company && companyId && String(user.company) !== String(companyId)) {
+        return res.status(401).json({ error: 'Company mismatch' })
+      }
+      if (user.branch && branchId && String(user.branch) !== String(branchId)) {
+        return res.status(401).json({ error: 'Branch mismatch' })
+      }
+      // Optionally persist selection for employee users if empty
+      const updates = {}
+      if (!user.company && companyId) updates.company = companyId
+      if (!user.branch && branchId) updates.branch = branchId
+      if (Object.keys(updates).length) {
+        await User.updateOne({ _id: user._id }, { $set: updates })
+      }
+    }
     res.json(sign(user))
   } catch (e) {
     res.status(500).json({ error: 'Login failed' })

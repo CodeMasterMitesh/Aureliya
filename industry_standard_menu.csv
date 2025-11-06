@@ -1,0 +1,342 @@
+main_menu,sub_menu,module_name,full_path
+Analytics,,Kanban,/analytics/kanban
+Accounts,Purchase,Inward Checklist,/accounts/purchase/inward-checklist
+Accounts,,Raw Data Review,/accounts/raw-data-review
+Accounts,,Sample Receiving,/accounts/sample-receiving
+Masters,,Checklist Master,/masters/checklist-master
+Reports,Accounts,Material Indent Report,/reports/accounts/material-indent-report
+Reports,Accounts,Sales Return Report,/reports/accounts/sales-return-report
+Reports,Manufacturing,Material Wastage Report,/reports/manufacturing/material-wastage-report
+Reports,Manufacturing,Other Consumption Report,/reports/manufacturing/other-consumption-report
+Reports,Manufacturing,Stock Transfer Report,/reports/manufacturing/stock-transfer-report
+Reports,,Part Consesion Note Report,/reports/part-consesion-note-report
+Reports,,Instrument Checklist Report,/reports/instrument-checklist-report
+Reports,QC,RMG Inspection Report,/reports/qc/rmg-inspection-report
+Reports,,SOP Report,/reports/sop-report
+Reports,Manufacturing,Daily Production Without BOM Report,/reports/manufacturing/daily-production-without-bom-report
+Reports,Manufacturing,Work Order Report,/reports/manufacturing/work-order-report
+Reports,Sales,Customer Price List Report,/reports/sales/customer-price-list-report
+Reports,HR,Asset Tracker Report,/reports/hr/asset-tracker-report
+Reports,Inventory,Stock Journal Report,/reports/inventory/stock-journal-report
+Reports,Accounts,PDC Report,/reports/accounts/pdc-report
+Reports,Accounts,Debit Report,/reports/accounts/debit-report
+Reports,Accounts,Credit Report,/reports/accounts/credit-report
+Reports,Accounts,Journal Vouchar Report,/reports/accounts/journal-vouchar-report
+Reports,Accounts,Wastage Cheque Report,/reports/accounts/wastage-cheque-report
+Reports,Accounts,Multi Payment Report,/reports/accounts/multi-payment-report
+Reports,Accounts,Cheque Return Report,/reports/accounts/cheque-return-report
+Reports,Accounts,Cheque Report,/reports/accounts/cheque-report
+Reports,HR,Event Report,/reports/hr/event-report
+Reports,HR,Task Master Report,/reports/hr/task-master-report
+Reports,HR,Recruitment Report,/reports/hr/recruitment-report
+Reports,HR,Employee Performance Report,/reports/hr/employee-performance-report
+Reports,HR,Earning and Deduction Report,/reports/hr/earning-and-deduction-report
+Manufacturing,,Gate Pass,/manufacturing/gate-pass
+Reports,HR,Advance Report,/reports/hr/advance-report
+Reports,HR,Employee Report,/reports/hr/employee-report
+Reports,Manufacturing,Sampling Plan Report,/reports/manufacturing/sampling-plan-report
+Reports,HR,Employee History,/reports/hr/employee-history
+Reports,Manufacturing,Production Report,/reports/manufacturing/production-report
+Manufacturing,,Daily Production Mix,/manufacturing/daily-production-mix
+Masters,Manufacturing,BOM Mix,/masters/manufacturing/bom-mix
+Manufacturing,,Material Return,/manufacturing/material-return
+Reports,Inventory,Inward Register Report,/reports/inventory/inward-register-report
+HR,Payroll,Advance,/hr/payroll/advance
+Reports,HR,Activity Report,/reports/hr/activity-report
+Masters,Payroll,Earnings and Deductions,/masters/payroll/earnings-and-deductions
+Masters,HR,Earnings and deductions Head,/masters/hr/earnings-and-deductions-head
+Manufacturing,,Sampling Plan,/manufacturing/sampling-plan
+Tools,,Notification Master,/tools/notification-master
+Masters,Analytics,Test Group,/masters/analytics/test-group
+Manufacturing,,Instrument Checklist,/manufacturing/instrument-checklist
+Manufacturing,,Daily Production FG,/manufacturing/daily-production-fg
+Manufacturing,,RMG Inspection Checklist,/manufacturing/rmg-inspection-checklist
+Masters,Inventory,Flavor Master,/masters/inventory/flavor-master
+Masters,Inventory,Brand Master,/masters/inventory/brand-master
+Masters,Analytics,Machine Master,/masters/analytics/machine-master
+Manufacturing,,Daily Production Bulk,/manufacturing/daily-production-bulk
+Reports,Manufacturing,Stock Audit Report,/reports/manufacturing/stock-audit-report
+Reports,Manufacturing,BOM Expected Qty Report,/reports/manufacturing/bom-expected-qty-report
+Reports,Manufacturing,BOM Report,/reports/manufacturing/bom-report
+Reports,Manufacturing,Material Requirement Plan,/reports/manufacturing/material-requirement-plan
+Reports,Manufacturing,Daily Production Report,/reports/manufacturing/daily-production-report
+Reports,,Manufacturing,/reports/manufacturing
+Masters,Inventory,SET,/masters/inventory/set
+Masters,Accounts,Opening Balance,/masters/accounts/opening-balance
+Masters,Accounts,Vendor Evaluation,/masters/accounts/vendor-evaluation
+Masters,Accounts,Cheque Book,/masters/accounts/cheque-book
+Masters,Accounts,Cost Master,/masters/accounts/cost-master
+Masters,Accounts,Customer Product Master,/masters/accounts/customer-product-master
+Masters,Accounts,Vendor Category,/masters/accounts/vendor-category
+Masters,Accounts,Vendor Type,/masters/accounts/vendor-type
+Masters,Accounts,Vendor,/masters/accounts/vendor
+Masters,Accounts,Merge Ledger,/masters/accounts/merge-ledger
+Accounts,Purchase,Other Purchase Return,/accounts/purchase/other-purchase-return
+Accounts,Purchase,Other Purchase Order,/accounts/purchase/other-purchase-order
+Reports,MIS Report,Profit and Loss Statement,/reports/mis-report/profit-and-loss-statement
+Reports,MIS Report,DP LIMIT,/reports/mis-report/dp-limit
+Reports,MIS Report,Audit Trial,/reports/mis-report/audit-trial
+Reports,,MIS Report,/reports/mis-report
+Reports,Inventory,Employee Product Ledger,/reports/inventory/employee-product-ledger
+Reports,Inventory,Minimum Qty Report,/reports/inventory/minimum-qty-report
+Reports,Inventory,Employee Out Standing,/reports/inventory/employee-out-standing
+Reports,Inventory,Stock Report,/reports/inventory/stock-report
+Reports,Inventory,Stock Report With Location,/reports/inventory/stock-report-with-location
+Reports,Pending Report,Pending Material Request For Location,/reports/pending-report/pending-material-request-for-location
+Reports,Pending Report,Pending Material Request For Employee,/reports/pending-report/pending-material-request-for-employee
+Reports,Pending Report,Pending Purchase Bill,/reports/pending-report/pending-purchase-bill
+Reports,Pending Report,Pending Material Indent,/reports/pending-report/pending-material-indent
+Reports,Pending Report,Pending Purchase Order,/reports/pending-report/pending-purchase-order
+Reports,Pending Report,Pending Sales Order,/reports/pending-report/pending-sales-order
+Reports,Pending Report,Pending Sales Challan,/reports/pending-report/pending-sales-challan
+Reports,Pending Report,Pending Material Issue of Employee,/reports/pending-report/pending-material-issue-of-employee
+Reports,Pending Report,Pending Material Return,/reports/pending-report/pending-material-return
+Reports,,Pending Report,/reports/pending-report
+Reports,Accounts,Sales Order Report,/reports/accounts/sales-order-report
+Reports,Accounts,Other Purchase Return,/reports/accounts/other-purchase-return
+Reports,Accounts,IQC Report,/reports/accounts/iqc-report
+Reports,Accounts,Purchase Return Report,/reports/accounts/purchase-return-report
+Reports,Accounts,PO Vs GRN Report,/reports/accounts/po-vs-grn-report
+Reports,Accounts,Material Return Report,/reports/accounts/material-return-report
+Reports,Accounts,Purchase Order Report,/reports/accounts/purchase-order-report
+Reports,Accounts,Other Purchase Report,/reports/accounts/other-purchase-report
+Reports,Accounts,Supplier Price List Report,/reports/accounts/supplier-price-list-report
+Reports,Accounts,QC Report,/reports/accounts/qc-report
+Accounts,Sales,PDC List,/accounts/sales/pdc-list
+Accounts,Sales,Customer Price List,/accounts/sales/customer-price-list
+Accounts,Sales,Sales Bill,/accounts/sales/sales-bill
+Accounts,Sales,Other Sales,/accounts/sales/other-sales
+Accounts,Sales,Sales Return,/accounts/sales/sales-return
+Accounts,Sales,Sales Challan,/accounts/sales/sales-challan
+Accounts,Sales,Sales Order,/accounts/sales/sales-order
+Accounts,,Wastage Cheque,/accounts/wastage-cheque
+Accounts,,Stock Journal,/accounts/stock-journal
+Accounts,,Multi Receipt,/accounts/multi-receipt
+Accounts,,Multi Payment,/accounts/multi-payment
+Accounts,,Cheque Return,/accounts/cheque-return
+Accounts,Purchase,Purchase Return,/accounts/purchase/purchase-return
+Accounts,Purchase,Supplier Price List,/accounts/purchase/supplier-price-list
+Accounts,Purchase,Material indent,/accounts/purchase/material-indent
+Accounts,Purchase,Material Issue,/accounts/purchase/material-issue
+Accounts,Purchase,Material Request,/accounts/purchase/material-request
+Accounts,Purchase,IQC,/accounts/purchase/iqc
+Manufacturing,,Part Concession Note,/manufacturing/part-concession-note
+Manufacturing,,Stock Audit,/manufacturing/stock-audit
+Manufacturing,,Material Wastage,/manufacturing/material-wastage
+Manufacturing,,Other Consumption,/manufacturing/other-consumption
+Manufacturing,,Stock Transfer,/manufacturing/stock-transfer
+Manufacturing,,SOP,/manufacturing/sop
+QMS,CAPA,Incident Management,/qms/capa/incident-management
+Reports,Analytics,Pending Report For Invoice,/reports/analytics/pending-report-for-invoice
+Masters,Analytics,Reason Master,/masters/analytics/reason-master
+Analytics,Pre Analytics,Booking Approval,/analytics/pre-analytics/booking-approval
+Analytics,Analytics,Approve Test Result,/analytics/analytics/approve-test-result
+Masters,Analytics,Pack Size Master,/masters/analytics/pack-size-master
+Reports,Analytics,Booking Report,/reports/analytics/booking-report
+Analytics,Pre Analytics,Test Review,/analytics/pre-analytics/test-review
+Masters,Analytics,Report Type,/masters/analytics/report-type
+Masters,Analytics,Method Master,/masters/analytics/method-master
+Masters,Inventory,Opening Qty,/masters/inventory/opening-qty
+Masters,Analytics,Instrument Type,/masters/analytics/instrument-type
+Masters,Analytics,Description Master,/masters/analytics/description-master
+Masters,Analytics,COA Templates,/masters/analytics/coa-templates
+QMS,,Dashboard,/qms/dashboard
+Masters,HR,Education Master,/masters/hr/education-master
+Masters,HR,Assign Shift,/masters/hr/assign-shift
+Masters,HR,Shift Master,/masters/hr/shift-master
+Manufacturing,,Post Launch,/manufacturing/post-launch
+Manufacturing,,Market Launch,/manufacturing/market-launch
+Manufacturing,,Regulatory Approval,/manufacturing/regulatory-approval
+Manufacturing,,Feasibility Assessment,/manufacturing/feasibility-assessment
+HR,Performance Management,Employee Performance,/hr/performance-management/employee-performance
+Reports,,Sample Withdrawal Report,/reports/sample-withdrawal-report
+Reports,,Test Result Entry Report,/reports/test-result-entry-report
+Reports,,Sample Receipt Report,/reports/sample-receipt-report
+Reports,,Pull Cycle Report,/reports/pull-cycle-report
+Masters,Accounts,Courier Company Master,/masters/accounts/courier-company-master
+Masters,Inventory,Chamber Master,/masters/inventory/chamber-master
+Masters,,Check list,/masters/check-list
+Masters,,Machine Category,/masters/machine-category
+Masters,,Building Location,/masters/building-location
+Masters,,Frequency,/masters/frequency
+Masters,,Complain Type,/masters/complain-type
+Masters,,Parts,/masters/parts
+Masters,,Machines,/masters/machines
+Masters,,Parts Group,/masters/parts-group
+Masters,,Make Master,/masters/make-master
+CMMS,,Visitor,/cmms/visitor
+CMMS,,Jobwork Out,/cmms/jobwork-out
+CMMS,,Jobwork In,/cmms/jobwork-in
+CMMS,,Complain,/cmms/complain
+CMMS,,PM,/cmms/pm
+CMMS,,AMC,/cmms/amc
+QMS,Non Conformance Management,Non Conformance investigation,/qms/non-conformance-management/non-conformance-investigation
+QMS,Non Conformance Management,Non Conformance Reporting,/qms/non-conformance-management/non-conformance-reporting
+Analytics,,R&D,/analytics/r-d
+QMS,Pharmacovigilance,Risk Management,/qms/pharmacovigilance/risk-management
+QMS,Pharmacovigilance,Regulatory Reporting,/qms/pharmacovigilance/regulatory-reporting
+QMS,Pharmacovigilance,Signal Detection,/qms/pharmacovigilance/signal-detection
+QMS,Pharmacovigilance,Drug Management,/qms/pharmacovigilance/drug-management
+QMS,Pharmacovigilance,Adverse Event,/qms/pharmacovigilance/adverse-event
+QMS,Pharmacovigilance,Case Management,/qms/pharmacovigilance/case-management
+Analytics,Post Analytics,COA Dispatch,/analytics/post-analytics/coa-dispatch
+Analytics,Post Analytics,COA Preparation,/analytics/post-analytics/coa-preparation
+Analytics,Post Analytics,Result Data Review,/analytics/post-analytics/result-data-review
+Analytics,Analytics,Test Result,/analytics/analytics/test-result
+Analytics,Pre Analytics,Work Allocation,/analytics/pre-analytics/work-allocation
+Analytics,Pre Analytics,Booking Entry,/analytics/pre-analytics/booking-entry
+Analytics,,Analytics,/analytics/analytics
+Analytics,,Post Analytics,/analytics/post-analytics
+Analytics,,Dashboard,/analytics/dashboard
+Analytics,,Pre Analytics,/analytics/pre-analytics
+Analytics,,Reports,/analytics/reports
+Analytics,,Sample Details,/analytics/sample-details
+QMS,,Audit,/qms/audit
+QMS,CAPA,Preventive Action,/qms/capa/preventive-action
+QMS,,CAPA,/qms/capa
+QMS,,Document Management,/qms/document-management
+QMS,LMS,Training Schedule,/qms/lms/training-schedule
+QMS,,Pharmacovigilance,/qms/pharmacovigilance
+QMS,CAPA,OOS Root Cause Analysis,/qms/capa/oos-root-cause-analysis
+QMS,Audit,External Audit,/qms/audit/external-audit
+QMS,Audit,Internal Audit,/qms/audit/internal-audit
+QMS,,LMS,/qms/lms
+QMS,Document Management,Document Archival,/qms/document-management/document-archival
+QMS,Document Management,Document Issuance,/qms/document-management/document-issuance
+Masters,Inventory,Solution Management,/masters/inventory/solution-management
+Masters,,Condition Master,/masters/condition-master
+Masters,,Chamber Inventory,/masters/chamber-inventory
+QMS,Document Management,Deviation Management,/qms/document-management/deviation-management
+QMS,,Non Conformance Management,/qms/non-conformance-management
+QMS,,Complaint Management,/qms/complaint-management
+QMS,Document Management,Change Control,/qms/document-management/change-control
+QMS,CAPA,Corrective Actions,/qms/capa/corrective-actions
+Masters,,Study Master,/masters/study-master
+Reports,,Test Result Report,/reports/test-result-report
+Reports,,Storage Condition Report,/reports/storage-condition-report
+Reports,,Product Stability Report,/reports/product-stability-report
+Masters,,Test Master,/masters/test-master
+Masters,,Storage Condition Master,/masters/storage-condition-master
+Masters,,Specification Master,/masters/specification-master
+Masters,,Product Master,/masters/product-master
+Masters,,Location Master,/masters/location-master
+Masters,Inventory,Test Master,/masters/inventory/test-master
+Masters,Inventory,Product Master,/masters/inventory/product-master
+Reports,Account Summary,Interest Calculator,/reports/account-summary/interest-calculator
+Reports,Account Summary,Cash Flow Report,/reports/account-summary/cash-flow-report
+Reports,Account Summary,GST Report,/reports/account-summary/gst-report
+Reports,Account Summary,Day Book,/reports/account-summary/day-book
+Reports,Account Summary,Profit Report,/reports/account-summary/profit-report
+Reports,,Account Summary,/reports/account-summary
+Masters,Accounts,Budget,/masters/accounts/budget
+CRM,,Dashboard,/crm/dashboard
+HR,,Dashboard,/hr/dashboard
+CRM,,Target,/crm/target
+CRM,,Comparison,/crm/comparison
+CRM,,Quotations,/crm/quotations
+CRM,,Inquiry,/crm/inquiry
+Masters,,Manufacturing,/masters/manufacturing
+Masters,Analytics,Study Code,/masters/analytics/study-code
+CRM,,Leads,/crm/leads
+Masters,,Inventory,/masters/inventory
+Masters,,Analytics,/masters/analytics
+Masters,,HR,/masters/hr
+Masters,,Accounts,/masters/accounts
+Masters,Inventory,Column Master,/masters/inventory/column-master
+Reports,Analytics,Chemist Test Start Report,/reports/analytics/chemist-test-start-report
+Reports,Analytics,Dispatch report,/reports/analytics/dispatch-report
+Reports,Account Summary,Einvoice Report,/reports/account-summary/einvoice-report
+Inventory,,QC,/inventory/qc
+Masters,Analytics,Raw Data Template,/masters/analytics/raw-data-template
+Masters,Inventory,Location,/masters/inventory/location
+Masters,Inventory,Category Master,/masters/inventory/category-master
+Reports,Inventory,Product Ledger,/reports/inventory/product-ledger
+Reports,Analytics,Chemist Test,/reports/analytics/chemist-test
+HR,,Employee Documents,/hr/employee-documents
+Reports,Analytics,Test Summary,/reports/analytics/test-summary
+Inventory,,Stock Audit,/inventory/stock-audit
+Inventory,,Material Wastage,/inventory/material-wastage
+Manufacturing,,Work Order,/manufacturing/work-order
+Masters,Manufacturing,BOM,/masters/manufacturing/bom
+Inventory,,Stock Transfer,/inventory/stock-transfer
+Masters,Inventory,Working  Standards,/masters/inventory/working-standards
+Reports,HR,User Activity,/reports/hr/user-activity
+Reports,HR,Leave Balance,/reports/hr/leave-balance
+Reports,HR,Salary Ledger,/reports/hr/salary-ledger
+Reports,HR,PF PT Statement,/reports/hr/pf-pt-statement
+HR,Payroll,Salary,/hr/payroll/salary
+Masters,HR,Opening Leave Balance,/masters/hr/opening-leave-balance
+HR,Payroll,Leaves,/hr/payroll/leaves
+Reports,Accounts,GRN Report,/reports/accounts/grn-report
+Reports,Accounts,Material Issue For Location,/reports/accounts/material-issue-for-location
+Reports,Accounts,Material Request For Location,/reports/accounts/material-request-for-location
+Accounts,Purchase,Other Purchase,/accounts/purchase/other-purchase
+HR,,Payroll,/hr/payroll
+Inventory,,Material Use,/inventory/material-use
+Reports,Analytics,Analysis Report,/reports/analytics/analysis-report
+Reports,Accounts,Sale Challan Report,/reports/accounts/sale-challan-report
+Reports,Accounts,Voucher Register,/reports/accounts/voucher-register
+Reports,Accounts,Receipt Report,/reports/accounts/receipt-report
+Reports,Pending Report,Pending Indent Report,/reports/pending-report/pending-indent-report
+Inventory,,Dashboard,/inventory/dashboard
+Reports,Accounts,Payment Report,/reports/accounts/payment-report
+Reports,Accounts,Sales Bill Report,/reports/accounts/sales-bill-report
+Masters,Accounts,HSN Master,/masters/accounts/hsn-master
+Accounts,,Finance,/accounts/finance
+Accounts,Finance,Debit Note,/accounts/finance/debit-note
+Accounts,Finance,Credit Note,/accounts/finance/credit-note
+Masters,Inventory,Unit Master,/masters/inventory/unit-master
+Accounts,Purchase,GRN,/accounts/purchase/grn
+Reports,Analytics,COA Release Report,/reports/analytics/coa-release-report
+Accounts,,Dashboard,/accounts/dashboard
+Accounts,Sales,Other Sales GST,/accounts/sales/other-sales-gst
+Accounts,Sales,Sales GST,/accounts/sales/sales-gst
+HR,Payroll,Attendance,/hr/payroll/attendance
+QMS,Audit,Audit Trial,/qms/audit/audit-trial
+Reports,Inventory,Material Issue Report,/reports/inventory/material-issue-report
+Reports,Inventory,Purchase Report,/reports/inventory/purchase-report
+Accounts,,Sales,/accounts/sales
+Reports,HR,Attendance Register,/reports/hr/attendance-register
+Reports,Pending Report,Pending Material Request,/reports/pending-report/pending-material-request
+Accounts,,Purchase,/accounts/purchase
+Accounts,Purchase,Purchase Order,/accounts/purchase/purchase-order
+Inventory,,Purchase Indent,/inventory/purchase-indent
+Reports,Analytics,Summary Report,/reports/analytics/summary-report
+Reports,Inventory,Stock Register,/reports/inventory/stock-register
+Masters,Inventory,Instruments,/masters/inventory/instruments
+Masters,Analytics,Test,/masters/analytics/test
+Masters,Analytics,Formula,/masters/analytics/formula
+Masters,Analytics,Products,/masters/analytics/products
+Masters,Analytics,Pharmacopeia,/masters/analytics/pharmacopeia
+Reports,,Inventory,/reports/inventory
+Reports,,Accounts,/reports/accounts
+Reports,,Analytics,/reports/analytics
+Reports,,HR,/reports/hr
+Masters,Inventory,Chemical,/masters/inventory/chemical
+Masters,Accounts,Bank Account Master,/masters/accounts/bank-account-master
+Masters,HR,Position Master,/masters/hr/position-master
+Masters,,Financial Year,/masters/financial-year
+Masters,HR,Department,/masters/hr/department
+Masters,,Branch,/masters/branch
+QMS,Document Management,Document Upload,/qms/document-management/document-upload
+Projects,,Bugs,/projects/bugs
+Reports,Accounts,Purchase Bill Report,/reports/accounts/purchase-bill-report
+Reports,Account Summary,Ledger Statement,/reports/account-summary/ledger-statement
+Reports,MIS Report,Trial Balance,/reports/mis-report/trial-balance
+Reports,Account Summary,Profit and Loss Statement,/reports/account-summary/profit-and-loss-statement
+Reports,MIS Report,Balance Sheet,/reports/mis-report/balance-sheet
+Accounts,Finance,Contra,/accounts/finance/contra
+Accounts,Finance,Journal Voucher,/accounts/finance/journal-voucher
+Accounts,Purchase,Purchase Bill,/accounts/purchase/purchase-bill
+Accounts,Sales,Receipt,/accounts/sales/receipt
+Accounts,Purchase,Payment,/accounts/purchase/payment
+Masters,Accounts,Ledger,/masters/accounts/ledger
+Masters,Accounts,Groups,/masters/accounts/groups
+HR,,Asset Tracker,/hr/asset-tracker
+HR,,Event,/hr/event
+HR,,Performance Management,/hr/performance-management
+HR,,Task,/hr/task
+HR,,Recruitment,/hr/recruitment
+Masters,HR,Holiday,/masters/hr/holiday
+Reports,HR,Salary Register,/reports/hr/salary-register
+HR,,Employee,/hr/employee
