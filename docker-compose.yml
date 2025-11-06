@@ -1,0 +1,48 @@
+services:
+  mongo:
+    image: mongo:6
+    container_name: aureliya-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "localhost:27017/test", "--eval", "db.runCommand({ ping: 1 }).ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+    container_name: aureliya-backend
+    environment:
+      PORT: 5000
+      MONGODB_URI: mongodb://mongo:27017/aureliya_ecom
+      FRONTEND_URL: http://localhost:3000
+    depends_on:
+      mongo:
+        condition: service_healthy
+    ports:
+      - "5000:5000"
+    restart: unless-stopped
+
+  web:
+    build:
+      context: ./web
+      args:
+        - BACKEND_ORIGIN=http://backend:5000
+    container_name: aureliya-web
+    environment:
+      BACKEND_ORIGIN: http://backend:5000
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+
+volumes:
+  mongo_data:
+    driver: local

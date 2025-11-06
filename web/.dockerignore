@@ -1,0 +1,12 @@
+# Ignore heavy and unneeded files for Docker build context
+node_modules
+.next
+out
+.env
+.env.*
+npm-debug.log*
+yarn-error.log*
+.git
+.gitignore
+Dockerfile*
+docker-compose*
