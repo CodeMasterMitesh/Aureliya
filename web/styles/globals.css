@@ -6,6 +6,14 @@
   --container-padding: 1rem;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
+:root {
+  --container-padding: 1rem;
+}
+
 .container {
   max-width: 1200px;
   margin-left: auto;

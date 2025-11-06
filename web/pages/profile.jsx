@@ -117,7 +117,7 @@ export default function Profile(){
                 <div className="h-16 w-16 rounded-full overflow-hidden bg-neutral-200">
                   {me?.profileImage ? (
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img src={me.profileImage} alt="avatar" className="h-full w-full object-cover" />
+                    <img src={me.profileImage?.startsWith('uploads/')? '/'+me.profileImage : me.profileImage} alt="avatar" className="h-full w-full object-cover" />
                   ) : null}
                 </div>
                 <div>

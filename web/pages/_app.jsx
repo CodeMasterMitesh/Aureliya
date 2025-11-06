@@ -1,4 +1,5 @@
 import '@/styles/globals.css'
+import TopBar from '@/components/TopBar'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import { useEffect } from 'react'
@@ -27,6 +28,7 @@ export default function MyApp({ Component, pageProps }){
 
   return (
     <div className="min-h-screen flex flex-col">
+      <TopBar />
       <Navbar />
       <main className="flex-1">
         <Component {...pageProps} />

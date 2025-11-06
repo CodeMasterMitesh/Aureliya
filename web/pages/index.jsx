@@ -3,6 +3,10 @@ import FeatureGrid from '@/components/FeatureGrid'
 import ProductCard from '@/components/ProductCard'
 import BlogPreview from '@/components/BlogPreview'
 import Reveal from '@/components/ui/Reveal'
+import CategoryStrip from '@/components/CategoryStrip'
+import ProductCarousel from '@/components/ProductCarousel'
+import BrandsStrip from '@/components/BrandsStrip'
+import NewsletterBar from '@/components/NewsletterBar'
 import { useEffect, useState } from 'react'
 import { fetchProducts } from '@/src/api/products'
 import { fetchBlogs } from '@/src/api/blogs'
@@ -33,27 +37,9 @@ export default function Home(){
   return (
     <>
       <BannerCarousel />
-      <Reveal as="section" className="container container-padding py-8">
-        <div className="flex items-end justify-between">
-          <h2 className="text-2xl font-semibold">Deal of the day</h2>
-          <a className="text-blue-600 hover:underline" href="/products">View all</a>
-        </div>
-        <div className="mt-6 grid gap-6 md:grid-cols-3">
-          <div className="md:col-span-1 rounded-2xl overflow-hidden border border-neutral-200/70 dark:border-neutral-800">
-            {loading ? (
-              <div className="aspect-square animate-pulse bg-neutral-100 dark:bg-neutral-900" />
-            ) : products[0] ? (
-              <ProductCard product={products[0]} />
-            ) : null}
-          </div>
-          <div className="md:col-span-2 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {loading && Array.from({ length: 6 }).map((_,i)=>(
-              <div key={i} className="h-64 rounded-xl border border-neutral-200/70 dark:border-neutral-800 animate-pulse bg-neutral-50 dark:bg-neutral-900" />
-            ))}
-            {!loading && products.slice(1,7).map(p => <ProductCard key={p.slug} product={p} />)}
-          </div>
-        </div>
-      </Reveal>
+      <CategoryStrip />
+      {!loading && <ProductCarousel title="New Arrivals" href="/products?sort=newest" products={products.slice(0,12)} />}
+      {!loading && <ProductCarousel title="Best Sellers" href="/products?sort=rating_desc" products={best.slice(0,12)} />}
       <Reveal as="section" className="container container-padding" delay={100}>
         <div className="grid gap-4 md:grid-cols-2">
           <a href="/products" className="group relative overflow-hidden rounded-2xl border border-neutral-200/70 dark:border-neutral-800">
@@ -76,19 +62,8 @@ export default function Home(){
           </a>
         </div>
       </Reveal>
-      <Reveal as="section" className="container container-padding py-8" delay={150}>
-        <div className="flex items-end justify-between">
-          <h2 className="text-2xl font-semibold">Best Sellers</h2>
-          <a className="text-blue-600 hover:underline" href="/products?sort=rating_desc">View all</a>
-        </div>
-        <div className="mt-6 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {loading && Array.from({ length: 8 }).map((_,i)=>(
-            <div key={i} className="h-64 rounded-xl border border-neutral-200/70 dark:border-neutral-800 animate-pulse bg-neutral-50 dark:bg-neutral-900" />
-          ))}
-          {!loading && best.map(p => <ProductCard key={p.slug} product={p} />)}
-        </div>
-      </Reveal>
       <FeatureGrid />
+      <BrandsStrip />
       <Reveal as="section" className="container container-padding py-8" delay={200}>
         <div className="flex items-end justify-between">
           <h2 className="text-2xl font-semibold">Featured Products</h2>
@@ -102,6 +77,7 @@ export default function Home(){
         </div>
       </Reveal>
       <Reveal as="div" delay={300}><BlogPreview posts={blogs} /></Reveal>
+      <NewsletterBar />
     </>
   )
 }

@@ -204,9 +204,17 @@ export default function Navbar() {
   )
 }
 
+function normalizeSrc(src){
+  if (!src) return src
+  // Ensure leading slash so Next rewrites /uploads correctly
+  if (src.startsWith('uploads/')) return '/' + src
+  return src
+}
+
 function Avatar({ src, name }){
   const size = 28
-  if (src) return <img src={src} alt={name||'avatar'} className="rounded-full object-cover" style={{ width:size, height:size }} />
+  const resolved = normalizeSrc(src)
+  if (resolved) return <img src={resolved} alt={name||'avatar'} className="rounded-full object-cover" style={{ width:size, height:size }} />
   const initial = (name||'?').trim().charAt(0).toUpperCase()
   return (
     <div className="rounded-full bg-neutral-200 dark:bg-neutral-700 flex items-center justify-center text-neutral-700 dark:text-neutral-100" style={{ width:size, height:size }}>

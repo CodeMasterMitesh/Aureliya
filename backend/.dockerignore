@@ -1,6 +1,7 @@
 # Ignore heavy and unneeded files for Docker build context
 node_modules
 coverage
+npm-cache
 npm-debug.log*
 yarn-error.log*
 .git
@@ -9,3 +10,14 @@ yarn-error.log*
 .env.*
 Dockerfile*
 docker-compose*
+logs
+tmp
+.npmrc
+npm-debug.log*
+yarn-error.log*
+.pnpm-store
+.vscode
+.cache
+.turbo
+.swc
+.scannerwork

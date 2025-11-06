@@ -4,14 +4,43 @@ import { useCart } from '@/src/store/cart'
 import Button from './ui/Button'
 
 function Stars({ value = 0 }) {
-  const v = Math.round(value)
-  return (
-    <div className="flex items-center gap-0.5 text-amber-500" aria-label={`${v} out of 5 stars`}>
-      {Array.from({ length: 5 }, (_, i) => (
-        <svg key={i} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className={`h-4 w-4 ${i < v ? 'opacity-100' : 'opacity-30'}`}>
-          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.802 2.036a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.802-2.036a1 1 0 00-1.176 0l-2.802 2.036c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.88 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+  const v = Math.max(0, Math.min(5, Number(value) || 0))
+  const full = Math.floor(v)
+  const hasHalf = v - full >= 0.5
+  const empty = 5 - full - (hasHalf ? 1 : 0)
+  const Star = ({ type, i }) => {
+    // type: 'full' | 'half' | 'empty'
+    if (type === 'half') {
+      return (
+        <svg key={`h${i}`} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="h-4 w-4 text-amber-500">
+          <defs>
+            <linearGradient id={`half-${i}`}>
+              <stop offset="50%" stopColor="currentColor"/>
+              <stop offset="50%" stopColor="transparent"/>
+            </linearGradient>
+          </defs>
+          <path fill={`url(#half-${i})`} stroke="currentColor" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
         </svg>
-      ))}
+      )
+    }
+    if (type === 'empty') {
+      return (
+        <svg key={`e${i}`} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="h-4 w-4 text-amber-500 opacity-30">
+          <path fill="currentColor" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+        </svg>
+      )
+    }
+    return (
+      <svg key={`f${i}`} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="h-4 w-4 text-amber-500">
+        <path fill="currentColor" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+      </svg>
+    )
+  }
+  return (
+    <div className="flex items-center gap-0.5" aria-label={`${v.toFixed(1)} out of 5 stars`}>
+      {Array.from({ length: full }).map((_, i) => <Star key={`sf${i}`} type="full" i={i} />)}
+      {hasHalf && <Star type="half" i={full} />}
+      {Array.from({ length: empty }).map((_, i) => <Star key={`se${i}`} type="empty" i={i} />)}
     </div>
   )
 }
@@ -31,15 +60,15 @@ export default function ProductCard({ product }) {
 
   return (
     <div className="group relative border border-neutral-200/70 dark:border-neutral-800 rounded-xl overflow-hidden">
-      <div className="aspect-square bg-neutral-100 dark:bg-neutral-900">
+      <div className="relative aspect-square bg-neutral-100 dark:bg-neutral-900">
         <img src={img} alt={product.title} className="h-full w-full object-cover" loading="lazy" />
-      </div>
-      <button type="button" aria-label="Add to wishlist" className="absolute top-3 right-3 rounded-full bg-white/90 dark:bg-neutral-900/90 border border-neutral-200/70 dark:border-neutral-800 p-2 shadow-sm hover:scale-105 transition">❤</button>
-      <div className="pointer-events-none absolute inset-0 flex items-end justify-center p-3 opacity-0 group-hover:opacity-100 transition">
-        <div className="pointer-events-auto flex gap-2">
-          <Button variant="solid" className="px-3 py-1.5" aria-label="Add to cart" onClick={() => add({ slug: product.slug, title: product.title, price: product.price, qty: 1, image: img })}>🛒 Add</Button>
-          <Button variant="outline" className="px-3 py-1.5" onClick={() => setQuick(true)} aria-label="Quick view">👁 Quick view</Button>
+        <div className="pointer-events-none absolute inset-0 flex items-end justify-center p-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-out">
+          <div className="pointer-events-auto flex gap-2">
+            <Button variant="solid" className="px-3 py-1.5" aria-label="Add to cart" onClick={() => add({ slug: product.slug, title: product.title, price: product.price, qty: 1, image: img })}>🛒 Add</Button>
+            <Button variant="outline" className="px-3 py-1.5" onClick={() => setQuick(true)} aria-label="Quick view">👁 Quick view</Button>
+          </div>
         </div>
+        <WishlistButton product={product} image={img} />
       </div>
       <div className="p-4">
         <Link href={`/product/${product.slug}`} className="font-medium group-hover:text-blue-600 line-clamp-1">{product.title}</Link>
@@ -74,3 +103,19 @@ export default function ProductCard({ product }) {
     </div>
   )
 }
+
+function WishlistButton({ product, image }){
+  const { toggle, has } = useWishlist()
+  const active = has(product.slug)
+  return (
+    <button
+      type="button"
+      aria-label="Add to wishlist"
+      aria-pressed={active}
+      onClick={(e)=>{ e.stopPropagation(); e.preventDefault(); toggle({ slug: product.slug, title: product.title, price: product.price, image }) }}
+      className={`absolute top-3 right-3 rounded-full border p-2 shadow-sm transition ${active ? 'bg-red-500 text-white border-red-600' : 'bg-white/90 dark:bg-neutral-900/90 text-neutral-800 dark:text-neutral-100 border-neutral-200/70 dark:border-neutral-800 hover:scale-105'}`}
+    >❤</button>
+  )
+}
+
+import { useWishlist } from '@/src/store/wishlist'

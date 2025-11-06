@@ -12,10 +12,23 @@ const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/aureli
 
 async function run(){
   await mongoose.connect(MONGODB_URI)
+  const existing = await Product.countDocuments()
+  if (existing > 0){
+    console.log('Seed skipped: products already exist.')
+    // Ensure admin user/cart still exist
+    const adminEmail = 'admin@aureliya.test'
+    let admin = await User.findOne({ email: adminEmail })
+    if (!admin){
+      admin = await User.create({ name: 'Admin', email: adminEmail, password: 'admin123', role: 'admin' })
+      console.log('Created admin user:', adminEmail, 'password: admin123')
+    }
+    const adminCart = await Cart.findOne({ user: admin._id })
+    if (!adminCart) await Cart.create({ user: admin._id, items: [] })
+    await mongoose.disconnect()
+    return
+  }
+
   console.log('Seeding database...')
-  await Promise.all([
-    Category.deleteMany({}), Product.deleteMany({}), Blog.deleteMany({}),
-  ])
 
   const catNames = ['men', 'women', 'kids', 'accessories', 'electronics']
   const cats = await Category.insertMany(catNames.map((c)=>({ name: c[0].toUpperCase()+c.slice(1), slug: c })))

@@ -24,6 +24,8 @@ services:
     depends_on:
       mongo:
         condition: service_healthy
+      seed:
+        condition: service_completed_successfully
     ports:
       - "5000:5000"
     restart: unless-stopped
@@ -42,6 +44,18 @@ services:
     ports:
       - "3000:3000"
     restart: unless-stopped
+
+  seed:
+    build:
+      context: ./backend
+    container_name: aureliya-seed
+    environment:
+      MONGODB_URI: mongodb://mongo:27017/aureliya_ecom
+    depends_on:
+      mongo:
+        condition: service_healthy
+    command: ["npm", "run", "seed"]
+    restart: "no"
 
 volumes:
   mongo_data:

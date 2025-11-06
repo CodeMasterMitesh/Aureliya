@@ -10,3 +10,9 @@ yarn-error.log*
 .gitignore
 Dockerfile*
 docker-compose*
+.vscode
+.cache
+.turbo
+.swc
+logs
+tmp
