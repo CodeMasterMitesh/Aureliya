@@ -14,7 +14,14 @@ export default function AdminLogin(){
   const [loading, setLoading] = useState(false)
 
   useEffect(()=>{
-    fetchCompanies().then(setCompanies).catch(()=>{})
+    async function init(){
+      try {
+        // Fetch CSRF token then companies
+        await api.get('/csrf')
+        fetchCompanies().then(setCompanies).catch(()=>{})
+      } catch (e){ /* ignore token fetch failure - login will fail gracefully */ }
+    }
+    init()
   }, [])
 
   useEffect(()=>{
@@ -26,9 +33,8 @@ export default function AdminLogin(){
     e.preventDefault()
     setLoading(true)
     try {
-      const { data } = await api.post('/auth/login', form)
-      // Store user data in session
-      loginStore({ user: data.user, token: data.token })
+  const { data } = await api.post('/auth/login', form)
+  loginStore({ user: data.user })
       
       // Show success alert
       await Swal.fire({

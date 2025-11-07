@@ -23,6 +23,10 @@ services:
       MONGODB_URI: mongodb://mongo:27017/aureliya_ecom
       FRONTEND_URL: http://localhost:3000
       NODE_ENV: development
+      JWT_SECRET: dev_jwt_secret_change
+      SESSION_SECRET: dev_session_secret_change
+      API_PREFIX: /api/v1
+      ENABLE_LEGACY_API: "false"
     depends_on:
       mongo:
         condition: service_healthy
@@ -33,7 +37,7 @@ services:
       - ./backend:/app:rw
       - /app/node_modules
       # The CSV for menu seeding is mounted only in the seed compose file
-    command: ["sh", "-c", "if [ ! -f node_modules/.bin/nodemon ]; then npm install; fi; npm run dev"]  # Ensure deps (including nodemon) are present in mounted volume if missing, then start with hot reload
+    command: ["sh", "-c", "npm install && npm run dev"]  # Always install to pick up new deps like helmet
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
@@ -52,6 +56,7 @@ services:
       BACKEND_ORIGIN: http://backend:5000
       NODE_ENV: development
       WATCHPACK_POLLING: "true"  # Enable polling for file changes in Docker
+      NEXT_PUBLIC_API_BASE_URL: /api/v1
     depends_on:
       backend:
         condition: service_healthy

@@ -2,7 +2,12 @@ import mongoose from 'mongoose'
 
 const SubMenuSchema = new mongoose.Schema(
   {
-    main_menu_id: { type: mongoose.Schema.Types.ObjectId, ref: 'MainMenu', required: true, index: true },
+    main_menu_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'MainMenu',
+      required: true,
+      index: true,
+    },
     parent_id: { type: mongoose.Schema.Types.ObjectId, ref: 'SubMenu', default: null, index: true },
     name: { type: String, required: true, trim: true },
     slug: { type: String, required: true, trim: true, index: true },

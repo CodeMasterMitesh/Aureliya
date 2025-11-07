@@ -9,7 +9,8 @@ r.get('/dashboard', auth, admin, async (req, res) => {
   const now = new Date()
   const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate())
   const dayOfWeek = (startOfDay.getDay() + 6) % 7 // Monday=0
-  const startOfWeek = new Date(startOfDay); startOfWeek.setDate(startOfDay.getDate() - dayOfWeek)
+  const startOfWeek = new Date(startOfDay)
+  startOfWeek.setDate(startOfDay.getDate() - dayOfWeek)
   const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
 
   const [todayAgg, weekAgg, monthAgg, users, lowStock, monthSeries, statusAgg] = await Promise.all([
@@ -21,22 +22,32 @@ r.get('/dashboard', auth, admin, async (req, res) => {
     // sales by day for current month
     Order.aggregate([
       { $match: { createdAt: { $gte: startOfMonth } } },
-      { $group: { _id: { d: { $dayOfMonth: '$createdAt' } }, total: { $sum: '$subtotal' }, count: { $sum: 1 } } },
-      { $sort: { '_id.d': 1 } }
+      {
+        $group: {
+          _id: { d: { $dayOfMonth: '$createdAt' } },
+          total: { $sum: '$subtotal' },
+          count: { $sum: 1 },
+        },
+      },
+      { $sort: { '_id.d': 1 } },
     ]),
     // orders by status
-    Order.aggregate([
-      { $group: { _id: '$status', count: { $sum: 1 } } }
-    ])
+    Order.aggregate([{ $group: { _id: '$status', count: { $sum: 1 } } }]),
   ])
 
-  const daysInMonth = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate()
-  const series = Array.from({ length: daysInMonth }, (_, i) => ({ day: i+1, total: 0, count: 0 }))
+  const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate()
+  const series = Array.from({ length: daysInMonth }, (_, i) => ({ day: i + 1, total: 0, count: 0 }))
   for (const row of monthSeries) {
     const index = row._id.d - 1
-    if (series[index]) { series[index].total = row.total; series[index].count = row.count }
+    if (series[index]) {
+      series[index].total = row.total
+      series[index].count = row.count
+    }
   }
-  const status = statusAgg.reduce((acc, s) => { acc[s._id||'unknown'] = s.count; return acc }, {})
+  const status = statusAgg.reduce((acc, s) => {
+    acc[s._id || 'unknown'] = s.count
+    return acc
+  }, {})
 
   res.json({
     cards: {
@@ -44,17 +55,17 @@ r.get('/dashboard', auth, admin, async (req, res) => {
       weekOrders: weekAgg,
       monthOrders: monthAgg,
       users,
-      lowStock
+      lowStock,
     },
     charts: {
       salesByDay: series,
-      ordersByStatus: status
-    }
+      ordersByStatus: status,
+    },
   })
 })
 
 export default r
- 
+
 // Admin: list users (basic)
 r.get('/users', auth, admin, async (req, res) => {
   const users = await User.find().select('name email role createdAt').sort({ createdAt: -1 }).lean()
@@ -74,7 +85,7 @@ r.put('/orders/:id', auth, admin, async (req, res) => {
   const order = await Order.findById(req.params.id)
   if (!order) return res.status(404).json({ error: 'Order not found' })
   order.status = status
-  order.timeline = [...(order.timeline||[]), { status, at: new Date() }]
+  order.timeline = [...(order.timeline || []), { status, at: new Date() }]
   await order.save()
   res.json(order)
 })

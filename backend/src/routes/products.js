@@ -2,10 +2,11 @@ import { Router } from 'express'
 import Product from '../models/Product.js'
 import Category from '../models/Category.js'
 import { admin, auth } from '../middleware/auth.js'
+import { AppError } from '../middleware/error.js'
 
 const r = Router()
 
-r.get('/', async (req, res) => {
+r.get('/', async (req, res, next) => {
   const { q, category, sort = 'newest' } = req.query
   const page = Math.max(1, parseInt(req.query.page || '1', 10))
   const limit = Math.max(1, Math.min(50, parseInt(req.query.limit || '12', 10)))
@@ -13,9 +14,13 @@ r.get('/', async (req, res) => {
   const find = {}
   if (q) find.$text = { $search: q }
   if (category) {
-    const cat = await Category.findOne({ slug: category.toLowerCase() })
-    if (cat) find.category = cat._id
-    else return res.json({ items: [], total: 0, page, limit, categories: [] })
+    try {
+      const cat = await Category.findOne({ slug: category.toLowerCase() })
+      if (cat) find.category = cat._id
+      else return res.json({ items: [], total: 0, page, limit, categories: [] })
+    } catch (e) {
+      return next(new AppError('Invalid category filter', 400, 'BAD_REQUEST'))
+    }
   }
 
   const sortMap = {
@@ -36,7 +41,7 @@ r.get('/', async (req, res) => {
     Category.find().select('name slug -_id').lean(),
   ])
 
-  const mapped = items.map(p => ({
+  const mapped = items.map((p) => ({
     _id: p._id,
     slug: p.slug,
     title: p.title,
@@ -47,11 +52,13 @@ r.get('/', async (req, res) => {
     createdAt: p.createdAt?.getTime?.() || Date.now(),
   }))
 
-  res.json({ items: mapped, total, page, limit, categories: categories.map(c=>c.slug) })
+  res.json({ items: mapped, total, page, limit, categories: categories.map((c) => c.slug) })
 })
 
 r.get('/:slug', async (req, res) => {
-  const p = await Product.findOne({ slug: req.params.slug }).populate('category', 'name slug').lean()
+  const p = await Product.findOne({ slug: req.params.slug })
+    .populate('category', 'name slug')
+    .lean()
   if (!p) return res.status(404).json({ error: 'Not found' })
   res.json({
     _id: p._id,
@@ -75,7 +82,15 @@ r.post('/', auth, admin, async (req, res) => {
     const cat = await Category.findOne({ slug: category })
     if (cat) catId = cat._id
   }
-  const p = await Product.create({ title, slug, price, category: catId, images, description, stock })
+  const p = await Product.create({
+    title,
+    slug,
+    price,
+    category: catId,
+    images,
+    description,
+    stock,
+  })
   res.status(201).json(p)
 })
 

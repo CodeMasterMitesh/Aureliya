@@ -2,21 +2,33 @@ import { Router } from 'express'
 import jwt from 'jsonwebtoken'
 import User from '../models/User.js'
 import Cart from '../models/Cart.js'
+import { auth } from '../middleware/auth.js'
+import { loginLimiter } from '../middleware/rateLimit.js'
 const r = Router()
 
-function sign(user, req){
-  const payload = { 
-    id: user._id, 
-    email: user.email, 
+function sign(user, req, res) {
+  const payload = {
+    id: user._id,
+    email: user.email,
     role: user.role,
     type: user.type || 'customer',
     name: user.name,
     username: user.username,
     company: user.company,
-    branch: user.branch
+    branch: user.branch,
   }
   const token = jwt.sign(payload, process.env.JWT_SECRET || 'dev_secret', { expiresIn: '7d' })
-  
+  // Also set secure HttpOnly cookie to move away from localStorage over time
+  if (res) {
+    const isProd = process.env.NODE_ENV === 'production'
+    res.cookie('access_token', token, {
+      httpOnly: true,
+      secure: isProd,
+      sameSite: 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    })
+  }
+
   // Store user data in session
   if (req && req.session) {
     req.session.user = {
@@ -28,10 +40,10 @@ function sign(user, req){
       username: user.username,
       company: user.company,
       branch: user.branch,
-      profileImage: user.profileImage
+      profileImage: user.profileImage,
     }
   }
-  
+
   return { token, user: payload }
 }
 
@@ -43,16 +55,20 @@ r.post('/register', async (req, res) => {
     if (exists) return res.status(400).json({ error: 'Email already registered' })
     const user = await User.create({ name, email, password })
     await Cart.create({ user: user._id, items: [] })
-    res.json(sign(user, req))
+    res.json(sign(user, req, res))
   } catch (e) {
     res.status(500).json({ error: 'Registration failed' })
   }
 })
 
-r.post('/login', async (req, res) => {
+r.post('/login', loginLimiter, async (req, res) => {
   try {
     const { email, username, identifier, password, companyId, branchId } = req.body
-    const query = identifier ? { $or: [ { email: identifier }, { username: identifier } ] } : (username ? { username } : { email })
+    const query = identifier
+      ? { $or: [{ email: identifier }, { username: identifier }] }
+      : username
+        ? { username }
+        : { email }
     const user = await User.findOne(query)
     if (!user) return res.status(401).json({ error: 'Invalid credentials' })
     const ok = await user.comparePassword(password)
@@ -73,7 +89,7 @@ r.post('/login', async (req, res) => {
         await User.updateOne({ _id: user._id }, { $set: updates })
       }
     }
-    res.json(sign(user, req))
+    res.json(sign(user, req, res))
   } catch (e) {
     res.status(500).json({ error: 'Login failed' })
   }
@@ -87,6 +103,7 @@ r.post('/logout', async (req, res) => {
           return res.status(500).json({ error: 'Logout failed' })
         }
         res.clearCookie('connect.sid')
+        res.clearCookie('access_token')
         res.json({ ok: true, message: 'Logged out successfully' })
       })
     } else {
@@ -104,7 +121,7 @@ r.post('/merge-cart', async (req, res) => {
     const cart = await Cart.findOne({ user: userId })
     if (!cart) return res.status(404).json({ error: 'Cart not found' })
     for (const it of items) {
-      const idx = cart.items.findIndex(x => String(x.product) === String(it.product))
+      const idx = cart.items.findIndex((x) => String(x.product) === String(it.product))
       if (idx >= 0) cart.items[idx].qty += it.qty || 1
       else cart.items.push({ product: it.product, qty: it.qty || 1, price: it.price || 0 })
     }
@@ -115,15 +132,10 @@ r.post('/merge-cart', async (req, res) => {
   }
 })
 
-export default r
 // Authenticated user profile endpoints
-r.get('/me', async (req, res) => {
+r.get('/me', auth, async (req, res) => {
   try {
-    const header = req.headers.authorization || ''
-    const token = header.startsWith('Bearer ') ? header.slice(7) : null
-    if (!token) return res.status(401).json({ error: 'Unauthorized' })
-    const payload = jwt.verify(token, process.env.JWT_SECRET || 'dev_secret')
-    const user = await User.findById(payload.id).lean()
+    const user = await User.findById(req.user.id).lean()
     if (!user) return res.status(404).json({ error: 'User not found' })
     const { _id, name, email, role, profileImage, addresses, createdAt } = user
     return res.json({ id: _id, name, email, role, profileImage, addresses, createdAt })
@@ -132,28 +144,31 @@ r.get('/me', async (req, res) => {
   }
 })
 
-r.put('/me', async (req, res) => {
+r.put('/me', auth, async (req, res) => {
   try {
-    const header = req.headers.authorization || ''
-    const token = header.startsWith('Bearer ') ? header.slice(7) : null
-    if (!token) return res.status(401).json({ error: 'Unauthorized' })
-    const payload = jwt.verify(token, process.env.JWT_SECRET || 'dev_secret')
     const { name, email, profileImage } = req.body
-    const user = await User.findByIdAndUpdate(payload.id, { $set: { name, email, profileImage } }, { new: true })
-    return res.json({ id: user._id, name: user.name, email: user.email, role: user.role, profileImage: user.profileImage, addresses: user.addresses })
+    const user = await User.findByIdAndUpdate(
+      req.user.id,
+      { $set: { name, email, profileImage } },
+      { new: true }
+    )
+    return res.json({
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      profileImage: user.profileImage,
+      addresses: user.addresses,
+    })
   } catch (e) {
     return res.status(400).json({ error: 'Update failed' })
   }
 })
 
-r.put('/change-password', async (req, res) => {
+r.put('/change-password', auth, async (req, res) => {
   try {
-    const header = req.headers.authorization || ''
-    const token = header.startsWith('Bearer ') ? header.slice(7) : null
-    if (!token) return res.status(401).json({ error: 'Unauthorized' })
-    const payload = jwt.verify(token, process.env.JWT_SECRET || 'dev_secret')
     const { oldPassword, newPassword } = req.body
-    const user = await User.findById(payload.id)
+    const user = await User.findById(req.user.id)
     if (!user) return res.status(404).json({ error: 'User not found' })
     const ok = await user.comparePassword(oldPassword)
     if (!ok) return res.status(400).json({ error: 'Invalid current password' })
@@ -166,13 +181,9 @@ r.put('/change-password', async (req, res) => {
 })
 
 // Addresses
-r.post('/me/addresses', async (req, res) => {
+r.post('/me/addresses', auth, async (req, res) => {
   try {
-    const header = req.headers.authorization || ''
-    const token = header.startsWith('Bearer ') ? header.slice(7) : null
-    if (!token) return res.status(401).json({ error: 'Unauthorized' })
-    const payload = jwt.verify(token, process.env.JWT_SECRET || 'dev_secret')
-    const user = await User.findById(payload.id)
+    const user = await User.findById(req.user.id)
     if (!user) return res.status(404).json({ error: 'User not found' })
     user.addresses.push(req.body)
     await user.save()
@@ -182,13 +193,9 @@ r.post('/me/addresses', async (req, res) => {
   }
 })
 
-r.put('/me/addresses/:id', async (req, res) => {
+r.put('/me/addresses/:id', auth, async (req, res) => {
   try {
-    const header = req.headers.authorization || ''
-    const token = header.startsWith('Bearer ') ? header.slice(7) : null
-    if (!token) return res.status(401).json({ error: 'Unauthorized' })
-    const payload = jwt.verify(token, process.env.JWT_SECRET || 'dev_secret')
-    const user = await User.findById(payload.id)
+    const user = await User.findById(req.user.id)
     const addr = user.addresses.id(req.params.id)
     if (!addr) return res.status(404).json({ error: 'Address not found' })
     Object.assign(addr, req.body)
@@ -199,13 +206,9 @@ r.put('/me/addresses/:id', async (req, res) => {
   }
 })
 
-r.delete('/me/addresses/:id', async (req, res) => {
+r.delete('/me/addresses/:id', auth, async (req, res) => {
   try {
-    const header = req.headers.authorization || ''
-    const token = header.startsWith('Bearer ') ? header.slice(7) : null
-    if (!token) return res.status(401).json({ error: 'Unauthorized' })
-    const payload = jwt.verify(token, process.env.JWT_SECRET || 'dev_secret')
-    const user = await User.findById(payload.id)
+    const user = await User.findById(req.user.id)
     const addr = user.addresses.id(req.params.id)
     if (!addr) return res.status(404).json({ error: 'Address not found' })
     addr.deleteOne()
@@ -215,3 +218,5 @@ r.delete('/me/addresses/:id', async (req, res) => {
     res.status(400).json({ error: 'Delete address failed' })
   }
 })
+
+export default r

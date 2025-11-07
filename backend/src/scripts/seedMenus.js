@@ -10,7 +10,7 @@ dotenv.config()
 
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/aureliya_ecom'
 
-function slugify(str=''){
+function slugify(str = '') {
   return String(str)
     .toLowerCase()
     .replace(/[^a-z0-9\s-/]/g, '')
@@ -19,7 +19,7 @@ function slugify(str=''){
     .replace(/^-|-$/g, '')
 }
 
-async function main(){
+async function main() {
   const __filename = fileURLToPath(import.meta.url)
   const __dirname = path.dirname(__filename)
   const repoRoot = path.resolve(__dirname, '../../..')
@@ -28,12 +28,17 @@ async function main(){
   const tryPaths = [
     process.env.CSV_PATH,
     '/app/industry_standard_menu.csv',
-    path.resolve(repoRoot, 'industry_standard_menu.csv')
+    path.resolve(repoRoot, 'industry_standard_menu.csv'),
   ].filter(Boolean)
 
   let csvPath = null
-  for (const p of tryPaths){
-    try { if (fs.existsSync(p)) { csvPath = p; break } } catch {}
+  for (const p of tryPaths) {
+    try {
+      if (fs.existsSync(p)) {
+        csvPath = p
+        break
+      }
+    } catch {}
   }
 
   if (!csvPath) {
@@ -44,22 +49,19 @@ async function main(){
   await mongoose.connect(MONGODB_URI)
   console.log('Connected to Mongo')
   // Clean existing
-  await Promise.all([
-    MainMenu.deleteMany({}),
-    SubMenu.deleteMany({})
-  ])
+  await Promise.all([MainMenu.deleteMany({}), SubMenu.deleteMany({})])
 
   const text = fs.readFileSync(csvPath, 'utf8')
   const lines = text.split(/\r?\n/).filter(Boolean)
   // header: main_menu,sub_menu,module_name,full_path
   const header = lines.shift()
-  const idx = { main:0, sub:1, module:2, path:3 }
+  const idx = { main: 0, sub: 1, module: 2, path: 3 }
   const mainIndex = new Map() // name -> {_id, order}
   const subIndex = new Map() // key main|name -> {_id, order}
   let mainOrder = 1
 
   for (const line of lines) {
-    const cols = line.split(',').map(c => c.trim())
+    const cols = line.split(',').map((c) => c.trim())
     const mainName = cols[idx.main]
     const subName = cols[idx.sub]
     const moduleName = cols[idx.module]
@@ -69,7 +71,11 @@ async function main(){
     // ensure main
     let mainDoc = mainIndex.get(mainName)
     if (!mainDoc) {
-      const m = await MainMenu.create({ name: mainName, slug: slugify(mainName), order: mainOrder++ })
+      const m = await MainMenu.create({
+        name: mainName,
+        slug: slugify(mainName),
+        order: mainOrder++,
+      })
       mainDoc = { _id: m._id }
       mainIndex.set(mainName, mainDoc)
     }
@@ -84,7 +90,7 @@ async function main(){
           parent_id: null,
           name: subName,
           slug: slugify(subName),
-          order: 0
+          order: 0,
         })
         subDoc = { _id: s._id }
         subIndex.set(key, subDoc)
@@ -100,7 +106,7 @@ async function main(){
       slug: slugify(moduleName),
       path: fullPath,
       order: 0,
-      meta: { type: 'module' }
+      meta: { type: 'module' },
     })
   }
 
@@ -110,6 +116,8 @@ async function main(){
 
 main().catch(async (e) => {
   console.error(e)
-  try { await mongoose.disconnect() } catch {}
+  try {
+    await mongoose.disconnect()
+  } catch {}
   process.exit(1)
 })

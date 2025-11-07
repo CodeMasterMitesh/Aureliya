@@ -9,10 +9,23 @@ const r = Router()
 r.post('/', auth, async (req, res) => {
   const cart = await Cart.findOne({ user: req.user.id }).populate('items.product').lean()
   if (!cart || cart.items.length === 0) return res.status(400).json({ error: 'Cart is empty' })
-  const items = cart.items.map(it => ({ product: it.product._id, title: it.product.title, price: it.price, qty: it.qty }))
+  const items = cart.items.map((it) => ({
+    product: it.product._id,
+    title: it.product.title,
+    price: it.price,
+    qty: it.qty,
+  }))
   const subtotal = items.reduce((s, i) => s + i.price * i.qty, 0)
   const address = req.body?.address || null
-  const order = await Order.create({ user: req.user.id, items, subtotal, status: 'pending', paymentStatus: 'unpaid', address, timeline: [{ status: 'placed', at: new Date() }] })
+  const order = await Order.create({
+    user: req.user.id,
+    items,
+    subtotal,
+    status: 'pending',
+    paymentStatus: 'unpaid',
+    address,
+    timeline: [{ status: 'placed', at: new Date() }],
+  })
   // Do not clear cart until payment confirmed
   res.status(201).json(order)
 })

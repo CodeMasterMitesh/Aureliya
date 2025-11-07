@@ -11,11 +11,13 @@ const uploadBase = path.join(rootDir, 'uploads', 'profile')
 fs.mkdirSync(uploadBase, { recursive: true })
 
 const storage = multer.diskStorage({
-  destination: function(req, file, cb){ cb(null, uploadBase) },
-  filename: function(req, file, cb){
+  destination: function (req, file, cb) {
+    cb(null, uploadBase)
+  },
+  filename: function (req, file, cb) {
     const safe = file.originalname.replace(/[^a-zA-Z0-9_.-]/g, '_')
     cb(null, Date.now() + '-' + safe)
-  }
+  },
 })
 const upload = multer({ storage })
 

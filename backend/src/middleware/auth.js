@@ -1,9 +1,19 @@
 import jwt from 'jsonwebtoken'
 import User from '../models/User.js'
 
+function getTokenFromCookie(req) {
+  const cookieHeader = req.headers.cookie || ''
+  const parts = cookieHeader.split(';').map((s) => s.trim())
+  for (const p of parts) {
+    if (p.startsWith('access_token=')) return decodeURIComponent(p.split('=')[1] || '')
+  }
+  return null
+}
+
 export function auth(req, res, next) {
   const header = req.headers.authorization || ''
-  const token = header.startsWith('Bearer ') ? header.slice(7) : null
+  let token = header.startsWith('Bearer ') ? header.slice(7) : null
+  if (!token) token = getTokenFromCookie(req)
   if (!token) return res.status(401).json({ error: 'Unauthorized' })
   try {
     const payload = jwt.verify(token, process.env.JWT_SECRET || 'dev_secret')

@@ -12,7 +12,13 @@ r.post('/intent', auth, async (req, res) => {
   const order = await Order.findOne({ _id: orderId, user: req.user.id })
   if (!order) return res.status(404).json({ error: 'Order not found' })
   if (order.paymentStatus === 'paid') return res.status(400).json({ error: 'Order already paid' })
-  const payment = await Payment.create({ order: order._id, amount: order.subtotal, status: 'created', provider: 'mock', ref: 'pi_' + Date.now() })
+  const payment = await Payment.create({
+    order: order._id,
+    amount: order.subtotal,
+    status: 'created',
+    provider: 'mock',
+    ref: 'pi_' + Date.now(),
+  })
   res.json({ clientSecret: payment.ref, paymentId: payment._id })
 })
 
@@ -28,7 +34,7 @@ r.post('/confirm', auth, async (req, res) => {
   order.paymentStatus = 'paid'
   order.status = 'paid'
   order.paymentRef = payment.ref
-  order.timeline = [...(order.timeline||[]), { status: 'paid', at: new Date() }]
+  order.timeline = [...(order.timeline || []), { status: 'paid', at: new Date() }]
   await order.save()
   // Clear cart after successful payment
   await Cart.updateOne({ user: req.user.id }, { $set: { items: [] } })

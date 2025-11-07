@@ -2,8 +2,13 @@ import express from 'express'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import cors from 'cors'
-import dotenv from 'dotenv'
 import session from 'express-session'
+import cookieParser from 'cookie-parser'
+import csrf from 'csurf'
+import { env } from './config/index.js'
+import helmet from 'helmet'
+import { requestId, httpLogger } from './middleware/logger.js'
+import { notFound, errorHandler } from './middleware/error.js'
 
 import authRoutes from './routes/auth.js'
 import productRoutes from './routes/products.js'
@@ -19,30 +24,68 @@ import companyRoutes from './routes/companies.js'
 import accountGroupRoutes from './routes/accountGroups.js'
 import ledgerRoutes from './routes/ledgers.js'
 
-dotenv.config()
-
 const app = express()
+// basic middlewares
+app.use(requestId)
+app.use(httpLogger)
 app.use(express.json({ limit: '1mb' }))
+app.use(cookieParser())
+// Security headers & CSP (adjust domains as needed)
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      useDefaults: true,
+      directives: {
+        'default-src': ["'self'"],
+        'script-src': ["'self'", "'unsafe-inline'"],
+        'style-src': ["'self'", "'unsafe-inline'"],
+        'img-src': ["'self'", 'data:', 'blob:'],
+        'connect-src': ["'self'", env.FRONTEND_URL.replace(/\/$/, ''), 'http://localhost:3000'],
+        'object-src': ["'none'"],
+        'frame-ancestors': ["'self'"],
+      },
+    },
+    crossOriginEmbedderPolicy: false, // for potential third-party scripts/images
+  })
+)
 // Allow common frontend dev ports; prefer explicit env but include 3001 fallback for port conflicts
-const allowedOrigins = [
-  process.env.FRONTEND_URL || 'http://localhost:3000',
-  'http://localhost:3001',
-]
-app.use(cors({ 
-  origin: allowedOrigins,
-  credentials: true 
-}))
+const allowedOrigins = [env.FRONTEND_URL, 'http://localhost:3001']
+app.use(
+  cors({
+    origin: allowedOrigins,
+    credentials: true,
+  })
+)
 // Configure session
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'aureliya_session_secret_key_change_in_production',
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    secure: process.env.NODE_ENV === 'production',
-    httpOnly: true,
-    maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+app.use(
+  session({
+    secret: env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: env.isProduction,
+      httpOnly: true,
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    },
+  })
+)
+
+// CSRF protection using double-submit cookie pattern
+const csrfProtection = csrf({ cookie: { key: 'XSRF-TOKEN', sameSite: 'lax', secure: env.isProduction, httpOnly: false } })
+// Apply CSRF middleware under API prefix (GET/HEAD/OPTIONS ignored by default)
+app.use(env.API_PREFIX, csrfProtection)
+// Provide explicit endpoint to fetch token and also set cookie on GETs
+app.get(`${env.API_PREFIX}/csrf`, (req, res) => {
+  res.cookie('XSRF-TOKEN', req.csrfToken(), { sameSite: 'lax', secure: env.isProduction, httpOnly: false })
+  res.json({ csrfToken: req.csrfToken() })
+})
+// For convenience, set XSRF-TOKEN on other GET requests under API prefix
+app.use((req, res, next) => {
+  if (req.method === 'GET' && req.path.startsWith(env.API_PREFIX)) {
+    try { res.cookie('XSRF-TOKEN', req.csrfToken(), { sameSite: 'lax', secure: env.isProduction, httpOnly: false }) } catch {}
   }
-}))
+  next()
+})
 
 app.get('/health', (_, res) => res.json({ ok: true }))
 
@@ -51,18 +94,41 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const rootDir = path.resolve(__dirname, '..')
 app.use('/uploads', express.static(path.join(rootDir, 'uploads')))
 
-app.use('/api/auth', authRoutes)
-app.use('/api/products', productRoutes)
-app.use('/api/categories', categoryRoutes)
-app.use('/api/cart', cartRoutes)
-app.use('/api/orders', orderRoutes)
-app.use('/api/admin', adminRoutes)
-app.use('/api/blogs', blogRoutes)
-app.use('/api/payments', paymentRoutes)
-app.use('/api/uploads', uploadRoutes)
-app.use('/api', menuRoutes)
-app.use('/api', companyRoutes)
-app.use('/api', accountGroupRoutes)
-app.use('/api', ledgerRoutes)
+// Versioned routes
+const api = env.API_PREFIX
+app.use(`${api}/auth`, authRoutes)
+app.use(`${api}/products`, productRoutes)
+app.use(`${api}/categories`, categoryRoutes)
+app.use(`${api}/cart`, cartRoutes)
+app.use(`${api}/orders`, orderRoutes)
+app.use(`${api}/admin`, adminRoutes)
+app.use(`${api}/blogs`, blogRoutes)
+app.use(`${api}/payments`, paymentRoutes)
+app.use(`${api}/uploads`, uploadRoutes)
+app.use(`${api}`, menuRoutes)
+app.use(`${api}`, companyRoutes)
+app.use(`${api}`, accountGroupRoutes)
+app.use(`${api}`, ledgerRoutes)
+
+// Optional legacy mounts for smooth transition
+if (env.ENABLE_LEGACY_API) {
+  app.use('/api/auth', authRoutes)
+  app.use('/api/products', productRoutes)
+  app.use('/api/categories', categoryRoutes)
+  app.use('/api/cart', cartRoutes)
+  app.use('/api/orders', orderRoutes)
+  app.use('/api/admin', adminRoutes)
+  app.use('/api/blogs', blogRoutes)
+  app.use('/api/payments', paymentRoutes)
+  app.use('/api/uploads', uploadRoutes)
+  app.use('/api', menuRoutes)
+  app.use('/api', companyRoutes)
+  app.use('/api', accountGroupRoutes)
+  app.use('/api', ledgerRoutes)
+}
+
+// 404 and error handler
+app.use(notFound)
+app.use(errorHandler)
 
 export default app

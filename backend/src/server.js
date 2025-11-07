@@ -1,18 +1,17 @@
 import mongoose from 'mongoose'
-import dotenv from 'dotenv'
 import app from './app.js'
+import { env } from './config/index.js'
+import { logger } from './middleware/logger.js'
 
-dotenv.config()
-
-const PORT = process.env.PORT || 4000
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/aureliya_ecom'
+const PORT = parseInt(env.PORT, 10)
+const MONGODB_URI = env.MONGODB_URI
 
 mongoose
   .connect(MONGODB_URI)
   .then(() => {
-    app.listen(PORT, () => console.log(`Backend listening on :${PORT}`))
+    app.listen(PORT, () => logger.info({ port: PORT }, 'Backend listening'))
   })
   .catch((err) => {
-    console.error('Mongo connection error:', err)
+    logger.error({ err }, 'Mongo connection error')
     process.exit(1)
   })

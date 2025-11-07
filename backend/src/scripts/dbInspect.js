@@ -10,7 +10,7 @@ dotenv.config()
 
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/aureliya_ecom'
 
-async function inspect(){
+async function inspect() {
   await mongoose.connect(MONGODB_URI)
   console.log('✓ Connected to MongoDB\n')
 
@@ -35,14 +35,21 @@ async function inspect(){
 
   const sampleUser = await User.findOne().lean()
   if (sampleUser) {
-    console.log('Sample User:', JSON.stringify({
-      name: sampleUser.name,
-      email: sampleUser.email,
-      role: sampleUser.role,
-      company: sampleUser.company,
-      branch: sampleUser.branch,
-      ledger: sampleUser.ledger
-    }, null, 2))
+    console.log(
+      'Sample User:',
+      JSON.stringify(
+        {
+          name: sampleUser.name,
+          email: sampleUser.email,
+          role: sampleUser.role,
+          company: sampleUser.company,
+          branch: sampleUser.branch,
+          ledger: sampleUser.ledger,
+        },
+        null,
+        2
+      )
+    )
   }
 
   const sampleCompany = await Company.findOne().lean()
@@ -52,19 +59,28 @@ async function inspect(){
 
   const sampleLedger = await Ledger.findOne().lean()
   if (sampleLedger) {
-    console.log('\nSample Ledger:', JSON.stringify({
-      title: sampleLedger.title,
-      email: sampleLedger.email,
-      company: sampleLedger.company,
-      branch: sampleLedger.branch,
-      account_group_name: sampleLedger.account_group_name,
-      gstin: sampleLedger.gstin,
-      is_active: sampleLedger.is_active
-    }, null, 2))
+    console.log(
+      '\nSample Ledger:',
+      JSON.stringify(
+        {
+          title: sampleLedger.title,
+          email: sampleLedger.email,
+          company: sampleLedger.company,
+          branch: sampleLedger.branch,
+          account_group_name: sampleLedger.account_group_name,
+          gstin: sampleLedger.gstin,
+          is_active: sampleLedger.is_active,
+        },
+        null,
+        2
+      )
+    )
   }
 
   await mongoose.disconnect()
   console.log('\n✓ Disconnected')
 }
 
-inspect().catch(console.error).finally(() => process.exit(0))
+inspect()
+  .catch(console.error)
+  .finally(() => process.exit(0))
