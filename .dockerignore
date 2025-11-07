@@ -1,0 +1,11 @@
+# Docker ignore for root level
+.git
+.gitignore
+README*.md
+docker-compose*.yml
+docker-compose*.yaml
+.dockerignore
+*.log
+.env
+.env.*
+

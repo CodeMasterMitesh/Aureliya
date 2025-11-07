@@ -4,9 +4,34 @@ import User from '../models/User.js'
 import Cart from '../models/Cart.js'
 const r = Router()
 
-function sign(user){
-  const payload = { id: user._id, email: user.email, role: user.role }
+function sign(user, req){
+  const payload = { 
+    id: user._id, 
+    email: user.email, 
+    role: user.role,
+    type: user.type || 'customer',
+    name: user.name,
+    username: user.username,
+    company: user.company,
+    branch: user.branch
+  }
   const token = jwt.sign(payload, process.env.JWT_SECRET || 'dev_secret', { expiresIn: '7d' })
+  
+  // Store user data in session
+  if (req && req.session) {
+    req.session.user = {
+      id: user._id,
+      email: user.email,
+      name: user.name,
+      role: user.role,
+      type: user.type || 'customer',
+      username: user.username,
+      company: user.company,
+      branch: user.branch,
+      profileImage: user.profileImage
+    }
+  }
+  
   return { token, user: payload }
 }
 
@@ -18,7 +43,7 @@ r.post('/register', async (req, res) => {
     if (exists) return res.status(400).json({ error: 'Email already registered' })
     const user = await User.create({ name, email, password })
     await Cart.create({ user: user._id, items: [] })
-    res.json(sign(user))
+    res.json(sign(user, req))
   } catch (e) {
     res.status(500).json({ error: 'Registration failed' })
   }
@@ -48,9 +73,27 @@ r.post('/login', async (req, res) => {
         await User.updateOne({ _id: user._id }, { $set: updates })
       }
     }
-    res.json(sign(user))
+    res.json(sign(user, req))
   } catch (e) {
     res.status(500).json({ error: 'Login failed' })
+  }
+})
+
+r.post('/logout', async (req, res) => {
+  try {
+    if (req.session) {
+      req.session.destroy((err) => {
+        if (err) {
+          return res.status(500).json({ error: 'Logout failed' })
+        }
+        res.clearCookie('connect.sid')
+        res.json({ ok: true, message: 'Logged out successfully' })
+      })
+    } else {
+      res.json({ ok: true, message: 'Logged out successfully' })
+    }
+  } catch (e) {
+    res.status(500).json({ error: 'Logout failed' })
   }
 })
 

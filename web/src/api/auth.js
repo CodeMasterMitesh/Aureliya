@@ -12,6 +12,14 @@ export async function login({ email, password }){
   return data
 }
 
-export function logout(){
-  if (typeof window!=='undefined') localStorage.removeItem('access_token')
+export async function logout(){
+  try {
+    await api.post('/auth/logout')
+  } catch (e) {
+    // Continue with logout even if API call fails
+  }
+  if (typeof window!=='undefined') {
+    localStorage.removeItem('access_token')
+    sessionStorage.removeItem('user_data')
+  }
 }

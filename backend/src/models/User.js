@@ -17,6 +17,7 @@ const UserSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true, lowercase: true, index: true },
   password: { type: String, required: true },
   role: { type: String, enum: ['user', 'employee', 'admin'], default: 'user', index: true },
+  type: { type: String, enum: ['customer', 'employee', 'admin', 'super_admin'], default: 'customer', index: true },
   company: { type: mongoose.Schema.Types.ObjectId, ref: 'Company' },
   branch: { type: mongoose.Schema.Types.ObjectId, ref: 'Branch' },
   profileImage: { type: String },

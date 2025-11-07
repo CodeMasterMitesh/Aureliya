@@ -1,0 +1,8 @@
+# This file shows how to auto-remove seed containers
+# Copy this to docker-compose.override.yml if you want containers removed after completion
+# Or use: docker-compose up -d --remove-orphans
+
+# Note: The seed containers will automatically exit after completion
+# To remove them, run: docker-compose rm -f seed seed_menus
+# Or use: docker-compose up -d --remove-orphans
+

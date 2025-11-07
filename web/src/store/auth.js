@@ -1,14 +1,35 @@
 import { create } from 'zustand'
 
-const initialToken = typeof window !== 'undefined' ? localStorage.getItem('access_token') : null
+const getInitialState = () => {
+  if (typeof window === 'undefined') return { user: null, token: null }
+  const token = localStorage.getItem('access_token')
+  const sessionUser = sessionStorage.getItem('user_data')
+  return {
+    user: sessionUser ? JSON.parse(sessionUser) : null,
+    token
+  }
+}
 
 export const useAuth = create((set) => ({
-  user: null,
-  token: initialToken,
+  ...getInitialState(),
   login({ user, token }) {
-    if (token && typeof window !== 'undefined') localStorage.setItem('access_token', token)
+    if (typeof window !== 'undefined') {
+      if (token) localStorage.setItem('access_token', token)
+      if (user) sessionStorage.setItem('user_data', JSON.stringify(user))
+    }
     set({ user, token })
   },
-  setUser(user){ set({ user }) },
-  logout() { if (typeof window !== 'undefined') localStorage.removeItem('access_token'); set({ user: null, token: null }) }
+  setUser(user) { 
+    if (typeof window !== 'undefined' && user) {
+      sessionStorage.setItem('user_data', JSON.stringify(user))
+    }
+    set({ user }) 
+  },
+  logout() { 
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('access_token')
+      sessionStorage.removeItem('user_data')
+    }
+    set({ user: null, token: null }) 
+  }
 }))

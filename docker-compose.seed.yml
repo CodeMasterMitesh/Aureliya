@@ -1,0 +1,29 @@
+version: "3.9"
+
+services:
+  seed:
+    build:
+      context: ./backend
+    container_name: aureliya-seed
+    environment:
+      MONGODB_URI: mongodb://mongo:27017/aureliya_ecom
+    depends_on:
+      mongo:
+        condition: service_healthy
+    command: ["npm", "run", "seed"]
+    restart: "no"
+
+  seed_menus:
+    build:
+      context: ./backend
+    container_name: aureliya-seed-menus
+    environment:
+      MONGODB_URI: mongodb://mongo:27017/aureliya_ecom
+      CSV_PATH: /app/industry_standard_menu.csv
+    depends_on:
+      mongo:
+        condition: service_healthy
+    volumes:
+      - ./industry_standard_menu.csv:/app/industry_standard_menu.csv:ro
+    command: ["npm", "run", "seed:menus"]
+    restart: "no"

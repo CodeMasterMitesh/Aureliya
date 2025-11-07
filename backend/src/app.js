@@ -3,6 +3,7 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import cors from 'cors'
 import dotenv from 'dotenv'
+import session from 'express-session'
 
 import authRoutes from './routes/auth.js'
 import productRoutes from './routes/products.js'
@@ -27,7 +28,21 @@ const allowedOrigins = [
   process.env.FRONTEND_URL || 'http://localhost:3000',
   'http://localhost:3001',
 ]
-app.use(cors({ origin: allowedOrigins }))
+app.use(cors({ 
+  origin: allowedOrigins,
+  credentials: true 
+}))
+// Configure session
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'aureliya_session_secret_key_change_in_production',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true,
+    maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+  }
+}))
 
 app.get('/health', (_, res) => res.json({ ok: true }))
 

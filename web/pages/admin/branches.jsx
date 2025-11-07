@@ -1,27 +1,17 @@
 import { useEffect, useMemo, useState } from 'react'
+import { useRouter } from 'next/router'
+import Swal from 'sweetalert2'
 import Sidebar from '@/components/Sidebar'
 import AdminTopBar from '@/components/AdminTopBar'
-import Table from '@/components/Table'
-import Pagination from '@/components/Pagination'
-import SearchBar from '@/components/SearchBar'
-import { useRouter } from 'next/router'
+import AdvancedDataTable from '@/components/AdvancedDataTable'
+import FormModal from '@/components/FormModal'
+import Breadcrumb from '@/components/Breadcrumb'
 import { useAuth } from '@/src/store/auth'
 import { listBranches, fetchCompanies, createBranch, updateBranch, deleteBranch, bulkDeleteBranches } from '@/src/api/companies'
 
-function toCSV(rows){
-  if (!rows?.length) return ''
-  const cols = ['company.name','name','code','address']
-  const header = ['Company','Name','Code','Address'].join(',')
-  const body = rows.map(r=> {
-    const vals = [r.company?.name, r.name, r.code, r.address].map(v=>`"${(v??'').toString().replaceAll('"','""')}"`)
-    return vals.join(',')
-  }).join('\n')
-  return header + '\n' + body
-}
-
-export default function BranchesPage(){
+export default function BranchesPage() {
   const router = useRouter()
-  const token = useAuth(s=>s.token)
+  const token = useAuth(s => s.token)
   const [items, setItems] = useState([])
   const [page, setPage] = useState(1)
   const [pages, setPages] = useState(1)
@@ -34,149 +24,349 @@ export default function BranchesPage(){
   const [companies, setCompanies] = useState([])
   const [loading, setLoading] = useState(true)
   const [editing, setEditing] = useState(null)
-  const [form, setForm] = useState({ company:'', name:'', code:'', address:'' })
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const [selected, setSelected] = useState(new Set())
 
-  useEffect(()=>{ if (!token) router.replace('/admin/login') }, [token])
-  useEffect(()=>{ fetchCompanies('').then(setCompanies) }, [])
+  useEffect(() => { if (!token) router.replace('/admin/login') }, [token])
+  useEffect(() => { fetchCompanies('').then(setCompanies) }, [])
 
-  async function load(p=page){
+  async function load(p = page) {
     setLoading(true)
     try {
-      const { items, pages, total, page:cur } = await listBranches({ page: p, limit, search, name: nameFilter, code: codeFilter, company: companyFilter||undefined })
-      setItems(items); setPages(pages); setTotal(total); setPage(cur)
+      const { items, pages, total, page: cur } = await listBranches({
+        page: p,
+        limit,
+        search,
+        name: nameFilter || undefined,
+        code: codeFilter || undefined,
+        company: companyFilter || undefined
+      })
+      setItems(items)
+      setPages(pages)
+      setTotal(total)
+      setPage(cur)
       setSelected(new Set())
-    } finally { setLoading(false) }
+    } catch (e) {
+      const code = e?.response?.status
+      if (code === 401 || code === 403) router.replace('/admin/login')
+      await Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Failed to load branches. Please try again.',
+        confirmButtonColor: '#3b82f6'
+      })
+    } finally {
+      setLoading(false)
+    }
   }
 
-  useEffect(()=>{ load(1) }, [search, nameFilter, codeFilter, companyFilter])
-  useEffect(()=>{ load(page) }, [])
+  useEffect(() => { load(1) }, [search, nameFilter, codeFilter, companyFilter])
 
-  function startEdit(row){
+  const handleAdd = () => {
+    setEditing(null)
+    setIsModalOpen(true)
+  }
+
+  const handleEdit = (row) => {
     setEditing(row)
-    setForm({ company: row.company?._id || row.company || '', name: row.name||'', code: row.code||'', address: row.address||'' })
-  }
-  function resetForm(){ setEditing(null); setForm({ company:'', name:'', code:'', address:'' }) }
-
-  async function submitForm(e){
-    e.preventDefault()
-    if (editing){ await updateBranch(editing._id, form) }
-    else { await createBranch(form) }
-    resetForm(); load(1)
+    setIsModalOpen(true)
   }
 
-  async function removeOne(id){ await deleteBranch(id); load(page) }
-  async function removeSelected(){ if (selected.size){ await bulkDeleteBranches(Array.from(selected)); setSelected(new Set()); load(page) } }
+  const handleDelete = async (id) => {
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, delete it!'
+    })
 
-  function exportCSV(){
-    const csv = toCSV(items)
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url; a.download = 'branches.csv'; a.click(); URL.revokeObjectURL(url)
+    if (result.isConfirmed) {
+      try {
+        await deleteBranch(id)
+        await Swal.fire({
+          icon: 'success',
+          title: 'Deleted!',
+          text: 'Branch has been deleted.',
+          timer: 2000,
+          showConfirmButton: false
+        })
+        load(page)
+      } catch (error) {
+        await Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: error?.response?.data?.error || 'Failed to delete branch.',
+          confirmButtonColor: '#3b82f6'
+        })
+      }
+    }
   }
 
-  const columns = useMemo(()=>[
-    { key:'company', label:'Company', render: (v)=> v?.name || '' , headerRender: ()=> (
-      <div>
-        <div className="font-semibold text-gray-600">Company</div>
-        <select className="mt-1 border rounded px-2 py-1 w-full text-xs" value={companyFilter} onChange={e=>setCompanyFilter(e.target.value)}>
-          <option value="">All</option>
-          {companies.map(c=> <option key={c._id} value={c._id}>{c.name}</option>)}
-        </select>
-      </div>
-    )},
-    { key:'name', label:'Name', headerRender: ()=> (
-      <div>
-        <div className="font-semibold text-gray-600">Name</div>
-        <input className="mt-1 border rounded px-2 py-1 w-full text-xs" placeholder="Filter by name" value={nameFilter} onChange={e=>setNameFilter(e.target.value)} />
-      </div>
-    )},
-    { key:'code', label:'Code', headerRender: ()=> (
-      <div>
-        <div className="font-semibold text-gray-600">Code</div>
-        <input className="mt-1 border rounded px-2 py-1 w-full text-xs" placeholder="Filter by code" value={codeFilter} onChange={e=>setCodeFilter(e.target.value)} />
-      </div>
-    )},
-    { key:'address', label:'Address' },
-  ], [companies, companyFilter, nameFilter, codeFilter])
+  const handleBulkDelete = async (ids) => {
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: `You are about to delete ${ids.length} branch(es). This action cannot be undone!`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: `Yes, delete ${ids.length} item(s)!`
+    })
 
-  function toggleRow(row, checked){
+    if (result.isConfirmed) {
+      try {
+        await bulkDeleteBranches(ids)
+        await Swal.fire({
+          icon: 'success',
+          title: 'Deleted!',
+          text: `${ids.length} branch(es) have been deleted.`,
+          timer: 2000,
+          showConfirmButton: false
+        })
+        load(page)
+      } catch (error) {
+        await Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: error?.response?.data?.error || 'Failed to delete branches.',
+          confirmButtonColor: '#3b82f6'
+        })
+      }
+    }
+  }
+
+  const handleSubmit = async (formData) => {
+    try {
+      if (editing) {
+        await updateBranch(editing._id, formData)
+        await Swal.fire({
+          icon: 'success',
+          title: 'Updated!',
+          text: 'Branch has been updated successfully.',
+          timer: 2000,
+          showConfirmButton: false
+        })
+      } else {
+        await createBranch(formData)
+        await Swal.fire({
+          icon: 'success',
+          title: 'Created!',
+          text: 'Branch has been created successfully.',
+          timer: 2000,
+          showConfirmButton: false
+        })
+      }
+      setIsModalOpen(false)
+      setEditing(null)
+      load(1)
+    } catch (error) {
+      await Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: error?.response?.data?.error || 'Failed to save branch.',
+        confirmButtonColor: '#3b82f6'
+      })
+    }
+  }
+
+  const columns = useMemo(() => [
+    {
+      key: 'company',
+      label: 'Company',
+      render: (v) => v?.name || ''
+    },
+    { key: 'name', label: 'Name' },
+    { key: 'code', label: 'Code' },
+    { key: 'address', label: 'Address' },
+  ], [])
+
+  const formFields = useMemo(() => [
+    {
+      key: 'company',
+      label: 'Company',
+      type: 'select',
+      required: true,
+      options: companies.map(c => ({ value: c._id, label: c.name })),
+      placeholder: 'Select company'
+    },
+    {
+      key: 'name',
+      label: 'Name',
+      required: true,
+      placeholder: 'Enter branch name'
+    },
+    {
+      key: 'code',
+      label: 'Code',
+      placeholder: 'Enter branch code'
+    },
+    {
+      key: 'address',
+      label: 'Address',
+      type: 'textarea',
+      rows: 4,
+      placeholder: 'Enter branch address'
+    }
+  ], [companies])
+
+  const formSections = useMemo(() => [
+    {
+      title: 'Branch Information',
+      fields: formFields
+    }
+  ], [formFields])
+
+  const filters = useMemo(() => [
+    {
+      key: 'company',
+      label: 'Company',
+      type: 'select',
+      value: companyFilter,
+      options: [{ value: '', label: 'All Companies' }, ...companies.map(c => ({ value: c._id, label: c.name }))]
+    },
+    {
+      key: 'name',
+      label: 'Name',
+      type: 'text',
+      value: nameFilter,
+      placeholder: 'Filter by name'
+    },
+    {
+      key: 'code',
+      label: 'Code',
+      type: 'text',
+      value: codeFilter,
+      placeholder: 'Filter by code'
+    }
+  ], [companyFilter, nameFilter, codeFilter, companies])
+
+  const handleFilterChange = (key, value) => {
+    if (key === 'company') {
+      setCompanyFilter(value)
+    } else if (key === 'name') {
+      setNameFilter(value)
+    } else if (key === 'code') {
+      setCodeFilter(value)
+    }
+  }
+
+  const toggleRow = (row, checked) => {
     const next = new Set(selected)
-    if (checked) next.add(row._id); else next.delete(row._id)
+    if (checked) next.add(row._id)
+    else next.delete(row._id)
     setSelected(next)
   }
-  function toggleAll(checked){ if (checked) setSelected(new Set(items.map(i=>i._id))); else setSelected(new Set()) }
+
+  const toggleAll = (checked) => {
+    if (checked) setSelected(new Set(items.map(i => i._id)))
+    else setSelected(new Set())
+  }
+
+  const getInitialFormData = () => {
+    if (editing) {
+      return {
+        company: editing.company?._id || editing.company || '',
+        name: editing.name || '',
+        code: editing.code || '',
+        address: editing.address || ''
+      }
+    }
+    return {
+      company: companyFilter || '',
+      name: '',
+      code: '',
+      address: ''
+    }
+  }
 
   if (!token) return null
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen flex bg-gray-50">
       <Sidebar />
       <main className="flex-1 flex flex-col">
         <AdminTopBar />
-        <div className="p-6 space-y-4">
-          <div className="flex items-center justify-between gap-3 flex-wrap">
-            <h1 className="text-2xl font-semibold">Branches</h1>
-            <div className="flex items-center gap-2">
-              <button onClick={exportCSV} className="px-3 py-2 border rounded text-sm">Export CSV</button>
-              <button onClick={removeSelected} disabled={selected.size===0} className="px-3 py-2 border rounded text-sm disabled:opacity-50">Delete Selected</button>
+        <div className="p-6 space-y-6">
+          <Breadcrumb
+            items={[
+              { label: 'Dashboard', href: '/admin/dashboard', icon: '🏠' },
+              { label: 'Branches' }
+            ]}
+          />
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">Branches</h1>
+              <p className="text-gray-600 mt-1">Manage your branches</p>
             </div>
+            <button
+              onClick={handleAdd}
+              className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg hover:shadow-xl flex items-center gap-2 font-medium"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              </svg>
+              Add Branch
+            </button>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            <div className="lg:col-span-2">
-              <div className="mb-2 max-w-xs"><SearchBar onSearch={setSearch} placeholder="Search name/code..." /></div>
-              <Table
-                columns={columns}
-                data={items}
-                actions={(row)=> (
-                  <div className="flex gap-2">
-                    <button onClick={()=>startEdit(row)} className="px-2 py-1 border rounded text-xs">Edit</button>
-                    <button onClick={()=>removeOne(row._id)} className="px-2 py-1 border rounded text-xs">Delete</button>
-                  </div>
-                )}
-                selectable
-                selectedIds={selected}
-                onToggleRow={toggleRow}
-                onToggleAll={toggleAll}
-              />
-              <Pagination page={page} pages={pages} onChange={p=>{ setPage(p); load(p) }} />
-              {loading && <div className="text-sm text-gray-500 mt-2">Loading...</div>}
-            </div>
-            <div>
-              <div className="border rounded p-4 bg-white">
-                <div className="font-medium mb-2">{editing? 'Edit Branch' : 'Add Branch'}</div>
-                <form onSubmit={submitForm} className="space-y-3">
-                  <div>
-                    <label className="block text-xs text-gray-600 mb-1">Company</label>
-                    <select value={form.company} onChange={e=>setForm(f=>({...f, company:e.target.value}))} className="border rounded px-3 py-2 w-full text-sm" required>
-                      <option value="" disabled>Select company</option>
-                      {companies.map(c=> <option key={c._id} value={c._id}>{c.name}</option>)}
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-xs text-gray-600 mb-1">Name</label>
-                    <input value={form.name} onChange={e=>setForm(f=>({...f, name:e.target.value}))} className="border rounded px-3 py-2 w-full text-sm" required />
-                  </div>
-                  <div>
-                    <label className="block text-xs text-gray-600 mb-1">Code</label>
-                    <input value={form.code} onChange={e=>setForm(f=>({...f, code:e.target.value}))} className="border rounded px-3 py-2 w-full text-sm" />
-                  </div>
-                  <div>
-                    <label className="block text-xs text-gray-600 mb-1">Address</label>
-                    <textarea value={form.address} onChange={e=>setForm(f=>({...f, address:e.target.value}))} className="border rounded px-3 py-2 w-full text-sm" rows={3} />
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <button type="submit" className="px-3 py-2 border rounded text-sm bg-blue-600 text-white">{editing? 'Update' : 'Create'}</button>
-                    {editing && <button type="button" onClick={resetForm} className="px-3 py-2 border rounded text-sm">Cancel</button>}
-                  </div>
-                </form>
+          <AdvancedDataTable
+            title="Branches"
+            columns={columns}
+            data={items}
+            loading={loading}
+            pagination={{ page, pages, total, limit }}
+            onPageChange={(p) => { setPage(p); load(p) }}
+            filters={filters}
+            onFilterChange={handleFilterChange}
+            selectable
+            selectedIds={selected}
+            onToggleRow={toggleRow}
+            onToggleAll={toggleAll}
+            onBulkDelete={handleBulkDelete}
+            exportFileName="branches"
+            showSearch
+            searchPlaceholder="Search branches..."
+            actions={(row) => (
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => handleEdit(row)}
+                  className="px-3 py-1 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium flex items-center gap-1"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                  </svg>
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleDelete(row._id)}
+                  className="px-3 py-1 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium flex items-center gap-1"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                  Delete
+                </button>
               </div>
-            </div>
-          </div>
+            )}
+          />
         </div>
       </main>
+
+      <FormModal
+        isOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false)
+          setEditing(null)
+        }}
+        onSubmit={handleSubmit}
+        title={editing ? 'Edit Branch' : 'Add New Branch'}
+        sections={formSections}
+        initialData={getInitialFormData()}
+        submitLabel={editing ? 'Update Branch' : 'Create Branch'}
+      />
     </div>
   )
 }

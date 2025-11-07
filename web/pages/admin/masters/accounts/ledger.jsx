@@ -1,263 +1,535 @@
 import { useEffect, useMemo, useState } from 'react'
+import { useRouter } from 'next/router'
+import Swal from 'sweetalert2'
 import Sidebar from '@/components/Sidebar'
 import AdminTopBar from '@/components/AdminTopBar'
-import Table from '@/components/Table'
-import Pagination from '@/components/Pagination'
-import SearchBar from '@/components/SearchBar'
-import { useRouter } from 'next/router'
+import AdvancedDataTable from '@/components/AdvancedDataTable'
+import FormModal from '@/components/FormModal'
+import Breadcrumb from '@/components/Breadcrumb'
 import { useAuth } from '@/src/store/auth'
 import { listLedgers, createLedger, updateLedger, deleteLedger, bulkDeleteLedgers } from '@/src/api/ledgers'
 import { listAccountGroups } from '@/src/api/accountGroups'
 import { fetchCompanies, listBranches } from '@/src/api/companies'
 
-function toCSV(rows){
-  if (!rows?.length) return ''
-  const cols = ['title','account_group_name','ledger_type','category','email','mobile_no','gstin','pan_no','is_active']
-  const header = ['Title','Account Group','Ledger Type','Category','Email','Mobile','GSTIN','PAN','Active'].join(',')
-  const body = rows.map(r=> [r.title,r.account_group_name,r.ledger_type,r.category,r.email,r.mobile_no,r.gstin,r.pan_no,(r.is_active? 'Yes':'No')]
-    .map(v=>`"${(v??'').toString().replaceAll('"','""')}"`).join(',')).join('\n')
-  return header + '\n' + body
-}
-
 const FIELD_DEFS = [
-  { key:'ledger_type', label:'Ledger Type' },
-  { key:'category', label:'Category' },
-  { key:'alias_name', label:'Alias Name' },
-  { key:'registration_type', label:'Registration Type' },
-  { key:'gstin', label:'GSTIN' },
-  { key:'pan_no', label:'PAN' },
-  { key:'birth_date', label:'Birth Date', type:'date' },
-  { key:'swift_code', label:'SWIFT Code' },
-  { key:'ifsc_code', label:'IFSC Code' },
-  { key:'bank_name', label:'Bank Name' },
-  { key:'branch_name', label:'Bank Branch Name' },
-  { key:'account_no', label:'Account No' },
-  { key:'tan_no', label:'TAN No' },
-  { key:'country', label:'Country' },
-  { key:'tds_percentage', label:'TDS %', type:'number' },
-  { key:'address_line1', label:'Address Line 1' },
-  { key:'address_line2', label:'Address Line 2' },
-  { key:'address_line3', label:'Address Line 3' },
-  { key:'address_line4', label:'Address Line 4' },
-  { key:'address_line5', label:'Address Line 5' },
-  { key:'area', label:'Area' },
-  { key:'city', label:'City' },
-  { key:'pincode', label:'Pincode' },
-  { key:'state', label:'State' },
-  { key:'contact_person_name', label:'Contact Person' },
-  { key:'contact_person_number', label:'Contact Number' },
-  { key:'credit_period_days', label:'Credit Period (days)', type:'number' },
+  { key: 'ledger_type', label: 'Ledger Type' },
+  { key: 'category', label: 'Category' },
+  { key: 'alias_name', label: 'Alias Name' },
+  { key: 'registration_type', label: 'Registration Type' },
+  { key: 'gstin', label: 'GSTIN' },
+  { key: 'pan_no', label: 'PAN' },
+  { key: 'birth_date', label: 'Birth Date', type: 'date' },
+  { key: 'swift_code', label: 'SWIFT Code' },
+  { key: 'ifsc_code', label: 'IFSC Code' },
+  { key: 'bank_name', label: 'Bank Name' },
+  { key: 'branch_name', label: 'Bank Branch Name' },
+  { key: 'account_no', label: 'Account No' },
+  { key: 'tan_no', label: 'TAN No' },
+  { key: 'country', label: 'Country' },
+  { key: 'tds_percentage', label: 'TDS %', type: 'number', step: 0.01 },
+  { key: 'address_line1', label: 'Address Line 1' },
+  { key: 'address_line2', label: 'Address Line 2' },
+  { key: 'address_line3', label: 'Address Line 3' },
+  { key: 'address_line4', label: 'Address Line 4' },
+  { key: 'address_line5', label: 'Address Line 5' },
+  { key: 'area', label: 'Area' },
+  { key: 'city', label: 'City' },
+  { key: 'pincode', label: 'Pincode' },
+  { key: 'state', label: 'State' },
+  { key: 'contact_person_name', label: 'Contact Person' },
+  { key: 'contact_person_number', label: 'Contact Number' },
+  { key: 'credit_period_days', label: 'Credit Period (days)', type: 'number' },
+  { key: 'is_rcm_applicable', label: 'RCM Applicable', type: 'checkbox' },
+  { key: 'is_msme_registered', label: 'MSME Registered', type: 'checkbox' },
 ]
 
-export default function LedgersPage(){
+export default function LedgersPage() {
   const router = useRouter()
-  const token = useAuth(s=>s.token)
+  const token = useAuth(s => s.token)
+  const user = useAuth(s => s.user)
   const [items, setItems] = useState([])
   const [page, setPage] = useState(1)
   const [pages, setPages] = useState(1)
   const [total, setTotal] = useState(0)
   const [limit] = useState(20)
   const [search, setSearch] = useState('')
-  const [companyFilter, setCompanyFilter] = useState('')
-  const [branchFilter, setBranchFilter] = useState('')
   const [groupFilter, setGroupFilter] = useState('')
-  const [companies, setCompanies] = useState([])
-  const [branches, setBranches] = useState([])
   const [groups, setGroups] = useState([])
   const [loading, setLoading] = useState(true)
   const [editing, setEditing] = useState(null)
-  const [form, setForm] = useState({
-    title:'', email:'', mobile_no:'',
-    company:'', branch:'', account_group_id:'', account_group_name:'',
-    is_active:true,
-  })
-  const [more, setMore] = useState({})
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const [selected, setSelected] = useState(new Set())
 
-  useEffect(()=>{ if (!token) router.replace('/admin/login') }, [token])
-  useEffect(()=>{ fetchCompanies('').then(setCompanies) }, [])
-  useEffect(()=>{ if (companyFilter) listBranches({ company: companyFilter, limit:500 }).then(({items})=> setBranches(items)); else setBranches([]) }, [companyFilter])
-  useEffect(()=>{ // preload account groups for filters and forms
-    (async()=>{ const { items } = await listAccountGroups({ limit: 500 }); setGroups(items) })()
-  }, [])
+  // Get company and branch from session user
+  const userCompany = user?.company || ''
+  const userBranch = user?.branch || ''
 
-  async function load(p=page){
+  useEffect(() => { if (!token) router.replace('/admin/login') }, [token])
+  useEffect(() => {
+    (async () => {
+      try {
+        const { items } = await listAccountGroups({ 
+          limit: 200, // Backend max limit is 200
+          company: userCompany || undefined,
+          branch: userBranch || undefined
+        })
+        setGroups(items)
+      } catch (error) {
+        console.error('Failed to load account groups:', error)
+        setGroups([])
+      }
+    })()
+  }, [userCompany, userBranch])
+
+  async function load(p = page) {
     setLoading(true)
     try {
-      const { items, pages, total, page:cur } = await listLedgers({ page: p, limit, search, company: companyFilter||undefined, branch: branchFilter||undefined, account_group_id: groupFilter||undefined })
-      setItems(items); setPages(pages); setTotal(total); setPage(cur); setSelected(new Set())
-    } catch (e){
+      const { items, pages, total, page: cur } = await listLedgers({
+        page: p,
+        limit,
+        search,
+        company: userCompany || undefined,
+        branch: userBranch || undefined,
+        account_group_id: groupFilter || undefined
+      })
+      setItems(items)
+      setPages(pages)
+      setTotal(total)
+      setPage(cur)
+      setSelected(new Set())
+    } catch (e) {
       const code = e?.response?.status
       if (code === 401 || code === 403) router.replace('/admin/login')
-    } finally { setLoading(false) }
+      await Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Failed to load ledgers. Please try again.',
+        confirmButtonColor: '#3b82f6'
+      })
+    } finally {
+      setLoading(false)
+    }
   }
-  useEffect(()=>{ load(1) }, [search, companyFilter, branchFilter, groupFilter])
-  useEffect(()=>{ load(page) }, [])
 
-  function startEdit(row){
+  useEffect(() => { load(1) }, [search, groupFilter, userCompany, userBranch])
+
+  const handleAdd = () => {
+    setEditing(null)
+    setIsModalOpen(true)
+  }
+
+  const handleEdit = (row) => {
     setEditing(row)
-    const base = {
-      title: row.title||'', email: row.email||'', mobile_no: row.mobile_no||'',
-      company: row.company||'', branch: row.branch||'', account_group_id: row.account_group_id||'', account_group_name: row.account_group_name||'',
-      is_active: row.is_active!==false,
-    }
-    const extra = {}
-    FIELD_DEFS.forEach(f=> extra[f.key] = row[f.key] ?? (f.type==='number'? 0 : ''))
-    setForm(base); setMore(extra)
+    setIsModalOpen(true)
   }
-  function resetForm(){ setEditing(null); setForm({ title:'', email:'', mobile_no:'', company:'', branch:'', account_group_id:'', account_group_name:'', is_active:true }); setMore({}) }
 
-  async function submitForm(e){
-    e.preventDefault()
-    const payload = { ...form, ...more }
-    const g = groups.find(g=>g._id===payload.account_group_id); if (g) payload.account_group_name = g.name
+  const handleDelete = async (id) => {
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, delete it!'
+    })
+
+    if (result.isConfirmed) {
+      try {
+        await deleteLedger(id)
+        await Swal.fire({
+          icon: 'success',
+          title: 'Deleted!',
+          text: 'Ledger has been deleted.',
+          timer: 2000,
+          showConfirmButton: false
+        })
+        load(page)
+      } catch (error) {
+        await Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: error?.response?.data?.error || 'Failed to delete ledger.',
+          confirmButtonColor: '#3b82f6'
+        })
+      }
+    }
+  }
+
+  const handleBulkDelete = async (ids) => {
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: `You are about to delete ${ids.length} ledger(s). This action cannot be undone!`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: `Yes, delete ${ids.length} item(s)!`
+    })
+
+    if (result.isConfirmed) {
+      try {
+        await bulkDeleteLedgers(ids)
+        await Swal.fire({
+          icon: 'success',
+          title: 'Deleted!',
+          text: `${ids.length} ledger(s) have been deleted.`,
+          timer: 2000,
+          showConfirmButton: false
+        })
+        load(page)
+      } catch (error) {
+        await Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: error?.response?.data?.error || 'Failed to delete ledgers.',
+          confirmButtonColor: '#3b82f6'
+        })
+      }
+    }
+  }
+
+  const handleSubmit = async (formData) => {
     try {
-      if (editing) await updateLedger(editing._id, payload); else await createLedger(payload)
-      resetForm(); load(1)
-    } catch (err){
-      const code = err?.response?.status
-      if (code === 401 || code === 403) router.replace('/admin/login')
-      // basic surface: could add toast/error UI later
+      const payload = { ...formData }
+      
+      // Clean up payload: remove empty strings and convert to proper types
+      const cleanedPayload = {}
+      Object.keys(payload).forEach(key => {
+        const value = payload[key]
+        
+        // Skip undefined values
+        if (value === undefined) return
+        
+        // Handle empty strings - remove for optional fields, keep for required
+        if (value === '' || value === null) {
+          // Only keep required fields (title is required)
+          if (key === 'title') {
+            cleanedPayload[key] = value
+          }
+          // Remove optional fields with empty values
+          return
+        }
+        
+        // Convert number fields
+        if (['tds_percentage', 'credit_period_days'].includes(key)) {
+          const numValue = Number(value)
+          if (!isNaN(numValue)) {
+            cleanedPayload[key] = numValue
+          }
+          return
+        }
+        
+        // Handle date fields
+        if (key === 'birth_date' && value) {
+          cleanedPayload[key] = new Date(value)
+          return
+        }
+        
+        // Ensure boolean fields are boolean
+        if (['is_active', 'is_rcm_applicable', 'is_msme_registered'].includes(key)) {
+          cleanedPayload[key] = Boolean(value)
+          return
+        }
+        
+        // Keep all other non-empty values
+        cleanedPayload[key] = value
+      })
+      
+      // Use cleaned payload
+      Object.assign(payload, cleanedPayload)
+      
+      // Automatically set company and branch from session user (only if valid)
+      if (userCompany && String(userCompany).trim() !== '') {
+        payload.company = String(userCompany)
+      }
+      if (userBranch && String(userBranch).trim() !== '') {
+        payload.branch = String(userBranch)
+      }
+      
+      // Validate and set account_group_name if account_group_id is provided
+      if (payload.account_group_id && payload.account_group_id.trim() !== '') {
+        const g = groups.find(g => g._id === payload.account_group_id)
+        if (g) {
+          payload.account_group_name = g.name
+        }
+      } else {
+        // Remove if empty to avoid validation error
+        delete payload.account_group_id
+        delete payload.account_group_name
+      }
+      
+      // Remove email if empty (to avoid email validation error)
+      if (payload.email === '' || !payload.email) {
+        delete payload.email
+      }
+
+      if (editing) {
+        await updateLedger(editing._id, payload)
+        await Swal.fire({
+          icon: 'success',
+          title: 'Updated!',
+          text: 'Ledger has been updated successfully.',
+          timer: 2000,
+          showConfirmButton: false
+        })
+      } else {
+        await createLedger(payload)
+        await Swal.fire({
+          icon: 'success',
+          title: 'Created!',
+          text: 'Ledger has been created successfully.',
+          timer: 2000,
+          showConfirmButton: false
+        })
+      }
+      setIsModalOpen(false)
+      setEditing(null)
+      load(1)
+    } catch (error) {
+      // Show detailed error message
+      const errorMessage = error?.response?.data?.errors 
+        ? error.response.data.errors.map(e => `${e.path}: ${e.msg}`).join(', ')
+        : error?.response?.data?.error || 'Failed to save ledger.'
+      
+      await Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: errorMessage,
+        confirmButtonColor: '#3b82f6'
+      })
     }
   }
 
-  async function removeOne(id){ await deleteLedger(id); load(page) }
-  async function removeSelected(){ if (selected.size){ await bulkDeleteLedgers(Array.from(selected)); setSelected(new Set()); load(page) } }
-  function exportCSV(){ const csv = toCSV(items); const blob = new Blob([csv], { type:'text/csv;charset=utf-8;' }); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='ledgers.csv'; a.click(); URL.revokeObjectURL(url) }
-
-  const columns = useMemo(()=>[
-    { key:'title', label:'Title' },
-    { key:'account_group_name', label:'Group' },
-    { key:'email', label:'Email' },
-    { key:'mobile_no', label:'Mobile' },
-    { key:'gstin', label:'GSTIN' },
-    { key:'pan_no', label:'PAN' },
-    { key:'is_active', label:'Active', render:(v)=> v? 'Yes':'No' },
+  const columns = useMemo(() => [
+    { key: 'title', label: 'Title' },
+    { key: 'account_group_name', label: 'Group' },
+    { key: 'email', label: 'Email' },
+    { key: 'mobile_no', label: 'Mobile' },
+    { key: 'gstin', label: 'GSTIN' },
+    { key: 'pan_no', label: 'PAN' },
+    {
+      key: 'is_active',
+      label: 'Active',
+      render: (value) => (
+        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+          value ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+        }`}>
+          {value ? 'Yes' : 'No'}
+        </span>
+      )
+    },
   ], [])
 
-  function toggleRow(row, checked){ const next=new Set(selected); if (checked) next.add(row._id); else next.delete(row._id); setSelected(next) }
-  function toggleAll(checked){ if (checked) setSelected(new Set(items.map(i=>i._id))); else setSelected(new Set()) }
+  const formFields = useMemo(() => {
+    const baseFields = [
+      {
+        key: 'account_group_id',
+        label: 'Account Group',
+        type: 'select',
+        required: true,
+        options: groups.map(g => ({ value: g._id, label: g.name })),
+        placeholder: 'Select Account Group'
+      },
+      {
+        key: 'title',
+        label: 'Title',
+        required: true,
+        placeholder: 'Enter title'
+      },
+      {
+        key: 'email',
+        label: 'Email',
+        type: 'email',
+        placeholder: 'Enter email'
+      },
+      {
+        key: 'mobile_no',
+        label: 'Mobile',
+        placeholder: 'Enter mobile number'
+      },
+      {
+        key: 'is_active',
+        label: 'Active',
+        type: 'checkbox',
+        checkboxLabel: 'Mark as active',
+        defaultValue: true
+      }
+    ]
+
+    const moreFields = FIELD_DEFS.map(f => ({
+      key: f.key,
+      label: f.label,
+      type: f.type || 'text',
+      step: f.step,
+      placeholder: `Enter ${f.label.toLowerCase()}`
+    }))
+
+    return [...baseFields, ...moreFields]
+  }, [groups])
+
+  const formSections = useMemo(() => [
+    {
+      title: 'Basic Information',
+      fields: formFields.slice(0, 7)
+    },
+    {
+      title: 'Additional Details',
+      fields: formFields.slice(7, 15)
+    },
+    {
+      title: 'Bank Details',
+      fields: formFields.slice(15, 22)
+    },
+    {
+      title: 'Address Information',
+      fields: formFields.slice(22, 30)
+    },
+    {
+      title: 'Other Information',
+      fields: formFields.slice(30)
+    }
+  ], [formFields])
+
+  const filters = useMemo(() => [
+    {
+      key: 'account_group_id',
+      label: 'Account Group',
+      type: 'select',
+      value: groupFilter,
+      options: [{ value: '', label: 'All Groups' }, ...groups.map(g => ({ value: g._id, label: g.name }))]
+    }
+  ], [groupFilter, groups])
+
+  const handleFilterChange = (key, value) => {
+    if (key === 'account_group_id') {
+      setGroupFilter(value)
+    }
+  }
+
+  const toggleRow = (row, checked) => {
+    const next = new Set(selected)
+    if (checked) next.add(row._id)
+    else next.delete(row._id)
+    setSelected(next)
+  }
+
+  const toggleAll = (checked) => {
+    if (checked) setSelected(new Set(items.map(i => i._id)))
+    else setSelected(new Set())
+  }
+
+  const getInitialFormData = () => {
+    if (editing) {
+      const base = {
+        title: editing.title || '',
+        email: editing.email || '',
+        mobile_no: editing.mobile_no || '',
+        account_group_id: editing.account_group_id || '',
+        is_active: editing.is_active !== false
+      }
+      const extra = {}
+      FIELD_DEFS.forEach(f => {
+        extra[f.key] = editing[f.key] ?? (f.type === 'number' ? 0 : f.type === 'checkbox' ? false : '')
+      })
+      return { ...base, ...extra }
+    }
+    return {
+      title: '',
+      email: '',
+      mobile_no: '',
+      account_group_id: '',
+      is_active: true
+    }
+  }
 
   if (!token) return null
+
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen flex bg-gray-50">
       <Sidebar />
       <main className="flex-1 flex flex-col">
         <AdminTopBar />
-        <div className="p-6 space-y-4">
-          <div className="flex items-center justify-between gap-3 flex-wrap">
-            <h1 className="text-2xl font-semibold">Ledgers</h1>
-            <div className="flex items-center gap-2">
-              <button onClick={exportCSV} className="px-3 py-2 border rounded text-sm">Export CSV</button>
-              <button onClick={removeSelected} disabled={selected.size===0} className="px-3 py-2 border rounded text-sm disabled:opacity-50">Delete Selected</button>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            <div className="lg:col-span-2 space-y-2">
-              <div className="flex gap-2 flex-wrap">
-                <div className="max-w-xs"><SearchBar onSearch={setSearch} placeholder="Search title/group..." /></div>
-                <select value={companyFilter} onChange={e=>setCompanyFilter(e.target.value)} className="border rounded px-3 py-2 text-sm">
-                  <option value="">All Companies</option>
-                  {companies.map(c=> <option key={c._id} value={c._id}>{c.name}</option>)}
-                </select>
-                <select value={branchFilter} onChange={e=>setBranchFilter(e.target.value)} className="border rounded px-3 py-2 text-sm" disabled={!companyFilter}>
-                  <option value="">All Branches</option>
-                  {branches.map(b=> <option key={b._id} value={b._id}>{b.name}</option>)}
-                </select>
-                <select value={groupFilter} onChange={e=>setGroupFilter(e.target.value)} className="border rounded px-3 py-2 text-sm">
-                  <option value="">All Groups</option>
-                  {groups.map(g=> <option key={g._id} value={g._id}>{g.name}</option>)}
-                </select>
-              </div>
-              <Table
-                columns={columns}
-                data={items}
-                actions={(row)=> (
-                  <div className="flex gap-2">
-                    <button onClick={()=>startEdit(row)} className="px-2 py-1 border rounded text-xs">Edit</button>
-                    <button onClick={()=>removeOne(row._id)} className="px-2 py-1 border rounded text-xs">Delete</button>
-                  </div>
-                )}
-                selectable
-                selectedIds={selected}
-                onToggleRow={toggleRow}
-                onToggleAll={toggleAll}
-              />
-              <Pagination page={page} pages={pages} onChange={p=>{ setPage(p); load(p) }} />
-              {loading && <div className="text-sm text-gray-500 mt-2">Loading...</div>}
-            </div>
+        <div className="p-6 space-y-6">
+          <Breadcrumb
+            items={[
+              { label: 'Dashboard', href: '/admin/dashboard', icon: '🏠' },
+              { label: 'Masters', href: '/admin/masters' },
+              { label: 'Accounts', href: '/admin/masters/accounts' },
+              { label: 'Ledgers' }
+            ]}
+          />
+          <div className="flex items-center justify-between">
             <div>
-              <div className="border rounded p-4 bg-white space-y-3">
-                <div className="font-medium">{editing? 'Edit Ledger' : 'Add Ledger'}</div>
-                <form onSubmit={submitForm} className="space-y-3">
-                  <div>
-                    <label className="block text-xs text-gray-600 mb-1">Company</label>
-                    <select value={form.company} onChange={e=>setForm(f=>({...f, company:e.target.value}))} className="border rounded px-3 py-2 w-full text-sm">
-                      <option value="">None</option>
-                      {companies.map(c=> <option key={c._id} value={c._id}>{c.name}</option>)}
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-xs text-gray-600 mb-1">Branch</label>
-                    <select value={form.branch} onChange={e=>setForm(f=>({...f, branch:e.target.value}))} className="border rounded px-3 py-2 w-full text-sm" disabled={!form.company}>
-                      <option value="">None</option>
-                      {branches.map(b=> <option key={b._id} value={b._id}>{b.name}</option>)}
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-xs text-gray-600 mb-1">Account Group</label>
-                    <select value={form.account_group_id} onChange={e=>setForm(f=>({...f, account_group_id:e.target.value}))} className="border rounded px-3 py-2 w-full text-sm">
-                      <option value="">None</option>
-                      {groups.map(g=> <option key={g._id} value={g._id}>{g.name}</option>)}
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-xs text-gray-600 mb-1">Title</label>
-                    <input value={form.title} onChange={e=>setForm(f=>({...f, title:e.target.value}))} className="border rounded px-3 py-2 w-full text-sm" required />
-                  </div>
-                  <div className="grid grid-cols-2 gap-2">
-                    <div>
-                      <label className="block text-xs text-gray-600 mb-1">Email</label>
-                      <input value={form.email} onChange={e=>setForm(f=>({...f, email:e.target.value}))} className="border rounded px-3 py-2 w-full text-sm" type="email" />
-                    </div>
-                    <div>
-                      <label className="block text-xs text-gray-600 mb-1">Mobile</label>
-                      <input value={form.mobile_no} onChange={e=>setForm(f=>({...f, mobile_no:e.target.value}))} className="border rounded px-3 py-2 w-full text-sm" />
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <input id="ld_active" type="checkbox" checked={form.is_active} onChange={e=>setForm(f=>({...f, is_active:e.target.checked}))} />
-                    <label htmlFor="ld_active" className="text-sm">Active</label>
-                  </div>
-
-                  <details className="mt-2">
-                    <summary className="cursor-pointer text-sm font-medium">More details</summary>
-                    <div className="grid grid-cols-2 gap-2 mt-2">
-                      {FIELD_DEFS.map(f=> (
-                        <div key={f.key} className="col-span-2 sm:col-span-1">
-                          <label className="block text-xs text-gray-600 mb-1">{f.label}</label>
-                          <input
-                            type={f.type||'text'}
-                            value={more[f.key] ?? ''}
-                            onChange={e=>setMore(m=>({...m, [f.key]: f.type==='number' ? parseFloat(e.target.value||'0') : e.target.value }))}
-                            className="border rounded px-3 py-2 w-full text-sm"
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  </details>
-
-                  <div className="flex items-center gap-2">
-                    <button type="submit" className="px-3 py-2 border rounded text-sm bg-blue-600 text-white">{editing? 'Update' : 'Create'}</button>
-                    {editing && <button type="button" onClick={resetForm} className="px-3 py-2 border rounded text-sm">Cancel</button>}
-                  </div>
-                </form>
-              </div>
+              <h1 className="text-3xl font-bold text-gray-900">Ledgers</h1>
+              <p className="text-gray-600 mt-1">Manage your ledger accounts</p>
             </div>
+            <button
+              onClick={handleAdd}
+              className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg hover:shadow-xl flex items-center gap-2 font-medium"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              </svg>
+              Add Ledger
+            </button>
           </div>
+
+          <AdvancedDataTable
+            title="Ledgers"
+            columns={columns}
+            data={items}
+            loading={loading}
+            pagination={{ page, pages, total, limit }}
+            onPageChange={(p) => { setPage(p); load(p) }}
+            filters={filters}
+            onFilterChange={handleFilterChange}
+            selectable
+            selectedIds={selected}
+            onToggleRow={toggleRow}
+            onToggleAll={toggleAll}
+            onBulkDelete={handleBulkDelete}
+            exportFileName="ledgers"
+            showSearch
+            searchPlaceholder="Search ledgers..."
+            actions={(row) => (
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => handleEdit(row)}
+                  className="px-3 py-1 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium flex items-center gap-1"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                  </svg>
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleDelete(row._id)}
+                  className="px-3 py-1 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium flex items-center gap-1"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                  Delete
+                </button>
+              </div>
+            )}
+          />
         </div>
       </main>
+
+      <FormModal
+        isOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false)
+          setEditing(null)
+        }}
+        onSubmit={handleSubmit}
+        title={editing ? 'Edit Ledger' : 'Add New Ledger'}
+        sections={formSections}
+        initialData={getInitialFormData()}
+        submitLabel={editing ? 'Update Ledger' : 'Create Ledger'}
+      />
     </div>
   )
 }

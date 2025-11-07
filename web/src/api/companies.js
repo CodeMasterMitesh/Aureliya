@@ -3,7 +3,7 @@ import api from './axios'
 // Simple helpers for dropdowns/quick fetch
 export const fetchCompanies = async (search) => {
   try {
-    const { data } = await api.get('/companies', { params: { search, limit: 1000 } })
+    const { data } = await api.get('/companies', { params: { search, limit: 200 } })
     return data.items
   } catch { return [] }
 }

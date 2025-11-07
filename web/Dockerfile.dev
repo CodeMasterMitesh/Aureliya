@@ -1,0 +1,29 @@
+# Development Dockerfile with hot reload support
+FROM node:18-alpine
+WORKDIR /app
+
+# Install curl for healthcheck
+RUN apk add --no-cache curl
+
+# Copy package files
+COPY package.json package-lock.json* ./
+
+# Install all dependencies
+RUN npm ci || npm install
+
+# Copy source code (will be overridden by volume mount in docker-compose)
+COPY . .
+
+# Environment variables
+ENV NODE_ENV=development
+ENV WATCHPACK_POLLING=true
+
+EXPOSE 3000
+
+# Healthcheck
+HEALTHCHECK --interval=10s --timeout=3s --retries=5 \
+  CMD curl -f http://localhost:3000 || exit 1
+
+# Use Next.js dev mode for hot reload
+CMD ["npm", "run", "dev"]
+
