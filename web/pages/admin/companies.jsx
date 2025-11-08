@@ -11,7 +11,8 @@ import { listCompanies, createCompany, updateCompany, deleteCompany, bulkDeleteC
 
 export default function CompaniesPage() {
   const router = useRouter()
-  const token = useAuth(s => s.token)
+  const user = useAuth(s => s.user)
+  const ready = useAuth(s => s.ready)
   const [items, setItems] = useState([])
   const [page, setPage] = useState(1)
   const [pages, setPages] = useState(1)
@@ -25,7 +26,7 @@ export default function CompaniesPage() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selected, setSelected] = useState(new Set())
 
-  useEffect(() => { if (!token) router.replace('/admin/login') }, [token])
+  useEffect(() => { if (ready && !user) router.replace('/login') }, [user, ready])
 
   async function load(p = page) {
     setLoading(true)
@@ -43,8 +44,8 @@ export default function CompaniesPage() {
       setPage(cur)
       setSelected(new Set())
     } catch (e) {
-      const code = e?.response?.status
-      if (code === 401 || code === 403) router.replace('/admin/login')
+  const code = e?.response?.status
+  if (code === 401 || code === 403) router.replace('/login')
       await Swal.fire({
         icon: 'error',
         title: 'Error',
@@ -254,7 +255,8 @@ export default function CompaniesPage() {
     }
   }
 
-  if (!token) return null
+  if (!ready) return null
+  if (!user) return null
 
   return (
     <div className="min-h-screen flex bg-gray-50">
@@ -264,7 +266,7 @@ export default function CompaniesPage() {
         <div className="p-6 space-y-6">
           <Breadcrumb
             items={[
-              { label: 'Dashboard', href: '/admin/dashboard', icon: '🏠' },
+              { label: 'Dashboard', href: '/dashboard', icon: '🏠' },
               { label: 'Companies' }
             ]}
           />
@@ -301,6 +303,8 @@ export default function CompaniesPage() {
             exportFileName="companies"
             showSearch
             searchPlaceholder="Search companies..."
+            showTitle={false}
+            showColumnFilters={false}
             actions={(row) => (
               <div className="flex items-center gap-2">
                 <button

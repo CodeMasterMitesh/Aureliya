@@ -11,7 +11,7 @@ import { listMainMenus, createMainMenu, updateMainMenu, deleteMainMenu } from '@
 
 export default function MainMenusPage() {
   const router = useRouter()
-  const token = useAuth(s => s.token)
+  const user = useAuth(s => s.user)
   const [items, setItems] = useState([])
   const [page, setPage] = useState(1)
   const [pages, setPages] = useState(1)
@@ -23,7 +23,8 @@ export default function MainMenusPage() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selected, setSelected] = useState(new Set())
 
-  useEffect(() => { if (!token) router.replace('/admin/login') }, [token])
+  const ready = useAuth(s => s.ready)
+  useEffect(() => { if (ready && !user) router.replace('/login') }, [user, ready])
 
   async function load(p = page) {
     setLoading(true)
@@ -35,8 +36,8 @@ export default function MainMenusPage() {
       setPage(cur)
       setSelected(new Set())
     } catch (e) {
-      const code = e?.response?.status
-      if (code === 401 || code === 403) router.replace('/admin/login')
+  const code = e?.response?.status
+  if (code === 401 || code === 403) router.replace('/login')
       await Swal.fire({
         icon: 'error',
         title: 'Error',
@@ -196,7 +197,8 @@ export default function MainMenusPage() {
     }
   }
 
-  if (!token) return null
+  if (!ready) return null
+  if (!user) return null
 
   return (
     <div className="min-h-screen flex bg-gray-50">
@@ -206,7 +208,7 @@ export default function MainMenusPage() {
         <div className="p-6 space-y-6">
           <Breadcrumb
             items={[
-              { label: 'Dashboard', href: '/admin/dashboard', icon: '🏠' },
+              { label: 'Dashboard', href: '/dashboard', icon: '🏠' },
               { label: 'Main Menus' }
             ]}
           />
@@ -241,6 +243,8 @@ export default function MainMenusPage() {
             exportFileName="main-menus"
             showSearch
             searchPlaceholder="Search main menus..."
+            showTitle={false}
+            showColumnFilters={false}
             actions={(row) => (
               <div className="flex items-center gap-2">
                 <button

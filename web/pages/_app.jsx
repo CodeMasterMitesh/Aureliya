@@ -9,16 +9,31 @@ import api, { setCsrfToken } from '@/src/api/axios'
 export default function MyApp({ Component, pageProps }){
   const router = useRouter()
   const setUser = useAuth((s)=>s.setUser)
+  const setReady = useAuth((s)=>s.setReady)
   // token no longer used (cookie-only auth)
 
   useEffect(()=>{
     let mounted = true
     async function hydrate(){
       try {
+        // Seed CSRF (optional for GET) and then hydrate user from JWT cookie
         const csrfRes = await api.get('/csrf')
         if (csrfRes?.data?.csrfToken) setCsrfToken(csrfRes.data.csrfToken)
-        // User hydration removed with storefront deprecation
-      } catch (_) { /* silent */ }
+      } catch (_) {}
+      try {
+        const me = await api.get('/auth/me')
+        if (me?.data) setUser({
+          id: me.data.id,
+          name: me.data.name,
+          email: me.data.email,
+          role: me.data.role,
+          profileImage: me.data.profileImage,
+        })
+      } catch (_) {
+        // not logged in; leave user as null
+      } finally {
+        setReady(true)
+      }
     }
     hydrate()
     return ()=>{ mounted = false }

@@ -6,23 +6,25 @@ import Link from 'next/link'
 import { useAuth } from '@/src/store/auth'
 
 const cards = [
-  { href: '/admin/companies', title: 'Companies', desc: 'Manage companies (create, update, bulk delete).', icon: '🏢' },
-  { href: '/admin/branches', title: 'Branches', desc: 'Manage branches under companies.', icon: '🏬' },
-  { href: '/admin/main-menus', title: 'Main Menus', desc: 'Top-level navigation groups.', icon: '🧭' },
-  { href: '/admin/sub-menus', title: 'Sub Menus', desc: 'Nested navigation items.', icon: '🗂️' },
-  { href: '/admin/masters/accounts/groups', title: 'Account Groups', desc: 'Ledger grouping (filtering and classification).', icon: '📁' },
-  { href: '/admin/masters/accounts/ledger', title: 'Ledgers', desc: 'Full ledger master data management.', icon: '📒' },
+  { href: '/companies', title: 'Companies', desc: 'Manage companies (create, update, bulk delete).', icon: '🏢' },
+  { href: '/branches', title: 'Branches', desc: 'Manage branches under companies.', icon: '🏬' },
+  { href: '/main-menus', title: 'Main Menus', desc: 'Top-level navigation groups.', icon: '🧭' },
+  { href: '/sub-menus', title: 'Sub Menus', desc: 'Nested navigation items.', icon: '🗂️' },
+  { href: '/masters/accounts/groups', title: 'Account Groups', desc: 'Ledger grouping (filtering and classification).', icon: '📁' },
+  { href: '/masters/accounts/ledger', title: 'Ledgers', desc: 'Full ledger master data management.', icon: '📒' },
 ]
 
 export default function AdminSetup(){
   const router = useRouter()
-  const token = useAuth(s=>s.token)
+  const user = useAuth(s=>s.user)
+  const ready = useAuth(s=>s.ready)
 
   useEffect(()=>{
-    if (!token) router.replace('/admin/login')
-  }, [token])
+    if (ready && !user) router.replace('/login')
+  }, [user])
 
-  if (!token) return null
+  if (!ready) return null
+  if (!user) return null
   return (
     <div className="min-h-screen flex">
       <Sidebar />

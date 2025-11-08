@@ -16,7 +16,11 @@ function slugify(str = '') {
 
 function handleValidation(req, res) {
   const errors = validationResult(req)
-  if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() })
+  if (!errors.isEmpty()) {
+    res.status(400).json({ errors: errors.array() })
+    return true
+  }
+  return false
 }
 
 // GET /api/menus -> nested structure
@@ -91,7 +95,7 @@ r.get(
     query('search').optional().isString(),
   ],
   async (req, res) => {
-    handleValidation(req, res)
+    if (handleValidation(req, res)) return
     const page = parseInt(req.query.page || '1')
     const limit = parseInt(req.query.limit || '20')
     const search = req.query.search?.trim()
@@ -117,7 +121,7 @@ r.post(
     body('order').optional().isInt(),
   ],
   async (req, res) => {
-    handleValidation(req, res)
+    if (handleValidation(req, res)) return
     const { name, slug, icon, order } = req.body
     const doc = await MainMenu.create({ name, slug: slug || slugify(name), icon, order })
     res.status(201).json(doc)
@@ -125,7 +129,7 @@ r.post(
 )
 
 r.get('/main-menus/:id', [param('id').isMongoId()], async (req, res) => {
-  handleValidation(req, res)
+  if (handleValidation(req, res)) return
   const item = await MainMenu.findById(req.params.id)
   if (!item) return res.status(404).json({ error: 'Not found' })
   res.json(item)
@@ -141,8 +145,10 @@ r.put(
     body('order').optional().isInt(),
   ],
   async (req, res) => {
-    handleValidation(req, res)
+    if (handleValidation(req, res)) return
     const payload = { ...req.body }
+    // Coerce types
+    if (payload.order !== undefined) payload.order = parseInt(payload.order)
     if (payload.name && !payload.slug) payload.slug = slugify(payload.name)
     const item = await MainMenu.findByIdAndUpdate(req.params.id, { $set: payload }, { new: true })
     if (!item) return res.status(404).json({ error: 'Not found' })
@@ -151,7 +157,7 @@ r.put(
 )
 
 r.delete('/main-menus/:id', [param('id').isMongoId()], async (req, res) => {
-  handleValidation(req, res)
+  if (handleValidation(req, res)) return
   // also remove submenus
   await SubMenu.deleteMany({ main_menu_id: req.params.id })
   const out = await MainMenu.findByIdAndDelete(req.params.id)
@@ -170,7 +176,7 @@ r.get(
     query('parent_id').optional().isMongoId(),
   ],
   async (req, res) => {
-    handleValidation(req, res)
+    if (handleValidation(req, res)) return
     const page = parseInt(req.query.page || '1')
     const limit = parseInt(req.query.limit || '20')
     const { search, main_menu_id, parent_id } = req.query
@@ -194,7 +200,10 @@ r.post(
   '/sub-menus',
   [
     body('main_menu_id').isMongoId(),
-    body('parent_id').optional({ nullable: true }).isMongoId(),
+    body('parent_id')
+      .customSanitizer((v) => (v === '' ? null : v))
+      .optional({ nullable: true })
+      .isMongoId(),
     body('name').isString().notEmpty(),
     body('slug').optional().isString(),
     body('path').optional().isString(),
@@ -202,8 +211,11 @@ r.post(
     body('meta').optional().isObject(),
   ],
   async (req, res) => {
-    handleValidation(req, res)
-    const { main_menu_id, parent_id = null, name, slug, path, order = 0, meta = {} } = req.body
+    if (handleValidation(req, res)) return
+    let { main_menu_id, parent_id = null, name, slug, path, order = 0, meta = {} } = req.body
+    // Normalize parent and order
+    if (parent_id === '' || parent_id === undefined) parent_id = null
+    order = parseInt(order || 0)
     const doc = await SubMenu.create({
       main_menu_id,
       parent_id,
@@ -218,7 +230,7 @@ r.post(
 )
 
 r.get('/sub-menus/:id', [param('id').isMongoId()], async (req, res) => {
-  handleValidation(req, res)
+  if (handleValidation(req, res)) return
   const item = await SubMenu.findById(req.params.id)
   if (!item) return res.status(404).json({ error: 'Not found' })
   res.json(item)
@@ -229,7 +241,10 @@ r.put(
   [
     param('id').isMongoId(),
     body('main_menu_id').optional().isMongoId(),
-    body('parent_id').optional({ nullable: true }).isMongoId(),
+    body('parent_id')
+      .customSanitizer((v) => (v === '' ? null : v))
+      .optional({ nullable: true })
+      .isMongoId(),
     body('name').optional().isString(),
     body('slug').optional().isString(),
     body('path').optional().isString(),
@@ -237,8 +252,11 @@ r.put(
     body('meta').optional().isObject(),
   ],
   async (req, res) => {
-    handleValidation(req, res)
+    if (handleValidation(req, res)) return
     const payload = { ...req.body }
+    // Normalize fields
+    if (payload.parent_id === '' || payload.parent_id === undefined) payload.parent_id = null
+    if (payload.order !== undefined) payload.order = parseInt(payload.order)
     if (payload.name && !payload.slug) payload.slug = slugify(payload.name)
     const item = await SubMenu.findByIdAndUpdate(req.params.id, { $set: payload }, { new: true })
     if (!item) return res.status(404).json({ error: 'Not found' })
@@ -247,7 +265,7 @@ r.put(
 )
 
 r.delete('/sub-menus/:id', [param('id').isMongoId()], async (req, res) => {
-  handleValidation(req, res)
+  if (handleValidation(req, res)) return
   // recursively delete children
   const toDelete = [req.params.id]
   while (toDelete.length) {

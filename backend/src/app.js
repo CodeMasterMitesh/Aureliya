@@ -81,28 +81,36 @@ const csrfProtection = csrf({
     signed: false,
   },
 })
-// Apply CSRF protection only to unsafe methods; allow safe reads without token
+// Apply CSRF protection only to unsafe methods; allow safe reads without token.
+// Additionally, expose a request-scoped helper for safe methods to generate a token lazily.
 app.use(env.API_PREFIX, (req, res, next) => {
-  if (['GET','HEAD','OPTIONS'].includes(req.method)) return next()
+  if (['GET','HEAD','OPTIONS'].includes(req.method)) {
+    // For GETs we still want ability to issue token later without wrapping route again.
+    req._csrfInit = () => new Promise((resolve, reject) => {
+      csrfProtection(req, res, (err) => (err ? reject(err) : resolve()))
+    })
+    return next()
+  }
   return csrfProtection(req, res, next)
 })
 
 // Endpoint to issue a CSRF token (frontend reads XSRF-TOKEN cookie or response)
-app.get(`${env.API_PREFIX}/csrf`, (req, res) => {
-  // Initialize middleware explicitly for GET to seed secret then issue token
-  csrfProtection(req, res, () => {
-    try {
-      const token = req.csrfToken()
-      res.cookie('XSRF-TOKEN', token, {
-        sameSite: 'lax',
-        secure: env.isProduction,
-        httpOnly: false,
-      })
-      return res.json({ csrfToken: token })
-    } catch (e) {
-      return res.status(500).json({ error: 'Failed to issue CSRF token', detail: e.message })
+app.get(`${env.API_PREFIX}/csrf`, async (req, res) => {
+  try {
+    // Initialize secret if not already done
+    if (!req.csrfToken) {
+      await req._csrfInit()
     }
-  })
+    const token = req.csrfToken()
+    res.cookie('XSRF-TOKEN', token, {
+      sameSite: 'lax',
+      secure: env.isProduction,
+      httpOnly: false,
+    })
+    return res.json({ csrfToken: token })
+  } catch (e) {
+    return res.status(500).json({ error: 'Failed to issue CSRF token', detail: e.message })
+  }
 })
 
 app.get('/health', (_, res) => res.json({ ok: true }))

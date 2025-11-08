@@ -11,7 +11,8 @@ import { listSubMenus, listMainMenus, createSubMenu, updateSubMenu, deleteSubMen
 
 export default function SubMenusPage() {
   const router = useRouter()
-  const token = useAuth(s => s.token)
+  const user = useAuth(s => s.user)
+  const ready = useAuth(s => s.ready)
   const [items, setItems] = useState([])
   const [page, setPage] = useState(1)
   const [pages, setPages] = useState(1)
@@ -26,7 +27,7 @@ export default function SubMenusPage() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selected, setSelected] = useState(new Set())
 
-  useEffect(() => { if (!token) router.replace('/admin/login') }, [token])
+  useEffect(() => { if (ready && !user) router.replace('/login') }, [user, ready])
   useEffect(() => {
     (async () => {
       const { items } = await listMainMenus({ limit: 200 })
@@ -51,7 +52,7 @@ export default function SubMenusPage() {
       setSelected(new Set())
     } catch (e) {
       const code = e?.response?.status
-      if (code === 401 || code === 403) router.replace('/admin/login')
+      if (code === 401 || code === 403) router.replace('/login')
       await Swal.fire({
         icon: 'error',
         title: 'Error',
@@ -265,7 +266,8 @@ export default function SubMenusPage() {
     }
   }
 
-  if (!token) return null
+  if (!ready) return null
+  if (!user) return null
 
   return (
     <div className="min-h-screen flex bg-gray-50">
@@ -275,7 +277,7 @@ export default function SubMenusPage() {
         <div className="p-6 space-y-6">
           <Breadcrumb
             items={[
-              { label: 'Dashboard', href: '/admin/dashboard', icon: '🏠' },
+              { label: 'Dashboard', href: '/dashboard', icon: '🏠' },
               { label: 'Sub Menus' }
             ]}
           />
@@ -311,6 +313,8 @@ export default function SubMenusPage() {
             exportFileName="sub-menus"
             showSearch
             searchPlaceholder="Search sub menus..."
+            showTitle={false}
+            showColumnFilters={false}
             actions={(row) => (
               <div className="flex items-center gap-2">
                 <button

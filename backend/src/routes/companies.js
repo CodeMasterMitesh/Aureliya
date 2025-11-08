@@ -161,7 +161,7 @@ r.get(
 
 // Branch detail
 r.get('/branches/:id', [param('id').isMongoId()], async (req, res) => {
-  handleValidation(req, res)
+  if (!handleValidation(req, res)) return
   const b = await Branch.findById(req.params.id)
   if (!b) return res.status(404).json({ error: 'Not found' })
   res.json(b)
@@ -178,7 +178,7 @@ r.put(
     body('meta').optional().isObject(),
   ],
   async (req, res) => {
-    handleValidation(req, res)
+    if (!handleValidation(req, res)) return
     const b = await Branch.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
     if (!b) return res.status(404).json({ error: 'Not found' })
     res.json(b)
@@ -186,7 +186,7 @@ r.put(
 )
 
 r.delete('/branches/:id', [param('id').isMongoId()], async (req, res) => {
-  handleValidation(req, res)
+  if (!handleValidation(req, res)) return
   const out = await Branch.findByIdAndDelete(req.params.id)
   if (!out) return res.status(404).json({ error: 'Not found' })
   res.json({ ok: true })
@@ -194,7 +194,7 @@ r.delete('/branches/:id', [param('id').isMongoId()], async (req, res) => {
 
 // Multi-delete branches
 r.delete('/branches', [body('ids').isArray({ min: 1 })], async (req, res) => {
-  handleValidation(req, res)
+  if (!handleValidation(req, res)) return
   await Branch.deleteMany({ _id: { $in: req.body.ids } })
   res.json({ ok: true })
 })

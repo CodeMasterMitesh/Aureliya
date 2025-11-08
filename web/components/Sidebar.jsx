@@ -20,7 +20,7 @@ function Chevron({ open }){
   )
 }
 
-function Node({ node, depth=0, activePath, openMap, toggle, collapsed }){
+function Node({ node, depth=0, activePath, openMap, toggle, collapsed, isValidPath }){
   const isLeaf = !node.submenus || node.submenus.length === 0
   const key = `sub:${node._id}`
   const isOpen = !!openMap[key]
@@ -35,8 +35,10 @@ function Node({ node, depth=0, activePath, openMap, toggle, collapsed }){
   )
 
   if (isLeaf) {
+    // Decide final href; if invalid path, send to 404
+    const target = node.path && isValidPath(node.path) ? node.path : '/404'
     return (
-      <Link href={node.path || '#'} title={collapsed ? node.name : undefined} className="block">
+      <Link href={target} title={collapsed ? node.name : undefined} className="block">
         {baseItem}
       </Link>
     )
@@ -58,7 +60,7 @@ function Node({ node, depth=0, activePath, openMap, toggle, collapsed }){
             className="ml-3 pl-2 border-l border-slate-700 space-y-1"
           >
             {(node.submenus||[]).map(child => (
-              <Node key={child._id} node={child} depth={depth+1} activePath={activePath} openMap={openMap} toggle={toggle} collapsed={collapsed} />
+              <Node key={child._id} node={child} depth={depth+1} activePath={activePath} openMap={openMap} toggle={toggle} collapsed={collapsed} isValidPath={isValidPath} />
             ))}
           </motion.div>
         )}
@@ -86,6 +88,23 @@ export default function Sidebar(){
   const flatNodes = useMemo(()=>items, [items])
   const toggle = (key) => setPersist(s => ({ ...s, open: { ...s.open, [key]: !s.open[key] } }))
   const toggleMain = (id) => toggle(`main:${id}`)
+
+  // Build runtime page path set for existence checking
+  const pagePaths = useMemo(()=>{
+    // Next.js exposes page list at build; we approximate using hardcoded known admin routes plus flatteneds.
+    // For a more robust solution, you could import a generated manifest.
+    return new Set([
+      '/login','/dashboard','/setup','/companies','/branches','/main-menus','/sub-menus',
+      '/masters/accounts/groups','/masters/accounts/ledger'
+    ])
+  }, [])
+
+  const isValidPath = (p) => {
+    if (!p || typeof p !== 'string') return false
+    // Normalize trailing slash
+    const norm = p.replace(/\/$/, '')
+    return pagePaths.has(norm)
+  }
 
   return (
     <aside className={`${collapsed ? 'w-16' : 'w-64'} sticky top-0 self-start h-screen overflow-y-auto bg-slate-900 border-r border-slate-800 p-2 transition-all duration-300` }>
@@ -125,7 +144,7 @@ export default function Sidebar(){
                     className="mt-1 ml-2 space-y-1"
                   >
                     {(m.submenus||[]).map(node => (
-                      <Node key={node._id} node={node} activePath={activePath} openMap={open} toggle={toggle} collapsed={collapsed} />
+                      <Node key={node._id} node={node} activePath={activePath} openMap={open} toggle={toggle} collapsed={collapsed} isValidPath={isValidPath} />
                     ))}
                   </motion.div>
                 )}

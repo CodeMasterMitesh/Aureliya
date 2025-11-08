@@ -46,6 +46,7 @@ const FIELD_DEFS = [
 export default function LedgersPage() {
   const router = useRouter()
   const user = useAuth(s => s.user)
+  const ready = useAuth(s => s.ready)
   const [items, setItems] = useState([])
   const [page, setPage] = useState(1)
   const [pages, setPages] = useState(1)
@@ -80,6 +81,10 @@ export default function LedgersPage() {
     })()
   }, [userCompany, userBranch])
 
+  useEffect(() => {
+    if (ready && !user) router.replace('/login')
+  }, [ready, user])
+
   async function load(p = page) {
     setLoading(true)
     try {
@@ -98,7 +103,7 @@ export default function LedgersPage() {
       setSelected(new Set())
     } catch (e) {
       const code = e?.response?.status
-      if (code === 401 || code === 403) router.replace('/admin/login')
+      if (code === 401 || code === 403) router.replace('/login')
       await Swal.fire({
         icon: 'error',
         title: 'Error',
@@ -462,6 +467,7 @@ export default function LedgersPage() {
   // Render page (data loader will redirect on 401/403). If you prefer a guard, check `user` instead of token.
 
   return (
+    !ready ? null : !user ? null :
     <div className="min-h-screen flex bg-gray-50">
       <Sidebar />
       <main className="flex-1 flex flex-col">
@@ -469,9 +475,9 @@ export default function LedgersPage() {
         <div className="p-6 space-y-6">
           <Breadcrumb
             items={[
-              { label: 'Dashboard', href: '/admin/dashboard', icon: '🏠' },
-              { label: 'Masters', href: '/admin/masters' },
-              { label: 'Accounts', href: '/admin/masters/accounts' },
+              { label: 'Dashboard', href: '/dashboard', icon: '🏠' },
+              { label: 'Masters', href: '/masters' },
+              { label: 'Accounts', href: '/masters/accounts' },
               { label: 'Ledgers' }
             ]}
           />
@@ -508,6 +514,8 @@ export default function LedgersPage() {
             exportFileName="ledgers"
             showSearch
             searchPlaceholder="Search ledgers..."
+            showTitle={false}
+            showColumnFilters={false}
             actions={(row) => (
               <div className="flex items-center gap-2">
                 <button

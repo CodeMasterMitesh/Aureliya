@@ -15,11 +15,13 @@ export default function AdvancedDataTable({
   onToggleAll,
   actions,
   title = 'Data Table',
+  showTitle = true,
   exportFileName = 'export',
   onExport,
   onBulkDelete,
   showSearch = true,
-  searchPlaceholder = 'Search...'
+  searchPlaceholder = 'Search...',
+  showColumnFilters = true
 }) {
   const [columnFilters, setColumnFilters] = useState({})
   const [globalSearch, setGlobalSearch] = useState('')
@@ -94,111 +96,99 @@ export default function AdvancedDataTable({
 
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-      {/* Header */}
+      {/* Unified Header: optional title + search + bulk + export */}
       <div className="p-4 border-b border-gray-200 bg-gradient-to-r from-gray-50 to-white">
-        <div className="flex items-center justify-between flex-wrap gap-4">
-          <h2 className="text-xl font-semibold text-gray-800">{title}</h2>
-          <div className="flex items-center gap-2 flex-wrap">
-            {selectable && selectedIds.size > 0 && (
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex items-center gap-3">
+            {showTitle && (
+              <h2 className="text-xl font-semibold text-gray-800">{title}</h2>
+            )}
+          </div>
+          <div className="flex flex-col w-full gap-3 lg:flex-row lg:items-center lg:justify-end">
+            {showSearch && (
+              <div className="w-full lg:w-64">
+                <input
+                  type="text"
+                  placeholder={searchPlaceholder}
+                  value={globalSearch}
+                  onChange={(e) => setGlobalSearch(e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                />
+              </div>
+            )}
+            <div className="flex items-center gap-2 flex-wrap">
+              {selectable && selectedIds.size > 0 && (
+                <button
+                  onClick={handleBulkDelete}
+                  className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium flex items-center gap-2"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                  Delete Selected ({selectedIds.size})
+                </button>
+              )}
               <button
-                onClick={handleBulkDelete}
-                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium flex items-center gap-2"
+                onClick={handleExportExcel}
+                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium flex items-center gap-2"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
-                Delete Selected ({selectedIds.size})
+                Export Excel
               </button>
-            )}
-            <button
-              onClick={handleExportExcel}
-              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium flex items-center gap-2"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
-              Export Excel
-            </button>
+            </div>
           </div>
         </div>
+        {filters && filters.length > 0 && (
+          <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            {filters.map((filter, idx) => (
+              <div key={idx}>
+                {filter.type === 'select' ? (
+                  <select
+                    value={filter.value || ''}
+                    onChange={(e) => onFilterChange && onFilterChange(filter.key, e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-sm"
+                  >
+                    <option value="">{filter.placeholder || `All ${filter.label}`}</option>
+                    {filter.options?.map(opt => (
+                      <option key={opt.value} value={opt.value}>{opt.label}</option>
+                    ))}
+                  </select>
+                ) : (
+                  <input
+                    type="text"
+                    placeholder={filter.placeholder || `Filter by ${filter.label}`}
+                    value={filter.value || ''}
+                    onChange={(e) => onFilterChange && onFilterChange(filter.key, e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-sm"
+                  />
+                )}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
-      {/* Filters and Search */}
-      <div className="p-4 border-b border-gray-200 bg-gray-50">
-        <div className="space-y-3">
-          {showSearch && (
-            <div>
-              <input
-                type="text"
-                placeholder={searchPlaceholder}
-                value={globalSearch}
-                onChange={(e) => setGlobalSearch(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-              />
-            </div>
-          )}
-          
-          {filters && filters.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-              {filters.map((filter, idx) => (
-                <div key={idx}>
-                  {filter.type === 'select' ? (
-                    <select
-                      value={filter.value || ''}
-                      onChange={(e) => onFilterChange && onFilterChange(filter.key, e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-sm"
-                    >
-                      <option value="">{filter.placeholder || `All ${filter.label}`}</option>
-                      {filter.options?.map(opt => (
-                        <option key={opt.value} value={opt.value}>{opt.label}</option>
-                      ))}
-                    </select>
-                  ) : (
-                    <input
-                      type="text"
-                      placeholder={filter.placeholder || `Filter by ${filter.label}`}
-                      value={filter.value || ''}
-                      onChange={(e) => onFilterChange && onFilterChange(filter.key, e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-sm"
-                    />
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
+      {/* Column Filters (optional) */}
+      {showColumnFilters && (
+        <div className="p-2 border-b border-gray-200 bg-gray-50">
+          <div className="grid gap-2" style={{ gridTemplateColumns: `repeat(${columns.length + (actions ? 1 : 0)}, minmax(120px, 1fr))` }}>
+            {columns.map(col => (
+              <div key={col.key} className="px-2">
+                <input
+                  type="text"
+                  placeholder={`Filter ${col.label}`}
+                  value={columnFilters[col.key] || ''}
+                  onChange={(e) => handleColumnFilter(col.key, e.target.value)}
+                  className="w-full px-2 py-1 text-xs border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 focus:border-transparent outline-none"
+                />
+              </div>
+            ))}
+            {actions && <div></div>}
+          </div>
         </div>
-      </div>
-
-      {/* Column Filters */}
-      <div className="p-2 border-b border-gray-200 bg-gray-50">
-        <div className="grid gap-2" style={{ gridTemplateColumns: `repeat(${columns.length + (selectable ? 1 : 0) + (actions ? 1 : 0)}, minmax(120px, 1fr))` }}>
-          {selectable && (
-            <div className="px-2">
-              <input
-                type="checkbox"
-                checked={allSelected}
-                ref={(input) => {
-                  if (input) input.indeterminate = someSelected && !allSelected
-                }}
-                onChange={(e) => onToggleAll && onToggleAll(e.target.checked)}
-                className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
-              />
-            </div>
-          )}
-          {columns.map(col => (
-            <div key={col.key} className="px-2">
-              <input
-                type="text"
-                placeholder={`Filter ${col.label}`}
-                value={columnFilters[col.key] || ''}
-                onChange={(e) => handleColumnFilter(col.key, e.target.value)}
-                className="w-full px-2 py-1 text-xs border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 focus:border-transparent outline-none"
-              />
-            </div>
-          ))}
-          {actions && <div></div>}
-        </div>
-      </div>
+      )}
 
       {/* Table */}
       <div className="overflow-x-auto">

@@ -28,7 +28,7 @@ export default function AdminTopBar(){
         {open && (
           <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow border p-2 z-50">
             <div className="px-2 py-1 text-xs text-slate-500">Account</div>
-            <Link href="/admin/setup" className="flex items-center gap-2 px-2 py-2 rounded hover:bg-slate-100 text-sm">
+            <Link href="/setup" className="flex items-center gap-2 px-2 py-2 rounded hover:bg-slate-100 text-sm">
               <span>⚙️</span> <span>Setup</span>
             </Link>
             <button onClick={()=>{ logout(); }} className="flex w-full text-left items-center gap-2 px-2 py-2 rounded hover:bg-slate-100 text-sm">

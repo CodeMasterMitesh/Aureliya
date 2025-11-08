@@ -1,0 +1,1 @@
+export { default } from '../../admin/masters/accounts/ledger.jsx'
