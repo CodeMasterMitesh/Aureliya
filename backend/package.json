@@ -22,7 +22,8 @@
     "import:transactions": "node src/scripts/importTransactions.js",
     "db:create-collections": "node src/scripts/createCollections.js",
     "db:create-collections:dry": "cross-env DRY_RUN=true node src/scripts/createCollections.js",
-    "db:create-collections:indexes": "cross-env BUILD_INDEXES=true node src/scripts/createCollections.js"
+    "db:create-collections:indexes": "cross-env BUILD_INDEXES=true node src/scripts/createCollections.js",
+    "db:seed-placeholders": "node src/scripts/seedPlaceholders.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

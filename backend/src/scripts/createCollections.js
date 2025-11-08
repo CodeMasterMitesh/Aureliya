@@ -40,15 +40,46 @@ async function importCoreModels(){
 
 async function importGeneratedModels(){
   if (!fs.existsSync(genDir)) return []
+  const strategy = (process.env.GEN_STRATEGY || 'skip').toLowerCase() // 'skip' | 'namespace' | 'overwrite'
   const files = fs.readdirSync(genDir).filter(f => f.endsWith('.js') && f !== 'index.js')
+
   for (const f of files){
-    const modelName = path.basename(f, '.js')
-    if (mongoose.models[modelName]){
-      console.log(`Skipping generated model ${modelName} (already defined)`)
+    const baseName = path.basename(f, '.js')
+    const p = path.join(genDir, f)
+
+    if (strategy === 'skip'){
+      if (mongoose.models[baseName]){
+        console.log(`Skipping generated model ${baseName} (already defined) [GEN_STRATEGY=skip]`)
+        continue
+      }
+      await import(url.pathToFileURL(p))
       continue
     }
-    const p = path.join(genDir, f)
-    await import(url.pathToFileURL(p))
+
+    if (strategy === 'overwrite'){
+      if (mongoose.models[baseName]){
+        console.log(`Overwriting existing model ${baseName} with generated version [GEN_STRATEGY=overwrite]`)
+        try { mongoose.deleteModel(baseName) } catch {}
+      }
+      await import(url.pathToFileURL(p))
+      continue
+    }
+
+    // namespace collisions: register generated model as Gen_<Name>
+    const originalModel = mongoose.model
+    mongoose.model = function(name, schema, collection, options){
+      if (mongoose.models[name]){
+        const namespaced = `Gen_${name}`
+        console.log(`Namespacing generated model ${name} -> ${namespaced} [GEN_STRATEGY=namespace]`)
+        return originalModel.call(this, namespaced, schema, collection, options)
+      }
+      return originalModel.call(this, name, schema, collection, options)
+    }
+    try {
+      await import(url.pathToFileURL(p))
+    } finally {
+      mongoose.model = originalModel
+    }
   }
   return files
 }

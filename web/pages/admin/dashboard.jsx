@@ -50,7 +50,7 @@ export default function AdminDashboard(){
         if (mounted) setData(d)
       } catch (e){
         const code = e?.response?.status
-        if (code === 401 || code === 403) router.replace('/admin/login')
+  if (code === 401 || code === 403) router.replace('/login')
       } finally {
         if (mounted) setLoading(false)
       }

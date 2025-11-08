@@ -54,6 +54,38 @@ Dry-run (no changes, just logs):
 docker-compose run --rm -e DRY_RUN=true create_collections
 ```
 
+### Import Generated Models With Collision Strategy
+
+You can control how models in `src/models_generated` that share names with core models are registered using `GEN_STRATEGY`:
+
+| Value | Behavior |
+|-------|----------|
+| skip (default) | Skip generated model if name already exists |
+| overwrite | Replace existing model with generated version |
+| namespace | Register generated duplicate as `Gen_<Name>` |
+
+Examples:
+
+Skip duplicates (default):
+```bash
+docker-compose run --rm -e GEN_STRATEGY=skip create_collections
+```
+
+Overwrite core model definitions with generated ones (use cautiously):
+```bash
+docker-compose run --rm -e GEN_STRATEGY=overwrite create_collections
+```
+
+Namespace duplicates to keep both versions:
+```bash
+docker-compose run --rm -e GEN_STRATEGY=namespace create_collections
+```
+
+Combine with index building:
+```bash
+docker-compose run --rm -e GEN_STRATEGY=namespace -e BUILD_INDEXES=true create_collections
+```
+
 Alternatively, run inside the running backend container:
 
 ```bash

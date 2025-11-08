@@ -18,7 +18,7 @@ export default function AdminLogin(){
     async function init(){
       try {
         // If already logged in, go straight to dashboard
-        if (currentUser){ router.replace('/admin/dashboard'); return }
+  if (currentUser){ router.replace('/dashboard'); return }
         // Fetch CSRF token then companies
         await api.get('/csrf')
         fetchCompanies().then(setCompanies).catch(()=>{})
@@ -50,7 +50,7 @@ export default function AdminLogin(){
         position: 'top-end'
       })
       
-      router.replace('/admin/dashboard')
+  router.replace('/dashboard')
     } catch (e) {
       const errorMsg = e?.response?.data?.error || 'Login failed. Please check your credentials.'
       await Swal.fire({
