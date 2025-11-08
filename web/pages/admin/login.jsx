@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import Swal from 'sweetalert2'
 import { fetchCompanies, fetchBranches } from '../../src/api/companies'
-import api from '../../src/api/axios'
+import api, { setCsrfToken } from '../../src/api/axios'
 import { useAuth } from '../../src/store/auth'
 
 export default function AdminLogin(){
@@ -20,7 +20,8 @@ export default function AdminLogin(){
         // If already logged in, go straight to dashboard
   if (currentUser){ router.replace('/dashboard'); return }
         // Fetch CSRF token then companies
-        await api.get('/csrf')
+  const res = await api.get('/csrf')
+  if (res?.data?.csrfToken) setCsrfToken(res.data.csrfToken)
         fetchCompanies().then(setCompanies).catch(()=>{})
       } catch (e){ /* ignore token fetch failure - login will fail gracefully */ }
     }
