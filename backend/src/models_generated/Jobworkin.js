@@ -1,0 +1,79 @@
+import mongoose from 'mongoose'
+const { Schema } = mongoose
+
+const JobworkinSchema = new Schema({
+  id: { type: Number }, // id int(11)
+  jobno: { type: String }, // jobno varchar(50)
+  vehicleno: { type: String }, // vehicleno varchar(255)
+  servicetype: { type: String }, // servicetype varchar(255)
+  serviceno: { type: String }, // serviceno varchar(50)
+  km: { type: String }, // km varchar(255)
+  couponno: { type: String }, // couponno varchar(255)
+  model: { type: String }, // model varchar(100)
+  chassisno: { type: String }, // chassisno varchar(120)
+  engineno: { type: String }, // engineno varchar(25)
+  saledate: { type: Date }, // saledate date
+  saledealer: { type: String }, // saledealer varchar(100)
+  supplier: { type: String }, // supplier varchar(255)
+  color: { type: String }, // color varchar(100)
+  fuel: { type: String }, // fuel varchar(100)
+  vehiclesold: { type: String }, // vehiclesold varchar(100)
+  mechanic: { type: String }, // mechanic varchar(100)
+  at: { type: String }, // at varchar(100)
+  taluka: { type: String }, // taluka varchar(100)
+  dist: { type: String }, // dist varchar(100)
+  contactno: { type: String }, // contactno varchar(50)
+  keyno: { type: String }, // keyno varchar(100)
+  batteryno: { type: String }, // batteryno varchar(100)
+  amccardno: { type: String }, // amccardno varchar(100)
+  insudate: { type: Date }, // insudate date
+  source: { type: String }, // source varchar(100)
+  workmanagaer: { type: String }, // workmanagaer varchar(100)
+  discsource: { type: String }, // discsource varchar(100)
+  jobdate: { type: Date }, // jobdate datetime
+  deldate: { type: Date }, // deldate datetime
+  location: { type: String }, // location varchar(100)
+  remarks: { type: String }, // remarks varchar(255)
+  total: { type: Number }, // total float
+  shipping: { type: Number }, // shipping float
+  discount: { type: Number }, // discount float
+  totalqty: { type: Number }, // totalqty float
+  gtotal: { type: Number }, // gtotal float
+  company: { type: Number }, // company int(11)
+  deleteField: { type: Number }, // delete int(11)
+  lock: { type: Number }, // lock int(11)
+  enterby: { type: Number }, // enterby int(11)
+  enterdatetime: { type: Date }, // enterdatetime datetime
+  modifiedby: { type: Number }, // modifiedby int(11)
+  modifieddatetime: { type: Date }, // modifieddatetime datetime
+  active: { type: Number }, // active int(11)
+  branch: { type: Number }, // branch int(11)
+  action: { type: String }, // action varchar(25)
+  deltme: { type: String }, // deltme varchar(25)
+  pid: { type: Number }, // pid int(11)
+  customername: { type: String }, // customername varchar(50)
+  client: { type: Number }, // client int(11)
+  workmanager: { type: Number }, // workmanager int(11)
+  jobdatetime: { type: Date }, // jobdatetime datetime
+  deldatetime: { type: Date }, // deldatetime datetime
+  status: { type: String }, // status varchar(15)
+  partstotal: { type: Number }, // partstotal float
+  invoicestatus: { type: String }, // invoicestatus varchar(100)
+  gstno: { type: String }, // gstno varchar(255)
+  psfcall: { type: Number }, // psfcall int(11)
+  vehicleper: { type: String }, // vehicleper varchar(255)
+  washingqua: { type: String }, // washingqua varchar(255)
+  servicepart: { type: String }, // servicepart varchar(255)
+  rating: { type: String }, // rating varchar(255)
+  satdis: { type: String }, // satdis varchar(255)
+  sugges: { type: String }, // sugges varchar(255)
+  reason: { type: String }, // reason varchar(255)
+  psfby: { type: Number }, // psfby int(11)
+  psfdatetime: { type: Date }, // psfdatetime datetime
+  nextfollowupafterdays: { type: String }, // nextfollowupafterdays varchar(255)
+  followupdate: { type: Date }, // followupdate date
+  customervoice: { type: String }, // customervoice varchar(255)
+  discountmaster: { type: Number }, // discountmaster int(11)
+}, { timestamps: false })
+
+export default mongoose.model('Jobworkin', JobworkinSchema, 'jobworkin')

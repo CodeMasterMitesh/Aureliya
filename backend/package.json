@@ -11,7 +11,18 @@
     "format": "prettier --write .",
     "seed": "node src/scripts/seed.js",
     "seed:menus": "node src/scripts/seedMenus.js",
-    "db:inspect": "node src/scripts/dbInspect.js"
+    "db:inspect": "node src/scripts/dbInspect.js",
+    "migrate:ledgers-to-users": "node src/scripts/migrateLedgersToUsers.js",
+    "import:contacts": "node src/scripts/importContactsToUsers.js",
+    "generate:schemas": "node src/scripts/generateSchemasFromSql.js",
+    "audit:schemas": "node src/scripts/auditGeneratedSchemas.js",
+    "import:companies-branches": "node src/scripts/importCompaniesBranches.js",
+    "import:account-groups": "node src/scripts/importAccountGroups.js",
+    "import:products": "node src/scripts/importProducts.js",
+    "import:transactions": "node src/scripts/importTransactions.js",
+    "db:create-collections": "node src/scripts/createCollections.js",
+    "db:create-collections:dry": "cross-env DRY_RUN=true node src/scripts/createCollections.js",
+    "db:create-collections:indexes": "cross-env BUILD_INDEXES=true node src/scripts/createCollections.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -29,12 +40,14 @@
     "pino": "^9.2.0",
     "pino-http": "^10.0.0",
     "helmet": "^7.1.0",
-  "cookie-parser": "^1.4.6",
-  "csurf": "^1.11.0",
+    "cookie-parser": "^1.4.6",
+    "csurf": "^1.11.0",
     "razorpay": "^2.9.5",
-    "sweetalert2": "^11.26.3"
+    "sweetalert2": "^11.26.3",
+    "mysql2": "^3.11.3"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "jest": "^29.7.0",
     "mongodb-memory-server": "^10.1.4",
     "nodemon": "^3.1.7",

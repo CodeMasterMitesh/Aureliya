@@ -1,12 +1,13 @@
-# Docker Setup with Hot Reload and Auto-Seeding
+# Docker Setup with Hot Reload, Seeding, and Collection Initialization
 
-This setup provides hot reload for development and automatic database seeding.
+This setup provides hot reload for development, optional one-off collection initialization, and on-demand database seeding.
 
 ## Features
 
-- ✅ **Hot Reload**: Changes to source code automatically reload in containers
-- ✅ **Auto-Seeding**: Menus and sub-menus are automatically seeded on startup
-- ✅ **Auto-Cleanup**: Seed containers are automatically removed after completion
+- ✅ Hot Reload (backend and frontend)
+- ✅ Auto-Seeding (on demand via seed compose)
+- ✅ Collection Initialization (one-off job to create empty MongoDB collections, optional index build)
+- ✅ Auto-Cleanup (seed/init jobs exit and can be removed)
 
 ## Quick Start
 
@@ -33,78 +34,95 @@ docker-compose logs -f
 docker-compose down
 ```
 
+## Create Empty MongoDB Collections (no data import)
+
+Run the one-off init service defined in `docker-compose.seed.yml` after Mongo is healthy:
+
+```bash
+docker-compose run --rm create_collections
+```
+
+Also build indexes defined in schemas:
+
+```bash
+docker-compose run --rm -e BUILD_INDEXES=true create_collections
+```
+
+Dry-run (no changes, just logs):
+
+```bash
+docker-compose run --rm -e DRY_RUN=true create_collections
+```
+
+Alternatively, run inside the running backend container:
+
+```bash
+docker-compose exec backend node src/scripts/createCollections.js
+docker-compose exec backend sh -lc "BUILD_INDEXES=true node src/scripts/createCollections.js"
+```
+
 ## How It Works
 
 ### Hot Reload
 
-**Backend:**
-- Uses `nodemon` to watch for file changes
-- Source code is mounted as a volume
-- Changes to files in `backend/src/` automatically restart the server
+Backend:
+- `nodemon` watches files; code is volume-mounted
 
-**Frontend:**
-- Uses Next.js development mode
-- Source code is mounted as a volume
-- Changes to files in `web/` automatically trigger hot module replacement
+Frontend:
+- Next.js dev server with HMR; code is volume-mounted
 
-### Auto-Seeding
+### Auto-Seeding (on demand)
 
-1. When you run `docker-compose up`, seed containers automatically run
-2. They wait for MongoDB to be healthy
-3. They seed the database with initial data
-4. After completion, they exit
-5. Main services wait for seeds to complete before starting
-
-### Removing Seed Containers
-
-Seed containers are configured to exit after completion. To remove them:
+Seed jobs are defined in `docker-compose.seed.yml` and can be run when needed:
 
 ```bash
-# Remove seed containers manually
-docker-compose rm -f seed seed_menus
-
-# Or use the start script which does this automatically
+docker-compose run --rm seed
+docker-compose run --rm seed_menus
 ```
+
+### Collection Initialization (optional)
+
+The `create_collections` job loads all Mongoose models and creates their collections without importing any data. If `BUILD_INDEXES=true` is set, it also builds indexes.
 
 ## Development Workflow
 
-1. **Start containers**: `docker-compose up -d --build`
-2. **Make changes**: Edit files in `backend/src/` or `web/`
-3. **See changes**: Containers automatically reload
-4. **View logs**: `docker-compose logs -f [service-name]`
+1. Start containers: `docker-compose up -d --build`
+2. Create collections (optional): `docker-compose run --rm create_collections`
+3. Make changes in `backend/src/` or `web/` and see hot reload
+4. View logs: `docker-compose logs -f [service]`
 
 ## Troubleshooting
 
 ### Changes not reflecting?
 
-1. Check if volumes are mounted correctly:
-   ```bash
-   docker-compose exec backend ls -la /app/src
-   docker-compose exec web ls -la /app
-   ```
+```bash
+docker-compose exec backend ls -la /app/src
+docker-compose exec web ls -la /app
+docker-compose restart backend
+docker-compose restart web
+```
 
-2. Restart the service:
-   ```bash
-   docker-compose restart backend
-   docker-compose restart web
-   ```
+### Seed/Init jobs not running?
 
-### Seed containers not running?
+```bash
+docker-compose ps mongo
+docker-compose run --rm create_collections
+docker-compose run --rm seed
+docker-compose run --rm seed_menus
+```
 
-1. Check MongoDB is healthy:
-   ```bash
-   docker-compose ps mongo
-   ```
+### Collections not appearing?
 
-2. Run seeds manually:
-   ```bash
-   docker-compose run --rm seed
-   docker-compose run --rm seed_menus
-   ```
+```bash
+docker-compose exec mongo mongosh aureliya_ecom --eval "db.getCollectionNames()"
+docker-compose run --rm create_collections
+docker-compose run --rm -e BUILD_INDEXES=true create_collections
+```
 
 ### Port conflicts?
 
-If ports 3000 or 5000 are already in use, update them in `docker-compose.yml`:
+Adjust ports in `docker-compose.yml`:
+
 ```yaml
 ports:
   - "3001:3000"  # Change host port
@@ -112,10 +130,9 @@ ports:
 
 ## Production Build
 
-For production, use the regular Dockerfiles (not `.dev` versions):
+Use the production Dockerfiles (not `.dev`):
 
 ```bash
-# Build production images
 docker-compose -f docker-compose.prod.yml build
 ```
 
@@ -123,29 +140,28 @@ docker-compose -f docker-compose.prod.yml build
 
 ```
 .
-├── docker-compose.yml          # Main compose file with hot reload
-├── docker-start.sh             # Linux/Mac startup script
-├── docker-start.bat            # Windows startup script
+├── docker-compose.yml
+├── docker-compose.seed.yml
+├── docker-start.sh
+├── docker-start.bat
 ├── backend/
-│   ├── Dockerfile              # Production Dockerfile
-│   ├── Dockerfile.dev          # Development Dockerfile (with nodemon)
-│   └── src/                    # Source code (mounted in dev)
+│   ├── Dockerfile
+│   ├── Dockerfile.dev
+│   └── src/
 └── web/
-    ├── Dockerfile              # Production Dockerfile
-    ├── Dockerfile.dev          # Development Dockerfile (Next.js dev)
-    └── pages/                  # Source code (mounted in dev)
+    ├── Dockerfile
+    ├── Dockerfile.dev
+    └── pages/
 ```
 
 ## Environment Variables
 
-Create `.env` files if needed:
-- `backend/.env` - Backend environment variables
-- `web/.env.local` - Frontend environment variables
+- `backend/.env` — Backend environment variables
+- `web/.env.local` — Frontend environment variables
 
 ## Notes
 
-- Seed containers run every time you start the services
-- They clean existing menus/sub-menus before seeding
-- Source code changes are immediately reflected (no rebuild needed)
-- `node_modules` are excluded from volume mounts for performance
+- Init/seed jobs are optional; run them when needed
+- Source changes reflect immediately with hot reload
+- `node_modules` are not bind-mounted for performance
 

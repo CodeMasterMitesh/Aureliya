@@ -1,0 +1,82 @@
+import mongoose from 'mongoose'
+const { Schema } = mongoose
+
+const PurchasereturnitemsSchema = new Schema({
+  id: { type: Number }, // id int(11)
+  purchasenumber: { type: String }, // purchasenumber varchar(100)
+  qty: { type: Number }, // qty decimal(10
+  pid: { type: Number }, // pid int(11)
+  prid: { type: Number }, // prid int(11)
+  mid: { type: Number }, // mid int(11)
+  rate: { type: Number }, // rate decimal(10
+  amount: { type: Number }, // amount decimal(10
+  weight: { type: Number }, // weight decimal(10
+  srno: { type: String }, // srno varchar(255)
+  purchasereturnorderdate: { type: Date }, // purchasereturnorderdate date
+  deleteField: { type: Number }, // delete int(11)
+  lock: { type: Number }, // lock int(11)
+  enterby: { type: Number }, // enterby int(11)
+  enterdatetime: { type: Date }, // enterdatetime datetime
+  modifiedby: { type: Number }, // modifiedby int(11)
+  modifieddatetime: { type: Date }, // modifieddatetime datetime
+  active: { type: Number }, // active int(11)
+  branch: { type: Number }, // branch int(11)
+  company: { type: Number }, // company int(11)
+  action: { type: String }, // action varchar(25)
+  reqty: { type: Number }, // reqty decimal(10
+  purchaseid: { type: Number }, // purchaseid int(11)
+  disc: { type: Number }, // disc float
+  typedisc: { type: String }, // typedisc varchar(20)
+  cgstper: { type: Number }, // cgstper decimal(10
+  sgstper: { type: Number }, // sgstper decimal(10
+  igstper: { type: Number }, // igstper decimal(10
+  cgst: { type: Number }, // cgst decimal(10
+  sgst: { type: Number }, // sgst decimal(10
+  igst: { type: Number }, // igst decimal(10
+  netamount: { type: Number }, // netamount decimal(10
+  ledgerid: { type: Number }, // ledgerid int(11)
+  batchno: { type: String }, // batchno text
+  godown: { type: Number }, // godown int(11)
+  discount: { type: Number }, // discount decimal(10
+  location: { type: Number }, // location int(11)
+  gstper: { type: Number }, // gstper int(11)
+  expirydate: { type: Date }, // expirydate date
+  gross: { type: Number }, // gross decimal(10
+  taxamount: { type: Number }, // taxamount decimal(10
+  itemcode: { type: String }, // itemcode varchar(255)
+  hsncode: { type: String }, // hsncode varchar(255)
+  rcmcgst: { type: Number }, // rcmcgst decimal(15
+  rcmsgst: { type: Number }, // rcmsgst decimal(15
+  rcmigst: { type: Number }, // rcmigst decimal(15
+  listprice: { type: Number }, // listprice decimal(15
+  handlingcharge: { type: Number }, // handlingcharge decimal(15
+  handlingchargetypedisc: { type: String }, // handlingchargetypedisc varchar(20)
+  purchaseaccid: { type: Number }, // purchaseaccid int(11)
+  centralpurchaseaccid: { type: Number }, // centralpurchaseaccid int(11)
+  cgstaccid: { type: Number }, // cgstaccid int(11)
+  sgstaccid: { type: Number }, // sgstaccid int(11)
+  igstaccid: { type: Number }, // igstaccid int(11)
+  centralcgstaccid: { type: Number }, // centralcgstaccid int(11)
+  centralsgstaccid: { type: Number }, // centralsgstaccid int(11)
+  centraligstaccid: { type: Number }, // centraligstaccid int(11)
+  batchqty: { type: String }, // batchqty text
+  egstper: { type: Number }, // egstper float
+  localpacid: { type: Number }, // localpacid int(11)
+  centralpacid: { type: Number }, // centralpacid int(11)
+  localcgstid: { type: Number }, // localcgstid int(11)
+  localsgstid: { type: Number }, // localsgstid int(11)
+  localigstid: { type: Number }, // localigstid int(11)
+  centralcgstid: { type: Number }, // centralcgstid int(11)
+  centralsgstid: { type: Number }, // centralsgstid int(11)
+  centraligstid: { type: Number }, // centraligstid int(11)
+  sgstid: { type: Number }, // sgstid int(11)
+  cgstid: { type: Number }, // cgstid int(11)
+  igstid: { type: Number }, // igstid int(11)
+  exemptsacid: { type: Number }, // exemptsacid int(11)
+  exemptcenteralsacid: { type: Number }, // exemptcenteralsacid int(11)
+  advance: { type: Number }, // advance decimal(15
+  kasar: { type: Number }, // kasar float
+  revision: { type: Number }, // revision int(11)
+}, { timestamps: false })
+
+export default mongoose.model('Purchasereturnitems', PurchasereturnitemsSchema, 'purchasereturnitems')

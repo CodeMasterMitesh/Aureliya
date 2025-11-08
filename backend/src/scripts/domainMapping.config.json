@@ -1,0 +1,26 @@
+{
+  "ignorePatterns": [
+    "^Temp202526",
+    "Copy$",
+    "[0-9]{6}$",
+    "[0-9]$"
+  ],
+  "canonical": {
+    "Company": ["Companymaster"],
+    "Branch": ["Branchmaster", "CompanyBranch"],
+    "AccountGroup": ["Accountgroups"],
+    "User": ["Contacts", "Contacts1", "Suppliermaster", "Vendormaster"],
+    "Product": ["Products", "Products1", "Products300516", "Itemmaster", "ItemmasterCopy", "Newmaterialmaster", "Productmaterial"],
+    "Transaction": [
+      "Salesorder", "Salesbill", "Sales", "Saleschallan", "Salesreceiptitems",
+      "Purchaseorder", "Purchasebill", "Purchases", "Purchasereturn", "Purchasepayment",
+      "Voucher", "Vouchertype", "Voucheritems", "Ledgervouchers",
+      "Receipt", "Payment"
+    ],
+    "PriceList": ["Customerpricelist", "Customerpricelistitem"],
+    "Uom": ["Uom"],
+    "Hsncode": ["Hsncode"],
+    "Taxmaster": ["Taxmaster"],
+    "InventoryMovement": ["Stock", "Stockjournal", "Stockregister", "Stocktransfer", "Stocktransferitems", "Openingqty", "Openingqtyitems"]
+  }
+}

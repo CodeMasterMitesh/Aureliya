@@ -1,6 +1,20 @@
 version: "3.9"
 
 services:
+  create_collections:
+    build:
+      context: ./backend
+    container_name: aureliya-create-collections
+    environment:
+      MONGODB_URI: mongodb://mongo:27017/aureliya_ecom
+      # Set to "true" if you also want to build indexes on first run
+      # BUILD_INDEXES: "true"
+    depends_on:
+      mongo:
+        condition: service_healthy
+    command: ["npm", "run", "db:create-collections"]
+    restart: "no"
+
   seed:
     build:
       context: ./backend

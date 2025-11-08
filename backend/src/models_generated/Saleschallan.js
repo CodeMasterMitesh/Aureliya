@@ -1,0 +1,85 @@
+import mongoose from 'mongoose'
+const { Schema } = mongoose
+
+const SaleschallanSchema = new Schema({
+  id: { type: Number }, // id int(11)
+  disc: { type: String }, // disc varchar(255)
+  saleschallanno: { type: String }, // saleschallanno varchar(100)
+  saleschallandate: { type: Date }, // saleschallandate datetime
+  client: { type: Number }, // client int(11)
+  salesorderno: { type: Number }, // salesorderno int(11)
+  gtotal: { type: Number }, // gtotal float
+  deleteField: { type: Number }, // delete int(11)
+  lock: { type: Number }, // lock int(11)
+  enterby: { type: Number }, // enterby int(11)
+  enterdatetime: { type: Date }, // enterdatetime datetime
+  modifiedby: { type: Number }, // modifiedby int(11)
+  modifieddatetime: { type: Date }, // modifieddatetime datetime
+  active: { type: Number }, // active int(11)
+  branch: { type: Number }, // branch int(11)
+  company: { type: Number }, // company int(11)
+  action: { type: String }, // action varchar(255)
+  godown: { type: Number }, // godown int(11)
+  frombranch: { type: Number }, // frombranch int(11)
+  location: { type: Number }, // location int(11)
+  tobranch: { type: Number }, // tobranch int(11)
+  togodown: { type: Number }, // togodown int(11)
+  consignee: { type: String }, // consignee varchar(255)
+  approved: { type: String }, // approved varchar(20)
+  terms: { type: String }, // terms text
+  pandfamount: { type: Number }, // pandfamount float
+  pandf: { type: Number }, // pandf float
+  cgstperpandf: { type: Number }, // cgstperpandf float
+  cgstpandf: { type: Number }, // cgstpandf float
+  sgstperpandf: { type: Number }, // sgstperpandf float
+  sgstpandf: { type: Number }, // sgstpandf float
+  igstperpandf: { type: Number }, // igstperpandf float
+  igstpandf: { type: Number }, // igstpandf float
+  netpandf: { type: Number }, // netpandf float
+  freight: { type: Number }, // freight float
+  cgstperfreight: { type: Number }, // cgstperfreight float
+  cgstfreight: { type: Number }, // cgstfreight float
+  sgstperfreight: { type: Number }, // sgstperfreight float
+  sgstfreight: { type: Number }, // sgstfreight float
+  igstperfreight: { type: Number }, // igstperfreight float
+  igstfreight: { type: Number }, // igstfreight float
+  netfreight: { type: Number }, // netfreight float
+  subtotal: { type: Number }, // subtotal float
+  totalcgst: { type: Number }, // totalcgst float
+  totalsgst: { type: Number }, // totalsgst float
+  panfdisc: { type: String }, // panfdisc varchar(20)
+  totaligst: { type: Number }, // totaligst float
+  dispatchthrough: { type: Number }, // dispatchthrough int(11)
+  podno: { type: String }, // podno varchar(255)
+  dispatchremarks: { type: String }, // dispatchremarks varchar(255)
+  roff: { type: Number }, // roff float
+  address: { type: String }, // address text
+  consigneeaddress: { type: String }, // consigneeaddress text
+  mobile: { type: String }, // mobile varchar(50)
+  email: { type: String }, // email varchar(50)
+  gstno: { type: String }, // gstno varchar(50)
+  famount: { type: Number }, // famount float
+  typedisc: { type: String }, // typedisc varchar(255)
+  branchstate: { type: String }, // branchstate varchar(50)
+  customerstate: { type: String }, // customerstate varchar(50)
+  tally: { type: Number }, // tally int(11)
+  batchnumber: { type: String }, // batchnumber varchar(255)
+  buyerstate: { type: String }, // buyerstate varchar(20)
+  consigneestate: { type: String }, // consigneestate varchar(20)
+  clientpo: { type: String }, // clientpo varchar(50)
+  podate: { type: Date }, // podate date
+  printtype: { type: String }, // printtype varchar(50)
+  voucherno: { type: Number }, // voucherno int(11)
+  salesacid: { type: Number }, // salesacid int(11)
+  ordername: { type: String }, // ordername varchar(50)
+  labname: { type: String }, // labname varchar(50)
+  totaltaxamount: { type: Number }, // totaltaxamount decimal(15
+  srno: { type: String }, // srno varchar(255)
+  salesperson: { type: Number }, // salesperson int(11)
+  billfrom: { type: String }, // billfrom varchar(15)
+  totalqty: { type: Number }, // totalqty decimal(15
+  cancel: { type: String }, // cancel varchar(20)
+  auditremarks: { type: String }, // auditremarks varchar(255)
+}, { timestamps: false })
+
+export default mongoose.model('Saleschallan', SaleschallanSchema, 'saleschallan')

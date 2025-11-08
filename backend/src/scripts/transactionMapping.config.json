@@ -1,0 +1,83 @@
+{
+  "sources": [
+    {
+      "table": "Salesorder",
+      "kind": "sales_order",
+      "header": {
+        "number": ["salesorderno"],
+        "date": ["salesorderdate", "date"],
+        "party": ["client", "customer", "customername"],
+        "company": ["company", "companyid"],
+        "branch": ["branch", "branchid"],
+        "subtotal": ["subtotal"],
+        "tax_total": ["totalcgst", "totalsgst", "totaligst"],
+        "grand_total": ["gtotal", "grandtotal"],
+        "currency": ["currency"]
+      },
+      "lines": {
+        "table": "Salesorderitem",
+        "link": { "headerKey": "id", "lineKey": "sid" },
+        "product": ["pid", "product", "itemid"],
+        "qty": ["qty", "quantity"],
+        "price": ["rate", "price"],
+        "total": ["total", "netamount"],
+        "hsn": ["hsncode"],
+        "tax_rate": ["gstper", "cgstper", "sgstper", "igstper"]
+      }
+    },
+    {
+      "table": "Purchaseorder",
+      "kind": "purchase_order",
+      "header": {
+        "number": ["purchaseorderno", "ponumber"],
+        "date": ["purchaseorderdate", "date"],
+        "party": ["supplier", "vendor", "suppliername"],
+        "company": ["company", "companyid"],
+        "branch": ["branch", "branchid"],
+        "subtotal": ["subtotal"],
+        "tax_total": ["totalcgst", "totalsgst", "totaligst"],
+        "grand_total": ["gtotal", "grandtotal"],
+        "currency": ["currency"]
+      }
+    },
+    {
+      "table": "Voucher",
+      "kind": "voucher",
+      "header": {
+        "number": ["voucherno"],
+        "date": ["date"],
+        "party": ["ledgerid", "party"],
+        "company": ["company"],
+        "branch": ["branch"],
+        "grand_total": ["amount", "netamount"],
+        "currency": ["currency"]
+      }
+    },
+    {
+      "table": "Receipt",
+      "kind": "receipt",
+      "header": {
+        "number": ["receiptno"],
+        "date": ["receiptdate", "date"],
+        "party": ["ledgerid", "customer"],
+        "company": ["company"],
+        "branch": ["branch"],
+        "grand_total": ["amount", "netamount"],
+        "currency": ["currency"]
+      }
+    },
+    {
+      "table": "Payment",
+      "kind": "payment",
+      "header": {
+        "number": ["paymentno"],
+        "date": ["paymentdate", "date"],
+        "party": ["ledgerid", "supplier"],
+        "company": ["company"],
+        "branch": ["branch"],
+        "grand_total": ["amount", "netamount"],
+        "currency": ["currency"]
+      }
+    }
+  ]
+}

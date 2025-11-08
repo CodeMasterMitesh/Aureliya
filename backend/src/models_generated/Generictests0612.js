@@ -1,0 +1,82 @@
+import mongoose from 'mongoose'
+const { Schema } = mongoose
+
+const Generictests0612Schema = new Schema({
+  id: { type: Number }, // id int(11)
+  testid: { type: Number }, // testid int(11)
+  psrno: { type: String }, // psrno varchar(15)
+  parentchild: { type: String }, // parentchild varchar(15)
+  parentChild: { type: Number }, // parent_child float
+  amount: { type: Number }, // amount float
+  genericid: { type: Number }, // genericid int(11)
+  pid: { type: String }, // pid varchar(50)
+  discount: { type: Number }, // discount int(11)
+  total: { type: Number }, // total float
+  protocol: { type: String }, // protocol varchar(50)
+  testname: { type: String }, // testname varchar(255)
+  division: { type: String }, // division varchar(50)
+  chemist: { type: Number }, // chemist int(11)
+  descforworksheet: { type: String }, // descforworksheet varchar(50)
+  result: { type: String }, // result varchar(500)
+  units: { type: String }, // units varchar(50)
+  desc1Limit1: { type: String }, // desc1/limit1 varchar(50)
+  desc2Limit2: { type: String }, // desc2/limit2 varchar(50)
+  limit3: { type: String }, // limit3 varchar(50)
+  testdate: { type: Date }, // testdate date
+  nabl: { type: String }, // nabl varchar(50)
+  flag: { type: String }, // flag varchar(50)
+  method: { type: String }, // method varchar(255)
+  logic: { type: String }, // logic varchar(50)
+  minlimit: { type: String }, // minlimit text
+  maxlimit: { type: String }, // maxlimit text
+  condition: { type: String }, // condition varchar(50)
+  formula: { type: String }, // formula varchar(50)
+  testtime: { type: String }, // testtime varchar(50)
+  result2: { type: String }, // result2 varchar(50)
+  result3: { type: String }, // result3 varchar(50)
+  limit: { type: Number }, // limit float
+  labelclaim: { type: String }, // labelclaim text
+  peroflabelclaim: { type: String }, // peroflabelclaim varchar(200)
+  pname: { type: String }, // pname varchar(255)
+  parent: { type: String }, // parent varchar(255)
+  description: { type: String }, // description text
+  nacontent: { type: String }, // nacontent varchar(255)
+  finalcontent: { type: String }, // finalcontent varchar(255)
+  mean: { type: String }, // mean varchar(25)
+  approved: { type: String }, // approved varchar(15)
+  datas: { type: String }, // datas text
+  elogbook: { type: String }, // elogbook text
+  resultdate: { type: Date }, // resultdate date
+  testdatetime: { type: Date }, // testdatetime datetime
+  resultsentence: { type: String }, // resultsentence longtext
+  resultjson: { type: String }, // resultjson longtext
+  approvedby: { type: Number }, // approvedby int(11)
+  approveddatetime: { type: Date }, // approveddatetime datetime
+  roaformat: { type: String }, // roaformat varchar(25)
+  backweight: { type: Number }, // backweight float
+  bypass: { type: String }, // bypass varchar(25)
+  resultlablecalm: { type: Number }, // resultlablecalm decimal(15
+  assigndatetime: { type: Date }, // assigndatetime datetime
+  labelclaimunit: { type: String }, // labelclaimunit varchar(50)
+  expanded: { type: String }, // expanded varchar(255)
+  tid: { type: Number }, // tid int(11)
+  rawdata: { type: Number }, // rawdata int(11)
+  rawdatatemplate: { type: String }, // rawdatatemplate text
+  startdate: { type: Date }, // startdate datetime
+  enddate: { type: Date }, // enddate datetime
+  formulaid: { type: Number }, // formulaid int(11)
+  formuladata: { type: String }, // formuladata text
+  testtypeid: { type: Number }, // testtypeid int(11)
+  deatils: { type: String }, // deatils longtext
+  noofstandard: { type: String }, // noofstandard longtext
+  nooftest: { type: String }, // nooftest longtext
+  impurities: { type: String }, // impurities longtext
+  drugname: { type: String }, // drugname longtext
+  typemasterid: { type: Number }, // typemasterid int(11)
+  drugminlimit2: { type: String }, // drugminlimit2 longtext
+  drugmaxlimit2: { type: String }, // drugmaxlimit2 longtext
+  impurityminlimit2: { type: String }, // impurityminlimit2 longtext
+  impuritymaxlimit2: { type: String }, // impuritymaxlimit2 longtext
+}, { timestamps: false })
+
+export default mongoose.model('Generictests0612', Generictests0612Schema, 'generictests-06-12')

@@ -1,0 +1,9242 @@
+{
+  "totalModels": 600,
+  "models": [
+    {
+      "name": "Abank",
+      "file": "Abank.js",
+      "fieldCount": 38,
+      "suspicious": [],
+      "likelyFks": []
+    },
+    {
+      "name": "Acash",
+      "file": "Acash.js",
+      "fieldCount": 18,
+      "suspicious": [],
+      "likelyFks": [
+        "csid"
+      ]
+    },
+    {
+      "name": "Accountgroups",
+      "file": "Accountgroups.js",
+      "fieldCount": 17,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(25)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "guid"
+      ]
+    },
+    {
+      "name": "Adverseevent",
+      "file": "Adverseevent.js",
+      "fieldCount": 16,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Ajv",
+      "file": "Ajv.js",
+      "fieldCount": 19,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "TYPE varchar(10)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Alert",
+      "file": "Alert.js",
+      "fieldCount": 14,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type int(11)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "toid",
+        "fromid",
+        "refid"
+      ]
+    },
+    {
+      "name": "Alpldata",
+      "file": "Alpldata.js",
+      "fieldCount": 10,
+      "suspicious": [],
+      "likelyFks": [
+        "categoryid",
+        "subcategoryid",
+        "subsubcategoryid"
+      ]
+    },
+    {
+      "name": "Amaster",
+      "file": "Amaster.js",
+      "fieldCount": 80,
+      "suspicious": [],
+      "likelyFks": []
+    },
+    {
+      "name": "Amc",
+      "file": "Amc.js",
+      "fieldCount": 32,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(255)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "pid",
+        "customerid",
+        "machineid"
+      ]
+    },
+    {
+      "name": "Amcitems",
+      "file": "Amcitems.js",
+      "fieldCount": 11,
+      "suspicious": [],
+      "likelyFks": [
+        "customeramcid",
+        "amcid"
+      ]
+    },
+    {
+      "name": "Analyticalsales",
+      "file": "Analyticalsales.js",
+      "fieldCount": 76,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(25)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Analyticalsalesitems",
+      "file": "Analyticalsalesitems.js",
+      "fieldCount": 19,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(11)"
+        }
+      ],
+      "likelyFks": [
+        "saleid",
+        "pid",
+        "mid"
+      ]
+    },
+    {
+      "name": "Analyticalsalesreturn",
+      "file": "Analyticalsalesreturn.js",
+      "fieldCount": 81,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(25)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "salesinvoiceid"
+      ]
+    },
+    {
+      "name": "Analyticalsalesreturnitems",
+      "file": "Analyticalsalesreturnitems.js",
+      "fieldCount": 19,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(11)"
+        }
+      ],
+      "likelyFks": [
+        "saleid",
+        "pid",
+        "mid"
+      ]
+    },
+    {
+      "name": "Apharma",
+      "file": "Apharma.js",
+      "fieldCount": 50,
+      "suspicious": [],
+      "likelyFks": [
+        "phid",
+        "rid",
+        "instid"
+      ]
+    },
+    {
+      "name": "Appnotification",
+      "file": "Appnotification.js",
+      "fieldCount": 17,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(50)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "reid"
+      ]
+    },
+    {
+      "name": "Approval",
+      "file": "Approval.js",
+      "fieldCount": 22,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(25)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "sid"
+      ]
+    },
+    {
+      "name": "Asalehd",
+      "file": "Asalehd.js",
+      "fieldCount": 50,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "TYPE varchar(2)"
+        }
+      ],
+      "likelyFks": [
+        "slid"
+      ]
+    },
+    {
+      "name": "Assay",
+      "file": "Assay.js",
+      "fieldCount": 4,
+      "suspicious": [],
+      "likelyFks": []
+    },
+    {
+      "name": "Assayitems",
+      "file": "Assayitems.js",
+      "fieldCount": 4,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(50)"
+        }
+      ],
+      "likelyFks": [
+        "assayid"
+      ]
+    },
+    {
+      "name": "AssetIssue",
+      "file": "AssetIssue.js",
+      "fieldCount": 19,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete tinyint(1)"
+        }
+      ],
+      "likelyFks": [
+        "assetid",
+        "employeeid"
+      ]
+    },
+    {
+      "name": "AssetMaster",
+      "file": "AssetMaster.js",
+      "fieldCount": 20,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete tinyint(1)"
+        }
+      ],
+      "likelyFks": [
+        "ledgerid"
+      ]
+    },
+    {
+      "name": "AssetReturn",
+      "file": "AssetReturn.js",
+      "fieldCount": 19,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete tinyint(1)"
+        }
+      ],
+      "likelyFks": [
+        "assetid",
+        "employeeid"
+      ]
+    },
+    {
+      "name": "Assignshift",
+      "file": "Assignshift.js",
+      "fieldCount": 15,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "shiftid",
+        "eid"
+      ]
+    },
+    {
+      "name": "Attendance",
+      "file": "Attendance.js",
+      "fieldCount": 6,
+      "suspicious": [],
+      "likelyFks": [
+        "employeeid"
+      ]
+    },
+    {
+      "name": "Attendanceregister",
+      "file": "Attendanceregister.js",
+      "fieldCount": 116,
+      "suspicious": [],
+      "likelyFks": [
+        "eid"
+      ]
+    },
+    {
+      "name": "Attlog",
+      "file": "Attlog.js",
+      "fieldCount": 14,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "employeeid"
+      ]
+    },
+    {
+      "name": "Attlog1",
+      "file": "Attlog1.js",
+      "fieldCount": 14,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "employeeid"
+      ]
+    },
+    {
+      "name": "Audittrial",
+      "file": "Audittrial.js",
+      "fieldCount": 15,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "refid",
+        "uid",
+        "refsubid"
+      ]
+    },
+    {
+      "name": "Autoresponce",
+      "file": "Autoresponce.js",
+      "fieldCount": 3,
+      "suspicious": [],
+      "likelyFks": [
+        "cid"
+      ]
+    },
+    {
+      "name": "Bankmaster",
+      "file": "Bankmaster.js",
+      "fieldCount": 10,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "customerid"
+      ]
+    },
+    {
+      "name": "Batch",
+      "file": "Batch.js",
+      "fieldCount": 45,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(25)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "minid",
+        "orderid"
+      ]
+    },
+    {
+      "name": "Batchitems",
+      "file": "Batchitems.js",
+      "fieldCount": 52,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "batchid",
+        "pid"
+      ]
+    },
+    {
+      "name": "Bom",
+      "file": "Bom.js",
+      "fieldCount": 88,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "pid",
+        "processid"
+      ]
+    },
+    {
+      "name": "Bomitems",
+      "file": "Bomitems.js",
+      "fieldCount": 19,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(25)"
+        }
+      ],
+      "likelyFks": [
+        "bomid",
+        "mid"
+      ]
+    },
+    {
+      "name": "Bomitemwastage",
+      "file": "Bomitemwastage.js",
+      "fieldCount": 4,
+      "suspicious": [],
+      "likelyFks": [
+        "bomid",
+        "pid"
+      ]
+    },
+    {
+      "name": "Bookingatt",
+      "file": "Bookingatt.js",
+      "fieldCount": 4,
+      "suspicious": [],
+      "likelyFks": [
+        "bookingid"
+      ]
+    },
+    {
+      "name": "Bookingconsumption",
+      "file": "Bookingconsumption.js",
+      "fieldCount": 9,
+      "suspicious": [],
+      "likelyFks": [
+        "testid",
+        "mid"
+      ]
+    },
+    {
+      "name": "Bookinggraph",
+      "file": "Bookinggraph.js",
+      "fieldCount": 4,
+      "suspicious": [],
+      "likelyFks": [
+        "bookingid"
+      ]
+    },
+    {
+      "name": "Bookinginstrument",
+      "file": "Bookinginstrument.js",
+      "fieldCount": 12,
+      "suspicious": [],
+      "likelyFks": [
+        "testid",
+        "instrumentcode",
+        "columnid",
+        "chid"
+      ]
+    },
+    {
+      "name": "Bookings",
+      "file": "Bookings.js",
+      "fieldCount": 137,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(255)"
+        }
+      ],
+      "likelyFks": [
+        "cid",
+        "pid",
+        "samplecode",
+        "salesid"
+      ]
+    },
+    {
+      "name": "Bookings1",
+      "file": "Bookings1.js",
+      "fieldCount": 136,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(255)"
+        }
+      ],
+      "likelyFks": [
+        "cid",
+        "pid",
+        "samplecode",
+        "salesid"
+      ]
+    },
+    {
+      "name": "Bookingsitem",
+      "file": "Bookingsitem.js",
+      "fieldCount": 41,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "TYPE varchar(2)"
+        }
+      ],
+      "likelyFks": [
+        "slid"
+      ]
+    },
+    {
+      "name": "Bookingtest",
+      "file": "Bookingtest.js",
+      "fieldCount": 103,
+      "suspicious": [
+        {
+          "field": "desc1Limit1",
+          "issues": [
+            "slash_in_sql_name"
+          ],
+          "sql": "desc1/limit1 varchar(50)"
+        },
+        {
+          "field": "desc2Limit2",
+          "issues": [
+            "slash_in_sql_name"
+          ],
+          "sql": "desc2/limit2 varchar(50)"
+        }
+      ],
+      "likelyFks": [
+        "testid",
+        "bid",
+        "tid",
+        "formulaid",
+        "testtypeid",
+        "typemasterid",
+        "departmentid"
+      ]
+    },
+    {
+      "name": "Bookingtest1",
+      "file": "Bookingtest1.js",
+      "fieldCount": 97,
+      "suspicious": [
+        {
+          "field": "desc1Limit1",
+          "issues": [
+            "slash_in_sql_name"
+          ],
+          "sql": "desc1/limit1 varchar(50)"
+        },
+        {
+          "field": "desc2Limit2",
+          "issues": [
+            "slash_in_sql_name"
+          ],
+          "sql": "desc2/limit2 varchar(50)"
+        }
+      ],
+      "likelyFks": [
+        "testid",
+        "bid",
+        "tid",
+        "formulaid",
+        "testtypeid",
+        "typemasterid",
+        "departmentid"
+      ]
+    },
+    {
+      "name": "Bookingtestgraph",
+      "file": "Bookingtestgraph.js",
+      "fieldCount": 7,
+      "suspicious": [],
+      "likelyFks": [
+        "testid",
+        "instrumentcode"
+      ]
+    },
+    {
+      "name": "Bookingtestjson",
+      "file": "Bookingtestjson.js",
+      "fieldCount": 3,
+      "suspicious": [],
+      "likelyFks": [
+        "bookingtestid"
+      ]
+    },
+    {
+      "name": "Bookingweightdata",
+      "file": "Bookingweightdata.js",
+      "fieldCount": 11,
+      "suspicious": [],
+      "likelyFks": [
+        "bookingid",
+        "testid"
+      ]
+    },
+    {
+      "name": "Branchmaster",
+      "file": "Branchmaster.js",
+      "fieldCount": 55,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Budgetmaster",
+      "file": "Budgetmaster.js",
+      "fieldCount": 16,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(255)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "pid"
+      ]
+    },
+    {
+      "name": "Bufferpreparation",
+      "file": "Bufferpreparation.js",
+      "fieldCount": 25,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        },
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(100)"
+        }
+      ],
+      "likelyFks": [
+        "bookingid",
+        "bookingtestid"
+      ]
+    },
+    {
+      "name": "Bufferpreparationchemicals",
+      "file": "Bufferpreparationchemicals.js",
+      "fieldCount": 9,
+      "suspicious": [],
+      "likelyFks": [
+        "bufferpreparationid",
+        "chemicalid"
+      ]
+    },
+    {
+      "name": "Calls",
+      "file": "Calls.js",
+      "fieldCount": 29,
+      "suspicious": [],
+      "likelyFks": [
+        "contactid",
+        "modifieduserid",
+        "assigneduserid",
+        "parentid",
+        "outlookid",
+        "repeatparentid"
+      ]
+    },
+    {
+      "name": "Capa",
+      "file": "Capa.js",
+      "fieldCount": 16,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        },
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(50)"
+        }
+      ],
+      "likelyFks": [
+        "employeeid"
+      ]
+    },
+    {
+      "name": "Capamanagement",
+      "file": "Capamanagement.js",
+      "fieldCount": 16,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        },
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(150)"
+        }
+      ],
+      "likelyFks": [
+        "employeeid"
+      ]
+    },
+    {
+      "name": "Casemanagement",
+      "file": "Casemanagement.js",
+      "fieldCount": 19,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Cashbank",
+      "file": "Cashbank.js",
+      "fieldCount": 15,
+      "suspicious": [],
+      "likelyFks": [
+        "ledgerid",
+        "bankid"
+      ]
+    },
+    {
+      "name": "Categorymaster",
+      "file": "Categorymaster.js",
+      "fieldCount": 14,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Chamberinventory",
+      "file": "Chamberinventory.js",
+      "fieldCount": 11,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Chambermaster",
+      "file": "Chambermaster.js",
+      "fieldCount": 13,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Changecontrol",
+      "file": "Changecontrol.js",
+      "fieldCount": 15,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(255)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "employeeid"
+      ]
+    },
+    {
+      "name": "Chats",
+      "file": "Chats.js",
+      "fieldCount": 7,
+      "suspicious": [],
+      "likelyFks": [
+        "toid",
+        "fromid"
+      ]
+    },
+    {
+      "name": "Chemicalanalysiscondition",
+      "file": "Chemicalanalysiscondition.js",
+      "fieldCount": 27,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        },
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(100)"
+        }
+      ],
+      "likelyFks": [
+        "bookingid",
+        "bookingtestid"
+      ]
+    },
+    {
+      "name": "Chemicalanalysisconditioninstrument",
+      "file": "Chemicalanalysisconditioninstrument.js",
+      "fieldCount": 10,
+      "suspicious": [],
+      "likelyFks": [
+        "chemicalanalysisconditionid",
+        "instrumentid",
+        "instrumentcode"
+      ]
+    },
+    {
+      "name": "Chemicalmaster",
+      "file": "Chemicalmaster.js",
+      "fieldCount": 87,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(25)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "purchaseid",
+        "salesid"
+      ]
+    },
+    {
+      "name": "Chequebook",
+      "file": "Chequebook.js",
+      "fieldCount": 15,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Chequeregister",
+      "file": "Chequeregister.js",
+      "fieldCount": 9,
+      "suspicious": [],
+      "likelyFks": []
+    },
+    {
+      "name": "Chequereturn",
+      "file": "Chequereturn.js",
+      "fieldCount": 37,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "voucherid",
+        "ledgerid",
+        "bankid"
+      ]
+    },
+    {
+      "name": "Chromatographycondition",
+      "file": "Chromatographycondition.js",
+      "fieldCount": 62,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        },
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(100)"
+        }
+      ],
+      "likelyFks": [
+        "bookingid",
+        "bookingtestid",
+        "columnid"
+      ]
+    },
+    {
+      "name": "Chromatographyconditionchemicals",
+      "file": "Chromatographyconditionchemicals.js",
+      "fieldCount": 6,
+      "suspicious": [],
+      "likelyFks": [
+        "chromatographyconditionid",
+        "chemicalid"
+      ]
+    },
+    {
+      "name": "Chromatographyconditioninstrument",
+      "file": "Chromatographyconditioninstrument.js",
+      "fieldCount": 7,
+      "suspicious": [],
+      "likelyFks": [
+        "chromatographyconditionid",
+        "instrumentid",
+        "instrumentcode"
+      ]
+    },
+    {
+      "name": "Chromatographygradient",
+      "file": "Chromatographygradient.js",
+      "fieldCount": 7,
+      "suspicious": [],
+      "likelyFks": [
+        "chromatographyconditionid"
+      ]
+    },
+    {
+      "name": "Chromatographyramped",
+      "file": "Chromatographyramped.js",
+      "fieldCount": 7,
+      "suspicious": [],
+      "likelyFks": [
+        "chromatographyconditionid"
+      ]
+    },
+    {
+      "name": "Citymaster",
+      "file": "Citymaster.js",
+      "fieldCount": 3,
+      "suspicious": [],
+      "likelyFks": []
+    },
+    {
+      "name": "Clinicaltrialsmanagement",
+      "file": "Clinicaltrialsmanagement.js",
+      "fieldCount": 12,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "projectid"
+      ]
+    },
+    {
+      "name": "Coatemplates",
+      "file": "Coatemplates.js",
+      "fieldCount": 17,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        },
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(50)"
+        }
+      ],
+      "likelyFks": [
+        "employeeid"
+      ]
+    },
+    {
+      "name": "Collectionmaster",
+      "file": "Collectionmaster.js",
+      "fieldCount": 3,
+      "suspicious": [],
+      "likelyFks": []
+    },
+    {
+      "name": "Columnmaster",
+      "file": "Columnmaster.js",
+      "fieldCount": 21,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "columnid"
+      ]
+    },
+    {
+      "name": "CompanyBranch",
+      "file": "CompanyBranch.js",
+      "fieldCount": 5,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "cid"
+      ]
+    },
+    {
+      "name": "Companymaster",
+      "file": "Companymaster.js",
+      "fieldCount": 60,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "senderid",
+        "templateid"
+      ]
+    },
+    {
+      "name": "Competitormaster",
+      "file": "Competitormaster.js",
+      "fieldCount": 10,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Complain",
+      "file": "Complain.js",
+      "fieldCount": 42,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        },
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(20)"
+        }
+      ],
+      "likelyFks": [
+        "customerid",
+        "complaintypeid",
+        "machineid"
+      ]
+    },
+    {
+      "name": "Complaintmanagement",
+      "file": "Complaintmanagement.js",
+      "fieldCount": 17,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(25)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "saleid",
+        "employeeid",
+        "customerid"
+      ]
+    },
+    {
+      "name": "Complaintype",
+      "file": "Complaintype.js",
+      "fieldCount": 17,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        },
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(25)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Conditionmaster",
+      "file": "Conditionmaster.js",
+      "fieldCount": 11,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Contactperson",
+      "file": "Contactperson.js",
+      "fieldCount": 7,
+      "suspicious": [],
+      "likelyFks": [
+        "contectid"
+      ]
+    },
+    {
+      "name": "Contacts",
+      "file": "Contacts.js",
+      "fieldCount": 224,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(15)"
+        },
+        {
+          "field": "othercountryRegion",
+          "issues": [
+            "slash_in_sql_name"
+          ],
+          "sql": "othercountry/region varchar(255)"
+        },
+        {
+          "field": "ttyTddphone",
+          "issues": [
+            "slash_in_sql_name"
+          ],
+          "sql": "tty/tddphone varchar(255)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        },
+        {
+          "field": "homecountryRegion",
+          "issues": [
+            "slash_in_sql_name"
+          ],
+          "sql": "homecountry/region varchar(50)"
+        },
+        {
+          "field": "businesscountryRegion",
+          "issues": [
+            "slash_in_sql_name"
+          ],
+          "sql": "businesscountry/region varchar(50)"
+        }
+      ],
+      "likelyFks": [
+        "departmentid",
+        "groupid",
+        "fcmdeviceid",
+        "assigneduserid"
+      ]
+    },
+    {
+      "name": "Contacts1",
+      "file": "Contacts1.js",
+      "fieldCount": 226,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(15)"
+        },
+        {
+          "field": "ttyTddphone",
+          "issues": [
+            "slash_in_sql_name"
+          ],
+          "sql": "tty/tddphone varchar(25)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        },
+        {
+          "field": "homecountryRegion",
+          "issues": [
+            "slash_in_sql_name"
+          ],
+          "sql": "homecountry/region varchar(50)"
+        },
+        {
+          "field": "businesscountryRegion",
+          "issues": [
+            "slash_in_sql_name"
+          ],
+          "sql": "businesscountry/region varchar(50)"
+        }
+      ],
+      "likelyFks": [
+        "departmentid",
+        "groupid",
+        "fcmdeviceid",
+        "assigneduserid",
+        "tallyguid"
+      ]
+    },
+    {
+      "name": "Contracts",
+      "file": "Contracts.js",
+      "fieldCount": 35,
+      "suspicious": [],
+      "likelyFks": [
+        "modifieduserid",
+        "assigneduserid",
+        "reportstoid",
+        "campaignid"
+      ]
+    },
+    {
+      "name": "Correctiveactions",
+      "file": "Correctiveactions.js",
+      "fieldCount": 21,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Costmaster",
+      "file": "Costmaster.js",
+      "fieldCount": 13,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Countrymaster",
+      "file": "Countrymaster.js",
+      "fieldCount": 3,
+      "suspicious": [],
+      "likelyFks": []
+    },
+    {
+      "name": "Cources",
+      "file": "Cources.js",
+      "fieldCount": 14,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Couriercompanymaster",
+      "file": "Couriercompanymaster.js",
+      "fieldCount": 14,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Course",
+      "file": "Course.js",
+      "fieldCount": 12,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete tinyint(1)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Currencymaster",
+      "file": "Currencymaster.js",
+      "fieldCount": 15,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Customeramc",
+      "file": "Customeramc.js",
+      "fieldCount": 31,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(255)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "pid",
+        "customerid"
+      ]
+    },
+    {
+      "name": "Customeramcitems",
+      "file": "Customeramcitems.js",
+      "fieldCount": 10,
+      "suspicious": [],
+      "likelyFks": [
+        "customeramcid"
+      ]
+    },
+    {
+      "name": "Customercomplain",
+      "file": "Customercomplain.js",
+      "fieldCount": 7,
+      "suspicious": [],
+      "likelyFks": [
+        "contactid",
+        "saleid"
+      ]
+    },
+    {
+      "name": "Customerpricelist",
+      "file": "Customerpricelist.js",
+      "fieldCount": 26,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "customerid"
+      ]
+    },
+    {
+      "name": "Customerpricelistitem",
+      "file": "Customerpricelistitem.js",
+      "fieldCount": 21,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "sid",
+        "pid"
+      ]
+    },
+    {
+      "name": "Customerproductmaster",
+      "file": "Customerproductmaster.js",
+      "fieldCount": 24,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "customerid",
+        "labid"
+      ]
+    },
+    {
+      "name": "Cv",
+      "file": "Cv.js",
+      "fieldCount": 35,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "departmentid",
+        "vacancyid",
+        "recid"
+      ]
+    },
+    {
+      "name": "Dailyproduction",
+      "file": "Dailyproduction.js",
+      "fieldCount": 45,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(50)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "stktrid"
+      ]
+    },
+    {
+      "name": "Departments",
+      "file": "Departments.js",
+      "fieldCount": 7,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "branchid",
+        "departmentid"
+      ]
+    },
+    {
+      "name": "Descriptionmaster",
+      "file": "Descriptionmaster.js",
+      "fieldCount": 15,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        },
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(50)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Designation",
+      "file": "Designation.js",
+      "fieldCount": 18,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "positionid",
+        "departmentid"
+      ]
+    },
+    {
+      "name": "Deviationmanagement",
+      "file": "Deviationmanagement.js",
+      "fieldCount": 15,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(255)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "employeeid"
+      ]
+    },
+    {
+      "name": "Disabledate",
+      "file": "Disabledate.js",
+      "fieldCount": 3,
+      "suspicious": [],
+      "likelyFks": []
+    },
+    {
+      "name": "Dissolution",
+      "file": "Dissolution.js",
+      "fieldCount": 20,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        },
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(100)"
+        }
+      ],
+      "likelyFks": [
+        "bookingid",
+        "bookingtestid"
+      ]
+    },
+    {
+      "name": "Dissolutionchemicals",
+      "file": "Dissolutionchemicals.js",
+      "fieldCount": 6,
+      "suspicious": [],
+      "likelyFks": [
+        "dissolutionid",
+        "chemicalid"
+      ]
+    },
+    {
+      "name": "Dissolutioncondition",
+      "file": "Dissolutioncondition.js",
+      "fieldCount": 27,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        },
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(100)"
+        }
+      ],
+      "likelyFks": [
+        "bookingid",
+        "bookingtestid"
+      ]
+    },
+    {
+      "name": "Dissolutionconditioninstrument",
+      "file": "Dissolutionconditioninstrument.js",
+      "fieldCount": 10,
+      "suspicious": [],
+      "likelyFks": [
+        "dissolutionconditionid",
+        "instrumentid",
+        "instrumentcode"
+      ]
+    },
+    {
+      "name": "Dissolutioninstrument",
+      "file": "Dissolutioninstrument.js",
+      "fieldCount": 5,
+      "suspicious": [],
+      "likelyFks": [
+        "dissolutionid",
+        "instrumentid",
+        "instrumentcode"
+      ]
+    },
+    {
+      "name": "Dissolutionmediumpreparation",
+      "file": "Dissolutionmediumpreparation.js",
+      "fieldCount": 27,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        },
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(100)"
+        }
+      ],
+      "likelyFks": [
+        "bookingid",
+        "bookingtestid"
+      ]
+    },
+    {
+      "name": "Dissolutionmediumpreparationchemicals",
+      "file": "Dissolutionmediumpreparationchemicals.js",
+      "fieldCount": 9,
+      "suspicious": [],
+      "likelyFks": [
+        "dissolutionmediumpreparationid",
+        "chemicalid"
+      ]
+    },
+    {
+      "name": "Dissolutionmediumpreparationinstrument",
+      "file": "Dissolutionmediumpreparationinstrument.js",
+      "fieldCount": 7,
+      "suspicious": [],
+      "likelyFks": [
+        "dissolutionmediumpreparationid",
+        "instrumentid",
+        "instrumentcode"
+      ]
+    },
+    {
+      "name": "Ditems",
+      "file": "Ditems.js",
+      "fieldCount": 5,
+      "suspicious": [],
+      "likelyFks": [
+        "documentid"
+      ]
+    },
+    {
+      "name": "Documentcontrol",
+      "file": "Documentcontrol.js",
+      "fieldCount": 20,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        },
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(100)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Documentissuance",
+      "file": "Documentissuance.js",
+      "fieldCount": 12,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "employeeid",
+        "documenttypeid"
+      ]
+    },
+    {
+      "name": "Documents",
+      "file": "Documents.js",
+      "fieldCount": 27,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        },
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(100)"
+        }
+      ],
+      "likelyFks": [
+        "uid",
+        "categoryid",
+        "subcategoryid",
+        "documentrevisionid",
+        "relateddocid"
+      ]
+    },
+    {
+      "name": "Documenttype",
+      "file": "Documenttype.js",
+      "fieldCount": 11,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Drugmanagement",
+      "file": "Drugmanagement.js",
+      "fieldCount": 17,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "supplierid"
+      ]
+    },
+    {
+      "name": "EarningsDeductions",
+      "file": "EarningsDeductions.js",
+      "fieldCount": 30,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "employeeid",
+        "headid",
+        "edid"
+      ]
+    },
+    {
+      "name": "EarningsDeductionsHead",
+      "file": "EarningsDeductionsHead.js",
+      "fieldCount": 15,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(255)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "employeeid"
+      ]
+    },
+    {
+      "name": "Educationmaster",
+      "file": "Educationmaster.js",
+      "fieldCount": 12,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete tinyint(1)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "EinvoiceRequest",
+      "file": "EinvoiceRequest.js",
+      "fieldCount": 22,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(150)"
+        }
+      ],
+      "likelyFks": [
+        "salesid",
+        "requestid",
+        "othersalesid"
+      ]
+    },
+    {
+      "name": "Email",
+      "file": "Email.js",
+      "fieldCount": 24,
+      "suspicious": [],
+      "likelyFks": [
+        "efid",
+        "messageid"
+      ]
+    },
+    {
+      "name": "Emailfolders",
+      "file": "Emailfolders.js",
+      "fieldCount": 4,
+      "suspicious": [],
+      "likelyFks": [
+        "emid"
+      ]
+    },
+    {
+      "name": "EmailLogs",
+      "file": "EmailLogs.js",
+      "fieldCount": 18,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(50)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "reid"
+      ]
+    },
+    {
+      "name": "Emailmaster",
+      "file": "Emailmaster.js",
+      "fieldCount": 9,
+      "suspicious": [],
+      "likelyFks": [
+        "eid"
+      ]
+    },
+    {
+      "name": "Emailtemplete",
+      "file": "Emailtemplete.js",
+      "fieldCount": 13,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(255)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Employee",
+      "file": "Employee.js",
+      "fieldCount": 36,
+      "suspicious": [],
+      "likelyFks": [
+        "departmentid",
+        "parentid"
+      ]
+    },
+    {
+      "name": "Employeeexitflow",
+      "file": "Employeeexitflow.js",
+      "fieldCount": 14,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete tinyint(1)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "EmployeeManagement",
+      "file": "EmployeeManagement.js",
+      "fieldCount": 14,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete tinyint(1)"
+        },
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type enum('resign'"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Employeementdetails",
+      "file": "Employeementdetails.js",
+      "fieldCount": 9,
+      "suspicious": [],
+      "likelyFks": [
+        "employeeid"
+      ]
+    },
+    {
+      "name": "Employeeperformance",
+      "file": "Employeeperformance.js",
+      "fieldCount": 28,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Employeequcationdetails",
+      "file": "Employeequcationdetails.js",
+      "fieldCount": 10,
+      "suspicious": [],
+      "likelyFks": [
+        "employeeid"
+      ]
+    },
+    {
+      "name": "Employeesalary",
+      "file": "Employeesalary.js",
+      "fieldCount": 49,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "employeeid"
+      ]
+    },
+    {
+      "name": "Employeestock",
+      "file": "Employeestock.js",
+      "fieldCount": 28,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        },
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(150)"
+        }
+      ],
+      "likelyFks": [
+        "pid",
+        "refid",
+        "refitemid",
+        "employeeid"
+      ]
+    },
+    {
+      "name": "Endofthedays",
+      "file": "Endofthedays.js",
+      "fieldCount": 9,
+      "suspicious": [],
+      "likelyFks": [
+        "cid",
+        "userid",
+        "bookingid"
+      ]
+    },
+    {
+      "name": "Event",
+      "file": "Event.js",
+      "fieldCount": 12,
+      "suspicious": [],
+      "likelyFks": []
+    },
+    {
+      "name": "Eventfeedback",
+      "file": "Eventfeedback.js",
+      "fieldCount": 29,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete tinyint(1)"
+        }
+      ],
+      "likelyFks": [
+        "employeeid",
+        "eventid"
+      ]
+    },
+    {
+      "name": "Eventitem",
+      "file": "Eventitem.js",
+      "fieldCount": 6,
+      "suspicious": [],
+      "likelyFks": [
+        "employeeid"
+      ]
+    },
+    {
+      "name": "Eventtype",
+      "file": "Eventtype.js",
+      "fieldCount": 14,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "uid"
+      ]
+    },
+    {
+      "name": "Exam",
+      "file": "Exam.js",
+      "fieldCount": 12,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete tinyint(1)"
+        }
+      ],
+      "likelyFks": [
+        "trainingscheduleid"
+      ]
+    },
+    {
+      "name": "Examwisegrade",
+      "file": "Examwisegrade.js",
+      "fieldCount": 16,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "examid"
+      ]
+    },
+    {
+      "name": "Expenses",
+      "file": "Expenses.js",
+      "fieldCount": 47,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "employeeid"
+      ]
+    },
+    {
+      "name": "Experimentmanagement",
+      "file": "Experimentmanagement.js",
+      "fieldCount": 18,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "projectid"
+      ]
+    },
+    {
+      "name": "Externalaudit",
+      "file": "Externalaudit.js",
+      "fieldCount": 29,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "grnid",
+        "qcid"
+      ]
+    },
+    {
+      "name": "Externalaudititems",
+      "file": "Externalaudititems.js",
+      "fieldCount": 19,
+      "suspicious": [],
+      "likelyFks": [
+        "externalauditid"
+      ]
+    },
+    {
+      "name": "Feasibilityassessment",
+      "file": "Feasibilityassessment.js",
+      "fieldCount": 14,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "projectid"
+      ]
+    },
+    {
+      "name": "Feasibilityassessmentitems",
+      "file": "Feasibilityassessmentitems.js",
+      "fieldCount": 6,
+      "suspicious": [],
+      "likelyFks": [
+        "feasibilityid"
+      ]
+    },
+    {
+      "name": "Financialyear",
+      "file": "Financialyear.js",
+      "fieldCount": 11,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Fixedledger",
+      "file": "Fixedledger.js",
+      "fieldCount": 13,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(10)"
+        }
+      ],
+      "likelyFks": [
+        "ledgerid"
+      ]
+    },
+    {
+      "name": "Folders",
+      "file": "Folders.js",
+      "fieldCount": 12,
+      "suspicious": [],
+      "likelyFks": [
+        "assigntoid"
+      ]
+    },
+    {
+      "name": "Followup",
+      "file": "Followup.js",
+      "fieldCount": 23,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "leadid"
+      ]
+    },
+    {
+      "name": "Formulaitems",
+      "file": "Formulaitems.js",
+      "fieldCount": 10,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(25)"
+        }
+      ],
+      "likelyFks": [
+        "fmid"
+      ]
+    },
+    {
+      "name": "Formulaitems1",
+      "file": "Formulaitems1.js",
+      "fieldCount": 10,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(25)"
+        }
+      ],
+      "likelyFks": [
+        "fmid"
+      ]
+    },
+    {
+      "name": "Formulamaster",
+      "file": "Formulamaster.js",
+      "fieldCount": 6,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(255)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Formulamaster1",
+      "file": "Formulamaster1.js",
+      "fieldCount": 6,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(255)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Franchise",
+      "file": "Franchise.js",
+      "fieldCount": 15,
+      "suspicious": [],
+      "likelyFks": []
+    },
+    {
+      "name": "Frequency",
+      "file": "Frequency.js",
+      "fieldCount": 11,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Generic",
+      "file": "Generic.js",
+      "fieldCount": 13,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "pharmacopoeiaid"
+      ]
+    },
+    {
+      "name": "Generic0612",
+      "file": "Generic0612.js",
+      "fieldCount": 13,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "pharmacopoeiaid"
+      ]
+    },
+    {
+      "name": "Generic1",
+      "file": "Generic1.js",
+      "fieldCount": 12,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "pharmacopoeiaid"
+      ]
+    },
+    {
+      "name": "Generictestitems",
+      "file": "Generictestitems.js",
+      "fieldCount": 18,
+      "suspicious": [],
+      "likelyFks": [
+        "generictestid",
+        "testid",
+        "testtypeid"
+      ]
+    },
+    {
+      "name": "Generictests",
+      "file": "Generictests.js",
+      "fieldCount": 75,
+      "suspicious": [
+        {
+          "field": "desc1Limit1",
+          "issues": [
+            "slash_in_sql_name"
+          ],
+          "sql": "desc1/limit1 varchar(50)"
+        },
+        {
+          "field": "desc2Limit2",
+          "issues": [
+            "slash_in_sql_name"
+          ],
+          "sql": "desc2/limit2 varchar(50)"
+        }
+      ],
+      "likelyFks": [
+        "testid",
+        "genericid",
+        "pid",
+        "tid",
+        "formulaid",
+        "testtypeid",
+        "typemasterid"
+      ]
+    },
+    {
+      "name": "Generictests0612",
+      "file": "Generictests0612.js",
+      "fieldCount": 75,
+      "suspicious": [
+        {
+          "field": "desc1Limit1",
+          "issues": [
+            "slash_in_sql_name"
+          ],
+          "sql": "desc1/limit1 varchar(50)"
+        },
+        {
+          "field": "desc2Limit2",
+          "issues": [
+            "slash_in_sql_name"
+          ],
+          "sql": "desc2/limit2 varchar(50)"
+        }
+      ],
+      "likelyFks": [
+        "testid",
+        "genericid",
+        "pid",
+        "tid",
+        "formulaid",
+        "testtypeid",
+        "typemasterid"
+      ]
+    },
+    {
+      "name": "Generictests1",
+      "file": "Generictests1.js",
+      "fieldCount": 75,
+      "suspicious": [
+        {
+          "field": "desc1Limit1",
+          "issues": [
+            "slash_in_sql_name"
+          ],
+          "sql": "desc1/limit1 varchar(50)"
+        },
+        {
+          "field": "desc2Limit2",
+          "issues": [
+            "slash_in_sql_name"
+          ],
+          "sql": "desc2/limit2 varchar(50)"
+        }
+      ],
+      "likelyFks": [
+        "testid",
+        "genericid",
+        "pid",
+        "tid",
+        "formulaid",
+        "testtypeid",
+        "typemasterid"
+      ]
+    },
+    {
+      "name": "Godown",
+      "file": "Godown.js",
+      "fieldCount": 15,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Grn",
+      "file": "Grn.js",
+      "fieldCount": 78,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(25)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "salesid",
+        "purchaseacid",
+        "guid"
+      ]
+    },
+    {
+      "name": "Grnitems",
+      "file": "Grnitems.js",
+      "fieldCount": 64,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "grnid",
+        "pid",
+        "mid",
+        "poid"
+      ]
+    },
+    {
+      "name": "Group",
+      "file": "Group.js",
+      "fieldCount": 13,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Holiday",
+      "file": "Holiday.js",
+      "fieldCount": 14,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "uid"
+      ]
+    },
+    {
+      "name": "Holidaymaster",
+      "file": "Holidaymaster.js",
+      "fieldCount": 3,
+      "suspicious": [],
+      "likelyFks": []
+    },
+    {
+      "name": "Hrdocumentitems",
+      "file": "Hrdocumentitems.js",
+      "fieldCount": 12,
+      "suspicious": [],
+      "likelyFks": [
+        "documentid"
+      ]
+    },
+    {
+      "name": "HrTrainingSchedule",
+      "file": "HrTrainingSchedule.js",
+      "fieldCount": 19,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete tinyint(1)"
+        }
+      ],
+      "likelyFks": [
+        "courseid",
+        "sectionid"
+      ]
+    },
+    {
+      "name": "Hsncode",
+      "file": "Hsncode.js",
+      "fieldCount": 13,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Impuritytestmaster",
+      "file": "Impuritytestmaster.js",
+      "fieldCount": 13,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Incidentmanagement",
+      "file": "Incidentmanagement.js",
+      "fieldCount": 23,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "incidenttypeid",
+        "instrumentid"
+      ]
+    },
+    {
+      "name": "Incidenttype",
+      "file": "Incidenttype.js",
+      "fieldCount": 11,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Inquiry",
+      "file": "Inquiry.js",
+      "fieldCount": 24,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        },
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(20)"
+        }
+      ],
+      "likelyFks": [
+        "assigneduserid"
+      ]
+    },
+    {
+      "name": "Instrumentitems",
+      "file": "Instrumentitems.js",
+      "fieldCount": 19,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(11)"
+        }
+      ],
+      "likelyFks": [
+        "instrumentid",
+        "pid",
+        "mid"
+      ]
+    },
+    {
+      "name": "Instruments",
+      "file": "Instruments.js",
+      "fieldCount": 48,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "instrumentsid",
+        "instrumenttypeid"
+      ]
+    },
+    {
+      "name": "Instrumenttype",
+      "file": "Instrumenttype.js",
+      "fieldCount": 13,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Internalaudit",
+      "file": "Internalaudit.js",
+      "fieldCount": 29,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "grnid",
+        "qcid"
+      ]
+    },
+    {
+      "name": "Internalaudititems",
+      "file": "Internalaudititems.js",
+      "fieldCount": 19,
+      "suspicious": [],
+      "likelyFks": [
+        "internalauditid"
+      ]
+    },
+    {
+      "name": "Interviewmanagement",
+      "file": "Interviewmanagement.js",
+      "fieldCount": 18,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete tinyint(1)"
+        }
+      ],
+      "likelyFks": [
+        "jobrequisitionid",
+        "cid",
+        "interviewroundid"
+      ]
+    },
+    {
+      "name": "Interviewroundmaster",
+      "file": "Interviewroundmaster.js",
+      "fieldCount": 9,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "positionid"
+      ]
+    },
+    {
+      "name": "Inventoryproduct",
+      "file": "Inventoryproduct.js",
+      "fieldCount": 62,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "testid",
+        "productioncode",
+        "guid"
+      ]
+    },
+    {
+      "name": "Ipindex",
+      "file": "Ipindex.js",
+      "fieldCount": 7,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "pharmacopoeiaid"
+      ]
+    },
+    {
+      "name": "Itemmaster",
+      "file": "Itemmaster.js",
+      "fieldCount": 171,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        },
+        {
+          "field": "defaultField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "default varchar(10)"
+        },
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(50)"
+        }
+      ],
+      "likelyFks": [
+        "productioncode",
+        "columnid",
+        "guid",
+        "refrencestandardid",
+        "comapnyid",
+        "refid"
+      ]
+    },
+    {
+      "name": "ItemmasterCopy",
+      "file": "ItemmasterCopy.js",
+      "fieldCount": 171,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        },
+        {
+          "field": "defaultField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "default varchar(10)"
+        },
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(50)"
+        }
+      ],
+      "likelyFks": [
+        "productioncode",
+        "columnid",
+        "guid",
+        "refrencestandardid",
+        "comapnyid",
+        "refid"
+      ]
+    },
+    {
+      "name": "Jobpostingandadvertisement",
+      "file": "Jobpostingandadvertisement.js",
+      "fieldCount": 16,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete tinyint(1)"
+        }
+      ],
+      "likelyFks": [
+        "jobrequisitionid"
+      ]
+    },
+    {
+      "name": "Jobpostingplatform",
+      "file": "Jobpostingplatform.js",
+      "fieldCount": 7,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Jobrequisitionmanagement",
+      "file": "Jobrequisitionmanagement.js",
+      "fieldCount": 40,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "departmentid",
+        "employeeid",
+        "positionid"
+      ]
+    },
+    {
+      "name": "Jobworkin",
+      "file": "Jobworkin.js",
+      "fieldCount": 72,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "pid"
+      ]
+    },
+    {
+      "name": "Jobworkinitem",
+      "file": "Jobworkinitem.js",
+      "fieldCount": 48,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "scid",
+        "pid"
+      ]
+    },
+    {
+      "name": "Jobworkout",
+      "file": "Jobworkout.js",
+      "fieldCount": 121,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        },
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(20)"
+        }
+      ],
+      "likelyFks": [
+        "salesacid"
+      ]
+    },
+    {
+      "name": "Jobworkoutitem",
+      "file": "Jobworkoutitem.js",
+      "fieldCount": 49,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "scid",
+        "pid"
+      ]
+    },
+    {
+      "name": "Labincidentreportingprocess",
+      "file": "Labincidentreportingprocess.js",
+      "fieldCount": 25,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Leaditems",
+      "file": "Leaditems.js",
+      "fieldCount": 11,
+      "suspicious": [],
+      "likelyFks": [
+        "pid",
+        "leadid",
+        "tid"
+      ]
+    },
+    {
+      "name": "Leads",
+      "file": "Leads.js",
+      "fieldCount": 50,
+      "suspicious": [],
+      "likelyFks": [
+        "modifieduserid",
+        "assigneduserid",
+        "reportstoid",
+        "contactid",
+        "accountid",
+        "opportunityid",
+        "campaignid"
+      ]
+    },
+    {
+      "name": "Leadsource",
+      "file": "Leadsource.js",
+      "fieldCount": 12,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Leavedetail",
+      "file": "Leavedetail.js",
+      "fieldCount": 25,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(11)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "employeeid"
+      ]
+    },
+    {
+      "name": "Leavedetail1",
+      "file": "Leavedetail1.js",
+      "fieldCount": 7,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(11)"
+        }
+      ],
+      "likelyFks": [
+        "employeeid"
+      ]
+    },
+    {
+      "name": "Leaveregister",
+      "file": "Leaveregister.js",
+      "fieldCount": 13,
+      "suspicious": [],
+      "likelyFks": [
+        "uid"
+      ]
+    },
+    {
+      "name": "Ledgervouchers",
+      "file": "Ledgervouchers.js",
+      "fieldCount": 22,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "ledgerid",
+        "voucherid",
+        "oppledgerid",
+        "voucheritemsid"
+      ]
+    },
+    {
+      "name": "Locationmaster",
+      "file": "Locationmaster.js",
+      "fieldCount": 15,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(100)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Login",
+      "file": "Login.js",
+      "fieldCount": 3,
+      "suspicious": [],
+      "likelyFks": []
+    },
+    {
+      "name": "Machinemaster",
+      "file": "Machinemaster.js",
+      "fieldCount": 17,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(255)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "pid"
+      ]
+    },
+    {
+      "name": "Main",
+      "file": "Main.js",
+      "fieldCount": 6,
+      "suspicious": [],
+      "likelyFks": [
+        "ingrid"
+      ]
+    },
+    {
+      "name": "Mainrelation",
+      "file": "Mainrelation.js",
+      "fieldCount": 3,
+      "suspicious": [],
+      "likelyFks": []
+    },
+    {
+      "name": "MarketLaunch",
+      "file": "MarketLaunch.js",
+      "fieldCount": 18,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "projectid",
+        "authoid",
+        "bomid",
+        "itemid"
+      ]
+    },
+    {
+      "name": "Materialindent",
+      "file": "Materialindent.js",
+      "fieldCount": 26,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        },
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(255)"
+        }
+      ],
+      "likelyFks": [
+        "customerid",
+        "materialrequestid"
+      ]
+    },
+    {
+      "name": "Materialindentitem",
+      "file": "Materialindentitem.js",
+      "fieldCount": 20,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "materialindentid",
+        "pid"
+      ]
+    },
+    {
+      "name": "Materialissue",
+      "file": "Materialissue.js",
+      "fieldCount": 63,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        },
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(255)"
+        }
+      ],
+      "likelyFks": [
+        "customerid",
+        "employeeid",
+        "mid"
+      ]
+    },
+    {
+      "name": "Materialissueitem",
+      "file": "Materialissueitem.js",
+      "fieldCount": 28,
+      "suspicious": [],
+      "likelyFks": [
+        "materialissueid",
+        "pid"
+      ]
+    },
+    {
+      "name": "Materialmaster",
+      "file": "Materialmaster.js",
+      "fieldCount": 85,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(25)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "purchaseid",
+        "salesid"
+      ]
+    },
+    {
+      "name": "Materialrequest",
+      "file": "Materialrequest.js",
+      "fieldCount": 58,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "customerid",
+        "bomid",
+        "employeeid",
+        "productid",
+        "mpid"
+      ]
+    },
+    {
+      "name": "Materialrequestitem",
+      "file": "Materialrequestitem.js",
+      "fieldCount": 15,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "materialrequestid",
+        "pid"
+      ]
+    },
+    {
+      "name": "Materialreturn",
+      "file": "Materialreturn.js",
+      "fieldCount": 35,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "customerid",
+        "employeeid",
+        "managerid"
+      ]
+    },
+    {
+      "name": "Materialreturnitem",
+      "file": "Materialreturnitem.js",
+      "fieldCount": 28,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "materialreturnid",
+        "pid"
+      ]
+    },
+    {
+      "name": "Materialuse",
+      "file": "Materialuse.js",
+      "fieldCount": 21,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "mid"
+      ]
+    },
+    {
+      "name": "Materialwastage",
+      "file": "Materialwastage.js",
+      "fieldCount": 18,
+      "suspicious": [],
+      "likelyFks": [
+        "uid"
+      ]
+    },
+    {
+      "name": "Materialwastageitems",
+      "file": "Materialwastageitems.js",
+      "fieldCount": 17,
+      "suspicious": [],
+      "likelyFks": [
+        "materialwastageid",
+        "pid",
+        "wid"
+      ]
+    },
+    {
+      "name": "Meetings",
+      "file": "Meetings.js",
+      "fieldCount": 22,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(255)"
+        }
+      ],
+      "likelyFks": [
+        "contactid",
+        "assigneduserid",
+        "parentid",
+        "repeatparentid"
+      ]
+    },
+    {
+      "name": "MetadataColumn",
+      "file": "MetadataColumn.js",
+      "fieldCount": 32,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(15)"
+        }
+      ],
+      "likelyFks": [
+        "componentid"
+      ]
+    },
+    {
+      "name": "MetadataForm",
+      "file": "MetadataForm.js",
+      "fieldCount": 7,
+      "suspicious": [],
+      "likelyFks": []
+    },
+    {
+      "name": "MetadataFormcomponent",
+      "file": "MetadataFormcomponent.js",
+      "fieldCount": 5,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(50)"
+        }
+      ],
+      "likelyFks": [
+        "formid"
+      ]
+    },
+    {
+      "name": "MetadataTables",
+      "file": "MetadataTables.js",
+      "fieldCount": 4,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(15)"
+        }
+      ],
+      "likelyFks": [
+        "moduleid"
+      ]
+    },
+    {
+      "name": "Metalmaster",
+      "file": "Metalmaster.js",
+      "fieldCount": 2,
+      "suspicious": [],
+      "likelyFks": []
+    },
+    {
+      "name": "Method",
+      "file": "Method.js",
+      "fieldCount": 20,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(100)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Methodmaster",
+      "file": "Methodmaster.js",
+      "fieldCount": 14,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "pharmacopeiaid"
+      ]
+    },
+    {
+      "name": "Min",
+      "file": "Min.js",
+      "fieldCount": 6,
+      "suspicious": [],
+      "likelyFks": []
+    },
+    {
+      "name": "Minitems",
+      "file": "Minitems.js",
+      "fieldCount": 5,
+      "suspicious": [],
+      "likelyFks": [
+        "minid",
+        "mid"
+      ]
+    },
+    {
+      "name": "Mixsamplepreparation",
+      "file": "Mixsamplepreparation.js",
+      "fieldCount": 32,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        },
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(100)"
+        }
+      ],
+      "likelyFks": [
+        "bookingid",
+        "bookingtestid"
+      ]
+    },
+    {
+      "name": "Mixsamplepreparationitems",
+      "file": "Mixsamplepreparationitems.js",
+      "fieldCount": 12,
+      "suspicious": [],
+      "likelyFks": [
+        "mixsamplepreparationid",
+        "testid"
+      ]
+    },
+    {
+      "name": "Mixstandardpreparation",
+      "file": "Mixstandardpreparation.js",
+      "fieldCount": 39,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        },
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(100)"
+        }
+      ],
+      "likelyFks": [
+        "bookingid",
+        "bookingtestid"
+      ]
+    },
+    {
+      "name": "Mixstandardpreparationitems",
+      "file": "Mixstandardpreparationitems.js",
+      "fieldCount": 12,
+      "suspicious": [],
+      "likelyFks": [
+        "mixstandardpreparationid",
+        "testid"
+      ]
+    },
+    {
+      "name": "Mobilephasepreparation",
+      "file": "Mobilephasepreparation.js",
+      "fieldCount": 27,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        },
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(100)"
+        }
+      ],
+      "likelyFks": [
+        "bookingid",
+        "bookingtestid"
+      ]
+    },
+    {
+      "name": "Mobilephasepreparationchemicals",
+      "file": "Mobilephasepreparationchemicals.js",
+      "fieldCount": 9,
+      "suspicious": [],
+      "likelyFks": [
+        "mobilephasepreparationid",
+        "chemicalid"
+      ]
+    },
+    {
+      "name": "Mobilephasepreparationinstrument",
+      "file": "Mobilephasepreparationinstrument.js",
+      "fieldCount": 7,
+      "suspicious": [],
+      "likelyFks": [
+        "mobilephasepreparationid",
+        "instrumentid",
+        "instrumentcode"
+      ]
+    },
+    {
+      "name": "Modules",
+      "file": "Modules.js",
+      "fieldCount": 9,
+      "suspicious": [],
+      "likelyFks": [
+        "sid"
+      ]
+    },
+    {
+      "name": "ModulesCopy",
+      "file": "ModulesCopy.js",
+      "fieldCount": 8,
+      "suspicious": [],
+      "likelyFks": [
+        "sid"
+      ]
+    },
+    {
+      "name": "Msale",
+      "file": "Msale.js",
+      "fieldCount": 41,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "TYPE varchar(1)"
+        }
+      ],
+      "likelyFks": [
+        "slid"
+      ]
+    },
+    {
+      "name": "Newmaterialmaster",
+      "file": "Newmaterialmaster.js",
+      "fieldCount": 10,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(20)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "mid"
+      ]
+    },
+    {
+      "name": "Newqc",
+      "file": "Newqc.js",
+      "fieldCount": 26,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(255)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Newqcitems",
+      "file": "Newqcitems.js",
+      "fieldCount": 18,
+      "suspicious": [],
+      "likelyFks": [
+        "qcid",
+        "pid"
+      ]
+    },
+    {
+      "name": "News",
+      "file": "News.js",
+      "fieldCount": 10,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Newsandupdate",
+      "file": "Newsandupdate.js",
+      "fieldCount": 14,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "uid"
+      ]
+    },
+    {
+      "name": "NewsReads",
+      "file": "NewsReads.js",
+      "fieldCount": 4,
+      "suspicious": [],
+      "likelyFks": [
+        "userid",
+        "newsid"
+      ]
+    },
+    {
+      "name": "Newstock",
+      "file": "Newstock.js",
+      "fieldCount": 17,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Newstock2file",
+      "file": "Newstock2file.js",
+      "fieldCount": 17,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Nonconformanceinvestigation",
+      "file": "Nonconformanceinvestigation.js",
+      "fieldCount": 24,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "employeeid",
+        "departmentid",
+        "reportid"
+      ]
+    },
+    {
+      "name": "Nonconformancereporting",
+      "file": "Nonconformancereporting.js",
+      "fieldCount": 22,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "employeeid",
+        "departmentid"
+      ]
+    },
+    {
+      "name": "Notes",
+      "file": "Notes.js",
+      "fieldCount": 16,
+      "suspicious": [],
+      "likelyFks": [
+        "assigneduserid",
+        "modifieduserid",
+        "parentid",
+        "contactid"
+      ]
+    },
+    {
+      "name": "Notification",
+      "file": "Notification.js",
+      "fieldCount": 10,
+      "suspicious": [],
+      "likelyFks": [
+        "moduleid",
+        "uid",
+        "aid"
+      ]
+    },
+    {
+      "name": "Notificationmaster",
+      "file": "Notificationmaster.js",
+      "fieldCount": 18,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(50)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Notinterestedreason",
+      "file": "Notinterestedreason.js",
+      "fieldCount": 13,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Offermanagement",
+      "file": "Offermanagement.js",
+      "fieldCount": 31,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete tinyint(1)"
+        }
+      ],
+      "likelyFks": [
+        "candidateid",
+        "jobrequisitionid",
+        "declinereasonid"
+      ]
+    },
+    {
+      "name": "Offerresaonmaster",
+      "file": "Offerresaonmaster.js",
+      "fieldCount": 7,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Oldpurchase",
+      "file": "Oldpurchase.js",
+      "fieldCount": 10,
+      "suspicious": [],
+      "likelyFks": []
+    },
+    {
+      "name": "Onboardingmanagement",
+      "file": "Onboardingmanagement.js",
+      "fieldCount": 19,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete tinyint(1)"
+        }
+      ],
+      "likelyFks": [
+        "candidateid",
+        "jobrequisitionid"
+      ]
+    },
+    {
+      "name": "Oosrootcauseanalysis",
+      "file": "Oosrootcauseanalysis.js",
+      "fieldCount": 18,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Openingbalance",
+      "file": "Openingbalance.js",
+      "fieldCount": 16,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        },
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(50)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Openingbalanceitems",
+      "file": "Openingbalanceitems.js",
+      "fieldCount": 26,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(11)"
+        }
+      ],
+      "likelyFks": [
+        "openingbalanceid",
+        "ledgerid",
+        "productid",
+        "categoryid"
+      ]
+    },
+    {
+      "name": "Openingleavebalance",
+      "file": "Openingleavebalance.js",
+      "fieldCount": 19,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "employeeid",
+        "eid"
+      ]
+    },
+    {
+      "name": "Openingqty",
+      "file": "Openingqty.js",
+      "fieldCount": 15,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Openingqtyitems",
+      "file": "Openingqtyitems.js",
+      "fieldCount": 17,
+      "suspicious": [],
+      "likelyFks": [
+        "openingqtyid",
+        "pid"
+      ]
+    },
+    {
+      "name": "Opportunities",
+      "file": "Opportunities.js",
+      "fieldCount": 12,
+      "suspicious": [],
+      "likelyFks": [
+        "contactid",
+        "productid"
+      ]
+    },
+    {
+      "name": "Otherpaymentitems",
+      "file": "Otherpaymentitems.js",
+      "fieldCount": 11,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(20)"
+        }
+      ],
+      "likelyFks": [
+        "paymentpurchaseid",
+        "purchaseid"
+      ]
+    },
+    {
+      "name": "Otherproduction",
+      "file": "Otherproduction.js",
+      "fieldCount": 18,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "fpid"
+      ]
+    },
+    {
+      "name": "Otherproductionitems",
+      "file": "Otherproductionitems.js",
+      "fieldCount": 14,
+      "suspicious": [],
+      "likelyFks": [
+        "otherproductionid",
+        "pid"
+      ]
+    },
+    {
+      "name": "Otherpurchaseorder",
+      "file": "Otherpurchaseorder.js",
+      "fieldCount": 124,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(25)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Otherpurchaseorderitems",
+      "file": "Otherpurchaseorderitems.js",
+      "fieldCount": 66,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(11)"
+        }
+      ],
+      "likelyFks": [
+        "purchaseid",
+        "pid",
+        "productcode",
+        "ledgerid",
+        "assetid"
+      ]
+    },
+    {
+      "name": "Otherpurchasepaymentitems",
+      "file": "Otherpurchasepaymentitems.js",
+      "fieldCount": 10,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(20)"
+        }
+      ],
+      "likelyFks": [
+        "otherpurchaseid",
+        "purchaseid"
+      ]
+    },
+    {
+      "name": "Otherpurchasereturn",
+      "file": "Otherpurchasereturn.js",
+      "fieldCount": 132,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(25)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "groupid"
+      ]
+    },
+    {
+      "name": "Otherpurchasereturnitems",
+      "file": "Otherpurchasereturnitems.js",
+      "fieldCount": 84,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(11)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "otherpurchsereturnid",
+        "pid",
+        "productcode",
+        "ledgerid",
+        "assetid",
+        "costid"
+      ]
+    },
+    {
+      "name": "Othersales",
+      "file": "Othersales.js",
+      "fieldCount": 99,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(25)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "guid"
+      ]
+    },
+    {
+      "name": "Othersalesitems",
+      "file": "Othersalesitems.js",
+      "fieldCount": 33,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(11)"
+        }
+      ],
+      "likelyFks": [
+        "othersaleid",
+        "pid",
+        "mid",
+        "ledgerid"
+      ]
+    },
+    {
+      "name": "Outstanding",
+      "file": "Outstanding.js",
+      "fieldCount": 42,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(25)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "ledgerid",
+        "salesid",
+        "voucheritemsid",
+        "groupid",
+        "maincatid",
+        "mainproductid",
+        "mainid",
+        "itemid"
+      ]
+    },
+    {
+      "name": "Packages",
+      "file": "Packages.js",
+      "fieldCount": 8,
+      "suspicious": [],
+      "likelyFks": [
+        "fid"
+      ]
+    },
+    {
+      "name": "Packsizemaster",
+      "file": "Packsizemaster.js",
+      "fieldCount": 14,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Parentchild",
+      "file": "Parentchild.js",
+      "fieldCount": 3,
+      "suspicious": [],
+      "likelyFks": [
+        "eid"
+      ]
+    },
+    {
+      "name": "Partconcessionnote",
+      "file": "Partconcessionnote.js",
+      "fieldCount": 32,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "pid"
+      ]
+    },
+    {
+      "name": "Partconcessionnoteitem",
+      "file": "Partconcessionnoteitem.js",
+      "fieldCount": 7,
+      "suspicious": [],
+      "likelyFks": [
+        "partconcessionnoteid"
+      ]
+    },
+    {
+      "name": "Payment",
+      "file": "Payment.js",
+      "fieldCount": 66,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "ledgerid",
+        "voucherid",
+        "groupid",
+        "realbookid",
+        "guid"
+      ]
+    },
+    {
+      "name": "Paymentitems",
+      "file": "Paymentitems.js",
+      "fieldCount": 13,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(25)"
+        }
+      ],
+      "likelyFks": [
+        "paymentid",
+        "purchaseid",
+        "salesid"
+      ]
+    },
+    {
+      "name": "Paymentold",
+      "file": "Paymentold.js",
+      "fieldCount": 10,
+      "suspicious": [],
+      "likelyFks": []
+    },
+    {
+      "name": "Pdcitems",
+      "file": "Pdcitems.js",
+      "fieldCount": 5,
+      "suspicious": [],
+      "likelyFks": [
+        "salesbillid"
+      ]
+    },
+    {
+      "name": "Pdclist",
+      "file": "Pdclist.js",
+      "fieldCount": 18,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Performance",
+      "file": "Performance.js",
+      "fieldCount": 7,
+      "suspicious": [],
+      "likelyFks": [
+        "employeeid"
+      ]
+    },
+    {
+      "name": "Pfptstatement",
+      "file": "Pfptstatement.js",
+      "fieldCount": 22,
+      "suspicious": [],
+      "likelyFks": [
+        "eid"
+      ]
+    },
+    {
+      "name": "Pharmacopoeia",
+      "file": "Pharmacopoeia.js",
+      "fieldCount": 6,
+      "suspicious": [],
+      "likelyFks": []
+    },
+    {
+      "name": "Pm",
+      "file": "Pm.js",
+      "fieldCount": 19,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "pid",
+        "customerid",
+        "machineid"
+      ]
+    },
+    {
+      "name": "Pmitems",
+      "file": "Pmitems.js",
+      "fieldCount": 8,
+      "suspicious": [],
+      "likelyFks": [
+        "customerpmid",
+        "pmid"
+      ]
+    },
+    {
+      "name": "Policy",
+      "file": "Policy.js",
+      "fieldCount": 14,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "uid"
+      ]
+    },
+    {
+      "name": "Policyacceptance",
+      "file": "Policyacceptance.js",
+      "fieldCount": 4,
+      "suspicious": [],
+      "likelyFks": [
+        "userid",
+        "policyid"
+      ]
+    },
+    {
+      "name": "Portmaster",
+      "file": "Portmaster.js",
+      "fieldCount": 13,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Positionmaster",
+      "file": "Positionmaster.js",
+      "fieldCount": 17,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "departmentid"
+      ]
+    },
+    {
+      "name": "PostLaunch",
+      "file": "PostLaunch.js",
+      "fieldCount": 18,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "projectid",
+        "authoid",
+        "bomid",
+        "itemid"
+      ]
+    },
+    {
+      "name": "Preparation",
+      "file": "Preparation.js",
+      "fieldCount": 46,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        },
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(100)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Preparationchemicals",
+      "file": "Preparationchemicals.js",
+      "fieldCount": 11,
+      "suspicious": [],
+      "likelyFks": [
+        "preparationid",
+        "chemicalid"
+      ]
+    },
+    {
+      "name": "Preparationinstrument",
+      "file": "Preparationinstrument.js",
+      "fieldCount": 5,
+      "suspicious": [],
+      "likelyFks": [
+        "preparationid",
+        "instrumentid",
+        "instrumentcode"
+      ]
+    },
+    {
+      "name": "Preparationvial",
+      "file": "Preparationvial.js",
+      "fieldCount": 12,
+      "suspicious": [],
+      "likelyFks": [
+        "preparationid",
+        "refid"
+      ]
+    },
+    {
+      "name": "Preventiveaction",
+      "file": "Preventiveaction.js",
+      "fieldCount": 21,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Pricerate",
+      "file": "Pricerate.js",
+      "fieldCount": 20,
+      "suspicious": [],
+      "likelyFks": []
+    },
+    {
+      "name": "Printdata",
+      "file": "Printdata.js",
+      "fieldCount": 2,
+      "suspicious": [],
+      "likelyFks": []
+    },
+    {
+      "name": "Printtemplete",
+      "file": "Printtemplete.js",
+      "fieldCount": 15,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        },
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(50)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Printtempleteitems",
+      "file": "Printtempleteitems.js",
+      "fieldCount": 7,
+      "suspicious": [],
+      "likelyFks": [
+        "printtempleteid"
+      ]
+    },
+    {
+      "name": "Printversion",
+      "file": "Printversion.js",
+      "fieldCount": 6,
+      "suspicious": [],
+      "likelyFks": [
+        "bookingid"
+      ]
+    },
+    {
+      "name": "Printversionroa",
+      "file": "Printversionroa.js",
+      "fieldCount": 5,
+      "suspicious": [],
+      "likelyFks": [
+        "bookingid"
+      ]
+    },
+    {
+      "name": "ProbationFeedback",
+      "file": "ProbationFeedback.js",
+      "fieldCount": 33,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete tinyint(1)"
+        }
+      ],
+      "likelyFks": [
+        "employeeid"
+      ]
+    },
+    {
+      "name": "Procedures",
+      "file": "Procedures.js",
+      "fieldCount": 15,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "formulaid",
+        "typemasterid"
+      ]
+    },
+    {
+      "name": "Procedures1",
+      "file": "Procedures1.js",
+      "fieldCount": 3,
+      "suspicious": [],
+      "likelyFks": []
+    },
+    {
+      "name": "Processmanagement",
+      "file": "Processmanagement.js",
+      "fieldCount": 13,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Processmaster",
+      "file": "Processmaster.js",
+      "fieldCount": 12,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Productformula",
+      "file": "Productformula.js",
+      "fieldCount": 9,
+      "suspicious": [],
+      "likelyFks": [
+        "pid"
+      ]
+    },
+    {
+      "name": "ProductionEntry",
+      "file": "ProductionEntry.js",
+      "fieldCount": 8,
+      "suspicious": [],
+      "likelyFks": []
+    },
+    {
+      "name": "Productmaterial",
+      "file": "Productmaterial.js",
+      "fieldCount": 6,
+      "suspicious": [],
+      "likelyFks": [
+        "pid",
+        "mid"
+      ]
+    },
+    {
+      "name": "Productprocess",
+      "file": "Productprocess.js",
+      "fieldCount": 7,
+      "suspicious": [],
+      "likelyFks": [
+        "pid"
+      ]
+    },
+    {
+      "name": "Products",
+      "file": "Products.js",
+      "fieldCount": 29,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "salesid"
+      ]
+    },
+    {
+      "name": "Products1",
+      "file": "Products1.js",
+      "fieldCount": 29,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "salesid"
+      ]
+    },
+    {
+      "name": "Products300516",
+      "file": "Products300516.js",
+      "fieldCount": 9,
+      "suspicious": [],
+      "likelyFks": []
+    },
+    {
+      "name": "Proformainvoice",
+      "file": "Proformainvoice.js",
+      "fieldCount": 80,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(25)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "quotationid"
+      ]
+    },
+    {
+      "name": "Proformainvoiceitems",
+      "file": "Proformainvoiceitems.js",
+      "fieldCount": 22,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(11)"
+        }
+      ],
+      "likelyFks": [
+        "saleid",
+        "pid",
+        "mid"
+      ]
+    },
+    {
+      "name": "Project",
+      "file": "Project.js",
+      "fieldCount": 13,
+      "suspicious": [],
+      "likelyFks": [
+        "assigneduserid",
+        "modifieduserid"
+      ]
+    },
+    {
+      "name": "Projectmanagement",
+      "file": "Projectmanagement.js",
+      "fieldCount": 19,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "projectid",
+        "employeeid"
+      ]
+    },
+    {
+      "name": "Projectmaster",
+      "file": "Projectmaster.js",
+      "fieldCount": 9,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "cid"
+      ]
+    },
+    {
+      "name": "Pullmaster",
+      "file": "Pullmaster.js",
+      "fieldCount": 11,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Purchasebill",
+      "file": "Purchasebill.js",
+      "fieldCount": 102,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        },
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(50)"
+        }
+      ],
+      "likelyFks": [
+        "purchaseacid",
+        "groupid",
+        "maincatid",
+        "mainproductid",
+        "guid"
+      ]
+    },
+    {
+      "name": "Purchasebillitems",
+      "file": "Purchasebillitems.js",
+      "fieldCount": 44,
+      "suspicious": [],
+      "likelyFks": [
+        "pid",
+        "purchaseid",
+        "ledgerid",
+        "purchasebillid",
+        "grnid"
+      ]
+    },
+    {
+      "name": "Purchaseindent",
+      "file": "Purchaseindent.js",
+      "fieldCount": 19,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Purchaseindentitems",
+      "file": "Purchaseindentitems.js",
+      "fieldCount": 15,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(50)"
+        }
+      ],
+      "likelyFks": [
+        "indentid",
+        "mid"
+      ]
+    },
+    {
+      "name": "Purchaseitems",
+      "file": "Purchaseitems.js",
+      "fieldCount": 86,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(11)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "purchaseid",
+        "pid",
+        "productcode",
+        "ledgerid",
+        "assetid",
+        "costid"
+      ]
+    },
+    {
+      "name": "Purchaseorder",
+      "file": "Purchaseorder.js",
+      "fieldCount": 131,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(25)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "purchaseacid"
+      ]
+    },
+    {
+      "name": "Purchaseorderitems",
+      "file": "Purchaseorderitems.js",
+      "fieldCount": 67,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(11)"
+        }
+      ],
+      "likelyFks": [
+        "purchaseid",
+        "pid",
+        "productcode",
+        "ledgerid",
+        "assetid"
+      ]
+    },
+    {
+      "name": "Purchasepayment",
+      "file": "Purchasepayment.js",
+      "fieldCount": 8,
+      "suspicious": [],
+      "likelyFks": [
+        "purchaseid",
+        "bankacid"
+      ]
+    },
+    {
+      "name": "Purchasepaymentitems",
+      "file": "Purchasepaymentitems.js",
+      "fieldCount": 11,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(20)"
+        }
+      ],
+      "likelyFks": [
+        "purchasebillid",
+        "purchaseid"
+      ]
+    },
+    {
+      "name": "Purchasereturn",
+      "file": "Purchasereturn.js",
+      "fieldCount": 82,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        },
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(20)"
+        }
+      ],
+      "likelyFks": [
+        "purchaseacid",
+        "groupid",
+        "governmentcgstid",
+        "governmentsgstid",
+        "governmentigstid",
+        "realbookid"
+      ]
+    },
+    {
+      "name": "Purchasereturnitempaymentitems",
+      "file": "Purchasereturnitempaymentitems.js",
+      "fieldCount": 11,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(20)"
+        }
+      ],
+      "likelyFks": [
+        "prid",
+        "purchaseid"
+      ]
+    },
+    {
+      "name": "Purchasereturnitems",
+      "file": "Purchasereturnitems.js",
+      "fieldCount": 75,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "pid",
+        "prid",
+        "mid",
+        "purchaseid",
+        "ledgerid",
+        "purchaseaccid",
+        "centralpurchaseaccid",
+        "cgstaccid",
+        "sgstaccid",
+        "igstaccid",
+        "centralcgstaccid",
+        "centralsgstaccid",
+        "centraligstaccid",
+        "localpacid",
+        "centralpacid",
+        "localcgstid",
+        "localsgstid",
+        "localigstid",
+        "centralcgstid",
+        "centralsgstid",
+        "centraligstid",
+        "sgstid",
+        "cgstid",
+        "igstid",
+        "exemptsacid",
+        "exemptcenteralsacid"
+      ]
+    },
+    {
+      "name": "Purchases",
+      "file": "Purchases.js",
+      "fieldCount": 147,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(25)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "groupid",
+        "maincatid",
+        "mainproductid"
+      ]
+    },
+    {
+      "name": "Qc",
+      "file": "Qc.js",
+      "fieldCount": 31,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "grnid"
+      ]
+    },
+    {
+      "name": "Qcitems",
+      "file": "Qcitems.js",
+      "fieldCount": 10,
+      "suspicious": [],
+      "likelyFks": [
+        "qcid",
+        "pid"
+      ]
+    },
+    {
+      "name": "Qcmaster",
+      "file": "Qcmaster.js",
+      "fieldCount": 25,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(255)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Qcmasteritems",
+      "file": "Qcmasteritems.js",
+      "fieldCount": 19,
+      "suspicious": [],
+      "likelyFks": [
+        "pid",
+        "qcid"
+      ]
+    },
+    {
+      "name": "Question",
+      "file": "Question.js",
+      "fieldCount": 21,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        },
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(50)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Quotation",
+      "file": "Quotation.js",
+      "fieldCount": 37,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(50)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "contactid",
+        "clientid",
+        "inquiryid"
+      ]
+    },
+    {
+      "name": "Quotationitems",
+      "file": "Quotationitems.js",
+      "fieldCount": 16,
+      "suspicious": [],
+      "likelyFks": [
+        "quotationid",
+        "pid",
+        "inquiryid"
+      ]
+    },
+    {
+      "name": "Rawdatatemplate",
+      "file": "Rawdatatemplate.js",
+      "fieldCount": 7,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        },
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(10)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "ReadReminders",
+      "file": "ReadReminders.js",
+      "fieldCount": 5,
+      "suspicious": [],
+      "likelyFks": [
+        "reminderid",
+        "userid",
+        "companyid"
+      ]
+    },
+    {
+      "name": "Reagentpreparation",
+      "file": "Reagentpreparation.js",
+      "fieldCount": 25,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        },
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(100)"
+        }
+      ],
+      "likelyFks": [
+        "bookingid",
+        "bookingtestid"
+      ]
+    },
+    {
+      "name": "Reagentpreparationchemicals",
+      "file": "Reagentpreparationchemicals.js",
+      "fieldCount": 9,
+      "suspicious": [],
+      "likelyFks": [
+        "reagentpreparationid",
+        "chemicalid"
+      ]
+    },
+    {
+      "name": "Reagentpreparationinstrument",
+      "file": "Reagentpreparationinstrument.js",
+      "fieldCount": 7,
+      "suspicious": [],
+      "likelyFks": [
+        "reagentpreparationid",
+        "instrumentid",
+        "instrumentcode"
+      ]
+    },
+    {
+      "name": "Reagentsmaster",
+      "file": "Reagentsmaster.js",
+      "fieldCount": 85,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(25)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "purchaseid",
+        "salesid"
+      ]
+    },
+    {
+      "name": "Reasonmaster",
+      "file": "Reasonmaster.js",
+      "fieldCount": 5,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Receipt",
+      "file": "Receipt.js",
+      "fieldCount": 59,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        },
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(50)"
+        }
+      ],
+      "likelyFks": [
+        "salechallanid",
+        "ledgerid",
+        "voucherid",
+        "groupid",
+        "maincatid",
+        "mainproductid",
+        "costid",
+        "guid"
+      ]
+    },
+    {
+      "name": "Receiptitems",
+      "file": "Receiptitems.js",
+      "fieldCount": 10,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(20)"
+        }
+      ],
+      "likelyFks": [
+        "receiptid",
+        "salesid"
+      ]
+    },
+    {
+      "name": "Regionmaster",
+      "file": "Regionmaster.js",
+      "fieldCount": 11,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Regulatoryapproval",
+      "file": "Regulatoryapproval.js",
+      "fieldCount": 21,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "projectid",
+        "authoid",
+        "bomid"
+      ]
+    },
+    {
+      "name": "Regulatoryreporting",
+      "file": "Regulatoryreporting.js",
+      "fieldCount": 15,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "caseid",
+        "regulatoryauthorityid"
+      ]
+    },
+    {
+      "name": "Reminder",
+      "file": "Reminder.js",
+      "fieldCount": 24,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(25)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "sid",
+        "employeeid"
+      ]
+    },
+    {
+      "name": "Reporttype",
+      "file": "Reporttype.js",
+      "fieldCount": 14,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Request",
+      "file": "Request.js",
+      "fieldCount": 32,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(11)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Requestslip",
+      "file": "Requestslip.js",
+      "fieldCount": 10,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "clientid"
+      ]
+    },
+    {
+      "name": "Requestslipatt",
+      "file": "Requestslipatt.js",
+      "fieldCount": 4,
+      "suspicious": [],
+      "likelyFks": [
+        "bookingid"
+      ]
+    },
+    {
+      "name": "Requestslipitems",
+      "file": "Requestslipitems.js",
+      "fieldCount": 13,
+      "suspicious": [],
+      "likelyFks": [
+        "requestid",
+        "pid"
+      ]
+    },
+    {
+      "name": "Requestsliptest",
+      "file": "Requestsliptest.js",
+      "fieldCount": 97,
+      "suspicious": [
+        {
+          "field": "desc1Limit1",
+          "issues": [
+            "slash_in_sql_name"
+          ],
+          "sql": "desc1/limit1 varchar(50)"
+        },
+        {
+          "field": "desc2Limit2",
+          "issues": [
+            "slash_in_sql_name"
+          ],
+          "sql": "desc2/limit2 varchar(50)"
+        }
+      ],
+      "likelyFks": [
+        "testid",
+        "bid",
+        "tid",
+        "formulaid",
+        "testtypeid",
+        "typemasterid",
+        "departmentid"
+      ]
+    },
+    {
+      "name": "Resources",
+      "file": "Resources.js",
+      "fieldCount": 34,
+      "suspicious": [],
+      "likelyFks": [
+        "departmentid",
+        "parentid"
+      ]
+    },
+    {
+      "name": "Resumemanagement",
+      "file": "Resumemanagement.js",
+      "fieldCount": 29,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete tinyint(1)"
+        }
+      ],
+      "likelyFks": [
+        "jobrequisitionid"
+      ]
+    },
+    {
+      "name": "Resumes",
+      "file": "Resumes.js",
+      "fieldCount": 5,
+      "suspicious": [],
+      "likelyFks": [
+        "vacanciesid"
+      ]
+    },
+    {
+      "name": "Riskmanagement",
+      "file": "Riskmanagement.js",
+      "fieldCount": 14,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Rndstages",
+      "file": "Rndstages.js",
+      "fieldCount": 13,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Salaryregister",
+      "file": "Salaryregister.js",
+      "fieldCount": 70,
+      "suspicious": [],
+      "likelyFks": [
+        "eid",
+        "dayspaid"
+      ]
+    },
+    {
+      "name": "Sale",
+      "file": "Sale.js",
+      "fieldCount": 26,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        },
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(150)"
+        }
+      ],
+      "likelyFks": [
+        "pid",
+        "supplierid",
+        "refparentid",
+        "refitemid"
+      ]
+    },
+    {
+      "name": "Salereturnreceiptitems",
+      "file": "Salereturnreceiptitems.js",
+      "fieldCount": 11,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(20)"
+        }
+      ],
+      "likelyFks": [
+        "srid",
+        "salesid"
+      ]
+    },
+    {
+      "name": "Sales",
+      "file": "Sales.js",
+      "fieldCount": 75,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(25)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Salesbill",
+      "file": "Salesbill.js",
+      "fieldCount": 154,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        },
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(100)"
+        }
+      ],
+      "likelyFks": [
+        "salesacid",
+        "amcid",
+        "groupid",
+        "maincatid",
+        "mainproductid",
+        "transid",
+        "portid"
+      ]
+    },
+    {
+      "name": "Salesbillitem",
+      "file": "Salesbillitem.js",
+      "fieldCount": 40,
+      "suspicious": [],
+      "likelyFks": [
+        "salesbillid",
+        "pid",
+        "ledgerid",
+        "issueid"
+      ]
+    },
+    {
+      "name": "Saleschallan",
+      "file": "Saleschallan.js",
+      "fieldCount": 78,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "salesacid"
+      ]
+    },
+    {
+      "name": "Saleschallanitem",
+      "file": "Saleschallanitem.js",
+      "fieldCount": 44,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "scid",
+        "pid"
+      ]
+    },
+    {
+      "name": "Salesitems",
+      "file": "Salesitems.js",
+      "fieldCount": 19,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(11)"
+        }
+      ],
+      "likelyFks": [
+        "saleid",
+        "pid",
+        "mid"
+      ]
+    },
+    {
+      "name": "Salesorder",
+      "file": "Salesorder.js",
+      "fieldCount": 111,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "eid",
+        "cledgerid",
+        "salesacid"
+      ]
+    },
+    {
+      "name": "Salesordercouponitem",
+      "file": "Salesordercouponitem.js",
+      "fieldCount": 4,
+      "suspicious": [],
+      "likelyFks": [
+        "sid",
+        "pid"
+      ]
+    },
+    {
+      "name": "Salesorderitem",
+      "file": "Salesorderitem.js",
+      "fieldCount": 36,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "sid",
+        "pid"
+      ]
+    },
+    {
+      "name": "Salespayment",
+      "file": "Salespayment.js",
+      "fieldCount": 7,
+      "suspicious": [],
+      "likelyFks": [
+        "saleid"
+      ]
+    },
+    {
+      "name": "Salesreceiptitems",
+      "file": "Salesreceiptitems.js",
+      "fieldCount": 11,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(20)"
+        }
+      ],
+      "likelyFks": [
+        "salesbillid",
+        "salesid"
+      ]
+    },
+    {
+      "name": "Salesreturn",
+      "file": "Salesreturn.js",
+      "fieldCount": 103,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        },
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(10)"
+        }
+      ],
+      "likelyFks": [
+        "salesacid",
+        "salesbillid",
+        "maincatid",
+        "mainproductid",
+        "groupid",
+        "portid"
+      ]
+    },
+    {
+      "name": "Salesreturnitems",
+      "file": "Salesreturnitems.js",
+      "fieldCount": 46,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "srid",
+        "pid",
+        "mid",
+        "ledgerid"
+      ]
+    },
+    {
+      "name": "Salsorderpdcitems",
+      "file": "Salsorderpdcitems.js",
+      "fieldCount": 5,
+      "suspicious": [],
+      "likelyFks": [
+        "salesorderid"
+      ]
+    },
+    {
+      "name": "Samplelocationmaster",
+      "file": "Samplelocationmaster.js",
+      "fieldCount": 17,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Samplemaster",
+      "file": "Samplemaster.js",
+      "fieldCount": 15,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "productid"
+      ]
+    },
+    {
+      "name": "Samplepreparation",
+      "file": "Samplepreparation.js",
+      "fieldCount": 36,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        },
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(100)"
+        }
+      ],
+      "likelyFks": [
+        "bookingid",
+        "bookingtestid"
+      ]
+    },
+    {
+      "name": "Samplepreparationchemicals",
+      "file": "Samplepreparationchemicals.js",
+      "fieldCount": 6,
+      "suspicious": [],
+      "likelyFks": [
+        "samplepreparationid",
+        "chemicalid"
+      ]
+    },
+    {
+      "name": "Samplepreparationconcentration",
+      "file": "Samplepreparationconcentration.js",
+      "fieldCount": 6,
+      "suspicious": [],
+      "likelyFks": [
+        "samplepreparationid"
+      ]
+    },
+    {
+      "name": "Samplepreparationinstrument",
+      "file": "Samplepreparationinstrument.js",
+      "fieldCount": 7,
+      "suspicious": [],
+      "likelyFks": [
+        "samplepreparationid",
+        "instrumentid",
+        "instrumentcode"
+      ]
+    },
+    {
+      "name": "Samplereceipt",
+      "file": "Samplereceipt.js",
+      "fieldCount": 113,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(255)"
+        }
+      ],
+      "likelyFks": [
+        "cid",
+        "pid",
+        "samplecode",
+        "salesid"
+      ]
+    },
+    {
+      "name": "Samplereceiptatt",
+      "file": "Samplereceiptatt.js",
+      "fieldCount": 4,
+      "suspicious": [],
+      "likelyFks": [
+        "samplereceiptid"
+      ]
+    },
+    {
+      "name": "Sampleretention",
+      "file": "Sampleretention.js",
+      "fieldCount": 19,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "bookingid",
+        "bookingtestid"
+      ]
+    },
+    {
+      "name": "Sampleweight",
+      "file": "Sampleweight.js",
+      "fieldCount": 17,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "bookingid"
+      ]
+    },
+    {
+      "name": "Samplewithdrawal",
+      "file": "Samplewithdrawal.js",
+      "fieldCount": 13,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "studyid",
+        "testid"
+      ]
+    },
+    {
+      "name": "Section",
+      "file": "Section.js",
+      "fieldCount": 13,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete tinyint(1)"
+        }
+      ],
+      "likelyFks": [
+        "courseid"
+      ]
+    },
+    {
+      "name": "Serialmaster",
+      "file": "Serialmaster.js",
+      "fieldCount": 19,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Services",
+      "file": "Services.js",
+      "fieldCount": 9,
+      "suspicious": [],
+      "likelyFks": [
+        "fid"
+      ]
+    },
+    {
+      "name": "Settings",
+      "file": "Settings.js",
+      "fieldCount": 8,
+      "suspicious": [],
+      "likelyFks": []
+    },
+    {
+      "name": "Shiftmaster",
+      "file": "Shiftmaster.js",
+      "fieldCount": 41,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Signaldetection",
+      "file": "Signaldetection.js",
+      "fieldCount": 18,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "drugid"
+      ]
+    },
+    {
+      "name": "Skill",
+      "file": "Skill.js",
+      "fieldCount": 11,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete tinyint(1)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Softwares",
+      "file": "Softwares.js",
+      "fieldCount": 7,
+      "suspicious": [],
+      "likelyFks": []
+    },
+    {
+      "name": "Solutionmanagement",
+      "file": "Solutionmanagement.js",
+      "fieldCount": 29,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        },
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(100)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Solutionmanagementtest",
+      "file": "Solutionmanagementtest.js",
+      "fieldCount": 9,
+      "suspicious": [],
+      "likelyFks": [
+        "solutionmid",
+        "chemicalid"
+      ]
+    },
+    {
+      "name": "Sop",
+      "file": "Sop.js",
+      "fieldCount": 14,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Specificationmaster",
+      "file": "Specificationmaster.js",
+      "fieldCount": 13,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "productid",
+        "testid"
+      ]
+    },
+    {
+      "name": "Spectrophotometriccondition",
+      "file": "Spectrophotometriccondition.js",
+      "fieldCount": 27,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        },
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(100)"
+        }
+      ],
+      "likelyFks": [
+        "bookingid",
+        "bookingtestid"
+      ]
+    },
+    {
+      "name": "Spectrophotometricconditioninstrument",
+      "file": "Spectrophotometricconditioninstrument.js",
+      "fieldCount": 10,
+      "suspicious": [],
+      "likelyFks": [
+        "spectrophotometricconditionid",
+        "instrumentid",
+        "instrumentcode"
+      ]
+    },
+    {
+      "name": "Stabilityconditions",
+      "file": "Stabilityconditions.js",
+      "fieldCount": 17,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Stabilityproduct",
+      "file": "Stabilityproduct.js",
+      "fieldCount": 15,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "testid"
+      ]
+    },
+    {
+      "name": "Stabilitystudy",
+      "file": "Stabilitystudy.js",
+      "fieldCount": 11,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Stabilitystudyinitiation",
+      "file": "Stabilitystudyinitiation.js",
+      "fieldCount": 13,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "productid",
+        "storageid"
+      ]
+    },
+    {
+      "name": "Stabilitystudyinitiationitem",
+      "file": "Stabilitystudyinitiationitem.js",
+      "fieldCount": 6,
+      "suspicious": [],
+      "likelyFks": [
+        "stabilitystudyinitiationid"
+      ]
+    },
+    {
+      "name": "Stabilitystudyitem",
+      "file": "Stabilitystudyitem.js",
+      "fieldCount": 4,
+      "suspicious": [],
+      "likelyFks": [
+        "stabilitystudyid"
+      ]
+    },
+    {
+      "name": "Standardpreparation",
+      "file": "Standardpreparation.js",
+      "fieldCount": 41,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        },
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(100)"
+        }
+      ],
+      "likelyFks": [
+        "bookingid",
+        "bookingtestid"
+      ]
+    },
+    {
+      "name": "Standardpreparationconcentration",
+      "file": "Standardpreparationconcentration.js",
+      "fieldCount": 10,
+      "suspicious": [],
+      "likelyFks": [
+        "standardpreparationid",
+        "chemicalid"
+      ]
+    },
+    {
+      "name": "Standardpreparationinstrument",
+      "file": "Standardpreparationinstrument.js",
+      "fieldCount": 7,
+      "suspicious": [],
+      "likelyFks": [
+        "standardpreparationid",
+        "instrumentid",
+        "instrumentcode"
+      ]
+    },
+    {
+      "name": "Standardpreparationvial",
+      "file": "Standardpreparationvial.js",
+      "fieldCount": 8,
+      "suspicious": [],
+      "likelyFks": [
+        "standardpreprationvialid",
+        "standardpreparationid",
+        "testid"
+      ]
+    },
+    {
+      "name": "Statemaster",
+      "file": "Statemaster.js",
+      "fieldCount": 13,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Stock",
+      "file": "Stock.js",
+      "fieldCount": 49,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(150)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "refid",
+        "refitemid",
+        "pid",
+        "supplierid",
+        "refparentid"
+      ]
+    },
+    {
+      "name": "Stockjournal",
+      "file": "Stockjournal.js",
+      "fieldCount": 24,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Stockjournalmaterial",
+      "file": "Stockjournalmaterial.js",
+      "fieldCount": 13,
+      "suspicious": [],
+      "likelyFks": [
+        "stockjournalid",
+        "pid"
+      ]
+    },
+    {
+      "name": "Stockjournalproduct",
+      "file": "Stockjournalproduct.js",
+      "fieldCount": 13,
+      "suspicious": [],
+      "likelyFks": [
+        "stockjournalid",
+        "pid"
+      ]
+    },
+    {
+      "name": "Stockregister",
+      "file": "Stockregister.js",
+      "fieldCount": 19,
+      "suspicious": [],
+      "likelyFks": []
+    },
+    {
+      "name": "Stocktransfer",
+      "file": "Stocktransfer.js",
+      "fieldCount": 19,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "grnid"
+      ]
+    },
+    {
+      "name": "Stocktransferitems",
+      "file": "Stocktransferitems.js",
+      "fieldCount": 12,
+      "suspicious": [],
+      "likelyFks": [
+        "stocktransferid",
+        "pid"
+      ]
+    },
+    {
+      "name": "Storageconditionmaster",
+      "file": "Storageconditionmaster.js",
+      "fieldCount": 11,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Stpitems",
+      "file": "Stpitems.js",
+      "fieldCount": 38,
+      "suspicious": [],
+      "likelyFks": [
+        "stpid",
+        "pid",
+        "testid",
+        "testtypeid",
+        "typemasterid",
+        "departmentid"
+      ]
+    },
+    {
+      "name": "Stpitems1",
+      "file": "Stpitems1.js",
+      "fieldCount": 38,
+      "suspicious": [],
+      "likelyFks": [
+        "stpid",
+        "pid",
+        "testid",
+        "testtypeid",
+        "typemasterid",
+        "departmentid"
+      ]
+    },
+    {
+      "name": "Stpmaster",
+      "file": "Stpmaster.js",
+      "fieldCount": 6,
+      "suspicious": [],
+      "likelyFks": [
+        "pid"
+      ]
+    },
+    {
+      "name": "Studycode",
+      "file": "Studycode.js",
+      "fieldCount": 17,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Studymaster",
+      "file": "Studymaster.js",
+      "fieldCount": 12,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "productid"
+      ]
+    },
+    {
+      "name": "Subcategorymaster",
+      "file": "Subcategorymaster.js",
+      "fieldCount": 28,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Suggestion",
+      "file": "Suggestion.js",
+      "fieldCount": 36,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(11)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "employeeid"
+      ]
+    },
+    {
+      "name": "Suppliermaster",
+      "file": "Suppliermaster.js",
+      "fieldCount": 16,
+      "suspicious": [],
+      "likelyFks": []
+    },
+    {
+      "name": "Supplierpricelist",
+      "file": "Supplierpricelist.js",
+      "fieldCount": 25,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Supplierpricelistitem",
+      "file": "Supplierpricelistitem.js",
+      "fieldCount": 21,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "sid",
+        "pid"
+      ]
+    },
+    {
+      "name": "Supplierproduct",
+      "file": "Supplierproduct.js",
+      "fieldCount": 37,
+      "suspicious": [],
+      "likelyFks": []
+    },
+    {
+      "name": "Target",
+      "file": "Target.js",
+      "fieldCount": 15,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "pid"
+      ]
+    },
+    {
+      "name": "Targetcategory",
+      "file": "Targetcategory.js",
+      "fieldCount": 9,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "TaskComments",
+      "file": "TaskComments.js",
+      "fieldCount": 7,
+      "suspicious": [],
+      "likelyFks": [
+        "taskid"
+      ]
+    },
+    {
+      "name": "Taskmanagement",
+      "file": "Taskmanagement.js",
+      "fieldCount": 36,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(10)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "repeatid",
+        "ccuserid"
+      ]
+    },
+    {
+      "name": "TaskRead",
+      "file": "TaskRead.js",
+      "fieldCount": 12,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "userid",
+        "taskid"
+      ]
+    },
+    {
+      "name": "Tasks",
+      "file": "Tasks.js",
+      "fieldCount": 38,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "assigneduserid",
+        "empid",
+        "clientid",
+        "uid",
+        "contactid"
+      ]
+    },
+    {
+      "name": "Tasktype",
+      "file": "Tasktype.js",
+      "fieldCount": 12,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Taxmaster",
+      "file": "Taxmaster.js",
+      "fieldCount": 6,
+      "suspicious": [],
+      "likelyFks": []
+    },
+    {
+      "name": "Tdsmaster",
+      "file": "Tdsmaster.js",
+      "fieldCount": 4,
+      "suspicious": [],
+      "likelyFks": []
+    },
+    {
+      "name": "Temp202526AccountingallocationsList",
+      "file": "Temp202526AccountingallocationsList.js",
+      "fieldCount": 44,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526Address1",
+      "file": "Temp202526Address1.js",
+      "fieldCount": 3,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526AddressList",
+      "file": "Temp202526AddressList.js",
+      "fieldCount": 4,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "_type text"
+        }
+      ],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526AllinventoryentriesList",
+      "file": "Temp202526AllinventoryentriesList.js",
+      "fieldCount": 37,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526AllledgerentriesList",
+      "file": "Temp202526AllledgerentriesList.js",
+      "fieldCount": 57,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526BankallocationsList",
+      "file": "Temp202526BankallocationsList.js",
+      "fieldCount": 29,
+      "suspicious": [],
+      "likelyFks": [
+        "bankid",
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526Basicbuyeraddress",
+      "file": "Temp202526Basicbuyeraddress.js",
+      "fieldCount": 3,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526BasicbuyeraddressList",
+      "file": "Temp202526BasicbuyeraddressList.js",
+      "fieldCount": 4,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "_type text"
+        }
+      ],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526BatchallocationsList",
+      "file": "Temp202526BatchallocationsList.js",
+      "fieldCount": 13,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526BillallocationsList",
+      "file": "Temp202526BillallocationsList.js",
+      "fieldCount": 8,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526Billcreditperiod",
+      "file": "Temp202526Billcreditperiod.js",
+      "fieldCount": 5,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526Body",
+      "file": "Temp202526Body.js",
+      "fieldCount": 2,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526Company",
+      "file": "Temp202526Company.js",
+      "fieldCount": 2,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526Envelope",
+      "file": "Temp202526Envelope.js",
+      "fieldCount": 2,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526GstList",
+      "file": "Temp202526GstList.js",
+      "fieldCount": 3,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526Gstregistration",
+      "file": "Temp202526Gstregistration.js",
+      "fieldCount": 5,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526Header",
+      "file": "Temp202526Header.js",
+      "fieldCount": 3,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526Importdata",
+      "file": "Temp202526Importdata.js",
+      "fieldCount": 2,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526LedgerentriesList",
+      "file": "Temp202526LedgerentriesList.js",
+      "fieldCount": 48,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterAddress",
+      "file": "Temp202526MasterAddress.js",
+      "fieldCount": 3,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterAddressList",
+      "file": "Temp202526MasterAddressList.js",
+      "fieldCount": 4,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "_type text"
+        }
+      ],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterBankallocationsList",
+      "file": "Temp202526MasterBankallocationsList.js",
+      "fieldCount": 24,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterBatchallocationsList",
+      "file": "Temp202526MasterBatchallocationsList.js",
+      "fieldCount": 8,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterBillallocationsList",
+      "file": "Temp202526MasterBillallocationsList.js",
+      "fieldCount": 7,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterBillcreditperiod",
+      "file": "Temp202526MasterBillcreditperiod.js",
+      "fieldCount": 5,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterBody",
+      "file": "Temp202526MasterBody.js",
+      "fieldCount": 2,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterCategorydetailsList",
+      "file": "Temp202526MasterCategorydetailsList.js",
+      "fieldCount": 11,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterCmpnote",
+      "file": "Temp202526MasterCmpnote.js",
+      "fieldCount": 5,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterCompany",
+      "file": "Temp202526MasterCompany.js",
+      "fieldCount": 2,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterContactdetailsList",
+      "file": "Temp202526MasterContactdetailsList.js",
+      "fieldCount": 6,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterCostcategory",
+      "file": "Temp202526MasterCostcategory.js",
+      "fieldCount": 13,
+      "suspicious": [],
+      "likelyFks": [
+        "alterid",
+        "guid",
+        "isupdatingtargetid",
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterCurrency",
+      "file": "Temp202526MasterCurrency.js",
+      "fieldCount": 23,
+      "suspicious": [],
+      "likelyFks": [
+        "alterid",
+        "guid",
+        "isupdatingtargetid",
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterDeductinsamevchrulesList",
+      "file": "Temp202526MasterDeductinsamevchrulesList.js",
+      "fieldCount": 3,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterEnvelope",
+      "file": "Temp202526MasterEnvelope.js",
+      "fieldCount": 2,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterGodown",
+      "file": "Temp202526MasterGodown.js",
+      "fieldCount": 34,
+      "suspicious": [],
+      "likelyFks": [
+        "alterid",
+        "guid",
+        "isupdatingtargetid",
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterGroup",
+      "file": "Temp202526MasterGroup.js",
+      "fieldCount": 45,
+      "suspicious": [],
+      "likelyFks": [
+        "alterid",
+        "guid",
+        "isupdatingtargetid",
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterGstdetailsList",
+      "file": "Temp202526MasterGstdetailsList.js",
+      "fieldCount": 15,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterGstewaybilldetailsList",
+      "file": "Temp202526MasterGstewaybilldetailsList.js",
+      "fieldCount": 4,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterGstreconconfigdetailsList",
+      "file": "Temp202526MasterGstreconconfigdetailsList.js",
+      "fieldCount": 8,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterGstregistrationdetailsList",
+      "file": "Temp202526MasterGstregistrationdetailsList.js",
+      "fieldCount": 10,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterHeader",
+      "file": "Temp202526MasterHeader.js",
+      "fieldCount": 3,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterHsndetailsList",
+      "file": "Temp202526MasterHsndetailsList.js",
+      "fieldCount": 6,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterImportdata",
+      "file": "Temp202526MasterImportdata.js",
+      "fieldCount": 2,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterIncometaxclassification",
+      "file": "Temp202526MasterIncometaxclassification.js",
+      "fieldCount": 19,
+      "suspicious": [],
+      "likelyFks": [
+        "alterid",
+        "guid",
+        "isupdatingtargetid",
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterIncometaxslab",
+      "file": "Temp202526MasterIncometaxslab.js",
+      "fieldCount": 13,
+      "suspicious": [],
+      "likelyFks": [
+        "alterid",
+        "guid",
+        "isupdatingtargetid",
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterInterestcollectionList",
+      "file": "Temp202526MasterInterestcollectionList.js",
+      "fieldCount": 6,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterItclassificationdetailsList",
+      "file": "Temp202526MasterItclassificationdetailsList.js",
+      "fieldCount": 4,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterItclassificationperiodList",
+      "file": "Temp202526MasterItclassificationperiodList.js",
+      "fieldCount": 11,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterItregimedetailsList",
+      "file": "Temp202526MasterItregimedetailsList.js",
+      "fieldCount": 3,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterItslabperiodList",
+      "file": "Temp202526MasterItslabperiodList.js",
+      "fieldCount": 5,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterItslabrateList",
+      "file": "Temp202526MasterItslabrateList.js",
+      "fieldCount": 6,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterLanguagenameList",
+      "file": "Temp202526MasterLanguagenameList.js",
+      "fieldCount": 3,
+      "suspicious": [],
+      "likelyFks": [
+        "languageid",
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterLastgsttaxunitbyseries",
+      "file": "Temp202526MasterLastgsttaxunitbyseries.js",
+      "fieldCount": 3,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterLastgsttaxunitbyseriesList",
+      "file": "Temp202526MasterLastgsttaxunitbyseriesList.js",
+      "fieldCount": 4,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "_type text"
+        }
+      ],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterLastseriesbygsttaxunit",
+      "file": "Temp202526MasterLastseriesbygsttaxunit.js",
+      "fieldCount": 3,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterLastseriesbygsttaxunitList",
+      "file": "Temp202526MasterLastseriesbygsttaxunitList.js",
+      "fieldCount": 4,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "_type text"
+        }
+      ],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterLedger",
+      "file": "Temp202526MasterLedger.js",
+      "fieldCount": 229,
+      "suspicious": [],
+      "likelyFks": [
+        "alterid",
+        "bankcapsuleid",
+        "bankingconfigbankid",
+        "guid",
+        "isproductcodebased",
+        "isupdatingtargetid",
+        "parentid",
+        "vouchertypeproductcodeslist"
+      ]
+    },
+    {
+      "name": "Temp202526MasterLedgerclosingvaluesList",
+      "file": "Temp202526MasterLedgerclosingvaluesList.js",
+      "fieldCount": 4,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterLedgerentrieslistList",
+      "file": "Temp202526MasterLedgerentrieslistList.js",
+      "fieldCount": 9,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterLedgerforinventorylistList",
+      "file": "Temp202526MasterLedgerforinventorylistList.js",
+      "fieldCount": 7,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterLedgstregdetailsList",
+      "file": "Temp202526MasterLedgstregdetailsList.js",
+      "fieldCount": 11,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterLedmailingdetailsList",
+      "file": "Temp202526MasterLedmailingdetailsList.js",
+      "fieldCount": 7,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterMsmeregistrationdetailsList",
+      "file": "Temp202526MasterMsmeregistrationdetailsList.js",
+      "fieldCount": 5,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterName",
+      "file": "Temp202526MasterName.js",
+      "fieldCount": 3,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterNameList",
+      "file": "Temp202526MasterNameList.js",
+      "fieldCount": 4,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "_type text"
+        }
+      ],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterNoteperiodList",
+      "file": "Temp202526MasterNoteperiodList.js",
+      "fieldCount": 50,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterOldaddress",
+      "file": "Temp202526MasterOldaddress.js",
+      "fieldCount": 3,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterOldaddressList",
+      "file": "Temp202526MasterOldaddressList.js",
+      "fieldCount": 4,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "_type text"
+        }
+      ],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterOldauditentryidsList",
+      "file": "Temp202526MasterOldauditentryidsList.js",
+      "fieldCount": 4,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "_type text"
+        }
+      ],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterOldmailingnameList",
+      "file": "Temp202526MasterOldmailingnameList.js",
+      "fieldCount": 4,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "_type text"
+        }
+      ],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterPaymentdetailsList",
+      "file": "Temp202526MasterPaymentdetailsList.js",
+      "fieldCount": 11,
+      "suspicious": [],
+      "likelyFks": [
+        "bankid",
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterPrefixlistList",
+      "file": "Temp202526MasterPrefixlistList.js",
+      "fieldCount": 4,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterPreviousnameList",
+      "file": "Temp202526MasterPreviousnameList.js",
+      "fieldCount": 4,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "_type text"
+        }
+      ],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterRatedetailsList",
+      "file": "Temp202526MasterRatedetailsList.js",
+      "fieldCount": 5,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterRemotecmpinfoList",
+      "file": "Temp202526MasterRemotecmpinfoList.js",
+      "fieldCount": 6,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterReportinguqcdetailsList",
+      "file": "Temp202526MasterReportinguqcdetailsList.js",
+      "fieldCount": 4,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterRequestdata",
+      "file": "Temp202526MasterRequestdata.js",
+      "fieldCount": 2,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterRequestdesc",
+      "file": "Temp202526MasterRequestdesc.js",
+      "fieldCount": 3,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterRestartfromlistList",
+      "file": "Temp202526MasterRestartfromlistList.js",
+      "fieldCount": 6,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterRoot",
+      "file": "Temp202526MasterRoot.js",
+      "fieldCount": 1,
+      "suspicious": [],
+      "likelyFks": []
+    },
+    {
+      "name": "Temp202526MasterSchvidetailsList",
+      "file": "Temp202526MasterSchvidetailsList.js",
+      "fieldCount": 7,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterSchvidisplaydetailList",
+      "file": "Temp202526MasterSchvidisplaydetailList.js",
+      "fieldCount": 6,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterStatewisedetailsList",
+      "file": "Temp202526MasterStatewisedetailsList.js",
+      "fieldCount": 4,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterStaticvariables",
+      "file": "Temp202526MasterStaticvariables.js",
+      "fieldCount": 3,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterStockgroup",
+      "file": "Temp202526MasterStockgroup.js",
+      "fieldCount": 38,
+      "suspicious": [],
+      "likelyFks": [
+        "alterid",
+        "guid",
+        "isupdatingtargetid",
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterStockitem",
+      "file": "Temp202526MasterStockitem.js",
+      "fieldCount": 97,
+      "suspicious": [],
+      "likelyFks": [
+        "alterid",
+        "guid",
+        "isupdatingtargetid",
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterSuffixlistList",
+      "file": "Temp202526MasterSuffixlistList.js",
+      "fieldCount": 3,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterTallymessage",
+      "file": "Temp202526MasterTallymessage.js",
+      "fieldCount": 3,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterTaxunit",
+      "file": "Temp202526MasterTaxunit.js",
+      "fieldCount": 70,
+      "suspicious": [],
+      "likelyFks": [
+        "alterid",
+        "guid",
+        "isupdatingtargetid",
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterTdscategorydetailsList",
+      "file": "Temp202526MasterTdscategorydetailsList.js",
+      "fieldCount": 4,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterTdsrate",
+      "file": "Temp202526MasterTdsrate.js",
+      "fieldCount": 15,
+      "suspicious": [],
+      "likelyFks": [
+        "alterid",
+        "guid",
+        "isupdatingtargetid",
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterUnit",
+      "file": "Temp202526MasterUnit.js",
+      "fieldCount": 16,
+      "suspicious": [],
+      "likelyFks": [
+        "alterid",
+        "guid",
+        "isupdatingtargetid",
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterVchnumseriesidList",
+      "file": "Temp202526MasterVchnumseriesidList.js",
+      "fieldCount": 4,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid",
+        "vtypnumseriesid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterVoucherclasslistList",
+      "file": "Temp202526MasterVoucherclasslistList.js",
+      "fieldCount": 27,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid",
+        "productcodedetailslist"
+      ]
+    },
+    {
+      "name": "Temp202526MasterVouchernumberseriesList",
+      "file": "Temp202526MasterVouchernumberseriesList.js",
+      "fieldCount": 13,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid",
+        "prevmasterid"
+      ]
+    },
+    {
+      "name": "Temp202526MasterVouchertype",
+      "file": "Temp202526MasterVouchertype.js",
+      "fieldCount": 80,
+      "suspicious": [],
+      "likelyFks": [
+        "alterid",
+        "guid",
+        "isupdatingtargetid",
+        "parentid",
+        "productcodedetailslist"
+      ]
+    },
+    {
+      "name": "Temp202526OldauditentryidsList",
+      "file": "Temp202526OldauditentryidsList.js",
+      "fieldCount": 4,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "_type text"
+        }
+      ],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526RatedetailsList",
+      "file": "Temp202526RatedetailsList.js",
+      "fieldCount": 5,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526RemotecmpinfoList",
+      "file": "Temp202526RemotecmpinfoList.js",
+      "fieldCount": 6,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526Requestdata",
+      "file": "Temp202526Requestdata.js",
+      "fieldCount": 2,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526Requestdesc",
+      "file": "Temp202526Requestdesc.js",
+      "fieldCount": 3,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526Root",
+      "file": "Temp202526Root.js",
+      "fieldCount": 1,
+      "suspicious": [],
+      "likelyFks": []
+    },
+    {
+      "name": "Temp202526Staticvariables",
+      "file": "Temp202526Staticvariables.js",
+      "fieldCount": 3,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526StatList",
+      "file": "Temp202526StatList.js",
+      "fieldCount": 7,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526Tallymessage",
+      "file": "Temp202526Tallymessage.js",
+      "fieldCount": 3,
+      "suspicious": [],
+      "likelyFks": [
+        "parentid"
+      ]
+    },
+    {
+      "name": "Temp202526Voucher",
+      "file": "Temp202526Voucher.js",
+      "fieldCount": 212,
+      "suspicious": [],
+      "likelyFks": [
+        "remoteid",
+        "alterid",
+        "guid",
+        "isvatdutypaid",
+        "isvoid",
+        "masterid",
+        "parentid"
+      ]
+    },
+    {
+      "name": "Terminology",
+      "file": "Terminology.js",
+      "fieldCount": 4,
+      "suspicious": [],
+      "likelyFks": []
+    },
+    {
+      "name": "Termsandconditiontemplete",
+      "file": "Termsandconditiontemplete.js",
+      "fieldCount": 13,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(255)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Testmaster",
+      "file": "Testmaster.js",
+      "fieldCount": 13,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Testrequestslip",
+      "file": "Testrequestslip.js",
+      "fieldCount": 16,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "clientid"
+      ]
+    },
+    {
+      "name": "Testrequestslipitems",
+      "file": "Testrequestslipitems.js",
+      "fieldCount": 17,
+      "suspicious": [],
+      "likelyFks": [
+        "requestid",
+        "pid"
+      ]
+    },
+    {
+      "name": "Testresult",
+      "file": "Testresult.js",
+      "fieldCount": 20,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        },
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(100)"
+        }
+      ],
+      "likelyFks": [
+        "bookingid",
+        "bookingtestid"
+      ]
+    },
+    {
+      "name": "Testresultchemicals",
+      "file": "Testresultchemicals.js",
+      "fieldCount": 6,
+      "suspicious": [],
+      "likelyFks": [
+        "testresultid",
+        "chemicalid"
+      ]
+    },
+    {
+      "name": "Testresultentry",
+      "file": "Testresultentry.js",
+      "fieldCount": 13,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "studyid",
+        "testid"
+      ]
+    },
+    {
+      "name": "Testresultinstrument",
+      "file": "Testresultinstrument.js",
+      "fieldCount": 5,
+      "suspicious": [],
+      "likelyFks": [
+        "testresultid",
+        "instrumentid",
+        "instrumentcode"
+      ]
+    },
+    {
+      "name": "Teststart",
+      "file": "Teststart.js",
+      "fieldCount": 7,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(20)"
+        }
+      ],
+      "likelyFks": [
+        "bookingid",
+        "testid"
+      ]
+    },
+    {
+      "name": "Trainingdetail",
+      "file": "Trainingdetail.js",
+      "fieldCount": 7,
+      "suspicious": [],
+      "likelyFks": [
+        "employeeid"
+      ]
+    },
+    {
+      "name": "Trainingmanagement",
+      "file": "Trainingmanagement.js",
+      "fieldCount": 15,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "employeeid",
+        "trainerid"
+      ]
+    },
+    {
+      "name": "TrainingSchedule",
+      "file": "TrainingSchedule.js",
+      "fieldCount": 14,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "employeeid",
+        "courseid"
+      ]
+    },
+    {
+      "name": "Typemaster",
+      "file": "Typemaster.js",
+      "fieldCount": 14,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Uom",
+      "file": "Uom.js",
+      "fieldCount": 7,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Userrights",
+      "file": "Userrights.js",
+      "fieldCount": 9,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "eid",
+        "moduleid"
+      ]
+    },
+    {
+      "name": "Usersettings",
+      "file": "Usersettings.js",
+      "fieldCount": 4,
+      "suspicious": [],
+      "likelyFks": [
+        "eid"
+      ]
+    },
+    {
+      "name": "Vacancies",
+      "file": "Vacancies.js",
+      "fieldCount": 23,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "departmentid",
+        "positionid"
+      ]
+    },
+    {
+      "name": "Vacanciesitem",
+      "file": "Vacanciesitem.js",
+      "fieldCount": 9,
+      "suspicious": [],
+      "likelyFks": [
+        "vacancieid"
+      ]
+    },
+    {
+      "name": "Vendorcategory",
+      "file": "Vendorcategory.js",
+      "fieldCount": 13,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Vendorevaluation",
+      "file": "Vendorevaluation.js",
+      "fieldCount": 26,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Vendormaster",
+      "file": "Vendormaster.js",
+      "fieldCount": 6,
+      "suspicious": [],
+      "likelyFks": []
+    },
+    {
+      "name": "Vendortype",
+      "file": "Vendortype.js",
+      "fieldCount": 12,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Visitor",
+      "file": "Visitor.js",
+      "fieldCount": 26,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "clientid",
+        "eid"
+      ]
+    },
+    {
+      "name": "Volumetricsolutionpreparation",
+      "file": "Volumetricsolutionpreparation.js",
+      "fieldCount": 25,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        },
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(100)"
+        }
+      ],
+      "likelyFks": [
+        "bookingid",
+        "bookingtestid"
+      ]
+    },
+    {
+      "name": "Volumetricsolutionpreparationchemicals",
+      "file": "Volumetricsolutionpreparationchemicals.js",
+      "fieldCount": 9,
+      "suspicious": [],
+      "likelyFks": [
+        "volumetricsolutionpreparationid",
+        "chemicalid"
+      ]
+    },
+    {
+      "name": "Volumetricsolutionpreparationinstrument",
+      "file": "Volumetricsolutionpreparationinstrument.js",
+      "fieldCount": 5,
+      "suspicious": [],
+      "likelyFks": [
+        "volumetricsolutionpreparationid",
+        "instrumentid",
+        "instrumentcode"
+      ]
+    },
+    {
+      "name": "Volumetricsolutions",
+      "file": "Volumetricsolutions.js",
+      "fieldCount": 29,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        },
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(100)"
+        }
+      ],
+      "likelyFks": []
+    },
+    {
+      "name": "Volumetricsolutionstest",
+      "file": "Volumetricsolutionstest.js",
+      "fieldCount": 9,
+      "suspicious": [],
+      "likelyFks": [
+        "volumetricsolutionid",
+        "chemicalid"
+      ]
+    },
+    {
+      "name": "Voucher",
+      "file": "Voucher.js",
+      "fieldCount": 28,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(100)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete tinyint(1)"
+        }
+      ],
+      "likelyFks": [
+        "ledgerid",
+        "guid"
+      ]
+    },
+    {
+      "name": "Voucheritems",
+      "file": "Voucheritems.js",
+      "fieldCount": 14,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(50)"
+        }
+      ],
+      "likelyFks": [
+        "voucherid",
+        "accgrid",
+        "ledgerid",
+        "costid"
+      ]
+    },
+    {
+      "name": "Vouchertype",
+      "file": "Vouchertype.js",
+      "fieldCount": 2,
+      "suspicious": [],
+      "likelyFks": []
+    },
+    {
+      "name": "Wastagecheque",
+      "file": "Wastagecheque.js",
+      "fieldCount": 14,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "ledgerid"
+      ]
+    },
+    {
+      "name": "Weekoff",
+      "file": "Weekoff.js",
+      "fieldCount": 16,
+      "suspicious": [
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "employeeid"
+      ]
+    },
+    {
+      "name": "Widgets",
+      "file": "Widgets.js",
+      "fieldCount": 3,
+      "suspicious": [],
+      "likelyFks": [
+        "moduleid"
+      ]
+    },
+    {
+      "name": "Workorder",
+      "file": "Workorder.js",
+      "fieldCount": 18,
+      "suspicious": [
+        {
+          "field": "typeField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "type varchar(25)"
+        },
+        {
+          "field": "inhouseOuthouse",
+          "issues": [
+            "slash_in_sql_name"
+          ],
+          "sql": "inhouse/outhouse varchar(255)"
+        },
+        {
+          "field": "deleteField",
+          "issues": [
+            "reserved_renamed"
+          ],
+          "sql": "delete int(11)"
+        }
+      ],
+      "likelyFks": [
+        "pid"
+      ]
+    },
+    {
+      "name": "Workorderitems",
+      "file": "Workorderitems.js",
+      "fieldCount": 11,
+      "suspicious": [],
+      "likelyFks": [
+        "woid",
+        "pid",
+        "mid"
+      ]
+    }
+  ],
+  "duplicates": [
+    {
+      "key": "attlog",
+      "variants": [
+        "Attlog",
+        "Attlog1"
+      ]
+    },
+    {
+      "key": "bookings",
+      "variants": [
+        "Bookings",
+        "Bookings1"
+      ]
+    },
+    {
+      "key": "bookingtest",
+      "variants": [
+        "Bookingtest",
+        "Bookingtest1"
+      ]
+    },
+    {
+      "key": "contacts",
+      "variants": [
+        "Contacts",
+        "Contacts1"
+      ]
+    },
+    {
+      "key": "formulaitems",
+      "variants": [
+        "Formulaitems",
+        "Formulaitems1"
+      ]
+    },
+    {
+      "key": "formulamaster",
+      "variants": [
+        "Formulamaster",
+        "Formulamaster1"
+      ]
+    },
+    {
+      "key": "generic",
+      "variants": [
+        "Generic",
+        "Generic0612",
+        "Generic1"
+      ]
+    },
+    {
+      "key": "generictests",
+      "variants": [
+        "Generictests",
+        "Generictests0612",
+        "Generictests1"
+      ]
+    },
+    {
+      "key": "itemmaster",
+      "variants": [
+        "Itemmaster",
+        "ItemmasterCopy"
+      ]
+    },
+    {
+      "key": "leavedetail",
+      "variants": [
+        "Leavedetail",
+        "Leavedetail1"
+      ]
+    },
+    {
+      "key": "modules",
+      "variants": [
+        "Modules",
+        "ModulesCopy"
+      ]
+    },
+    {
+      "key": "procedures",
+      "variants": [
+        "Procedures",
+        "Procedures1"
+      ]
+    },
+    {
+      "key": "products",
+      "variants": [
+        "Products",
+        "Products1",
+        "Products300516"
+      ]
+    },
+    {
+      "key": "stpitems",
+      "variants": [
+        "Stpitems",
+        "Stpitems1"
+      ]
+    }
+  ],
+  "summary": {
+    "lims": 63,
+    "erp": 146
+  }
+}

@@ -40,13 +40,11 @@ export default function AdminDashboard(){
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
   const router = useRouter()
-  const token = useAuth(s=>s.token)
+  const user = useAuth(s=>s.user)
 
   useEffect(()=>{
     let mounted = true
     async function load(){
-      // if no token at all, send to login
-      if (!token) { router.replace('/admin/login'); return }
       try {
         const d = await adminDashboard()
         if (mounted) setData(d)
@@ -59,7 +57,7 @@ export default function AdminDashboard(){
     }
     load()
     return ()=>{ mounted = false }
-  }, [token])
+  }, [user])
 
   if (loading) return <div className="min-h-[70vh] flex items-center justify-center">Loading...</div>
 

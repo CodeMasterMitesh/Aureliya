@@ -1,0 +1,47 @@
+{
+  "sources": [
+    {
+      "table": "Products",
+      "columns": {
+        "name": ["title", "name"],
+        "sku": ["sku", "itemcode", "code"],
+        "unit": ["unit", "uom"],
+        "hsn": ["hsn", "hsncode", "hsn_code"],
+        "gst": ["gst", "gstper", "gst_rate"],
+        "mrp": ["mrp"],
+        "purchase_price": ["purchaseprice", "buyprice", "cost"],
+        "company": ["company", "companyid", "company_name"],
+        "branch": ["branch", "branchid", "branch_name"]
+      }
+    },
+    {
+      "table": "Products1",
+      "columns": { "$ref": "#/$defs/defaultColumns" }
+    },
+    {
+      "table": "Products300516",
+      "columns": { "$ref": "#/$defs/defaultColumns" }
+    },
+    {
+      "table": "Itemmaster",
+      "columns": { "$ref": "#/$defs/defaultColumns" }
+    },
+    {
+      "table": "Newmaterialmaster",
+      "columns": { "$ref": "#/$defs/defaultColumns" }
+    }
+  ],
+  "$defs": {
+    "defaultColumns": {
+      "name": ["title", "name"],
+      "sku": ["sku", "itemcode", "code"],
+      "unit": ["unit", "uom"],
+      "hsn": ["hsn", "hsncode", "hsn_code"],
+      "gst": ["gst", "gstper", "gst_rate"],
+      "mrp": ["mrp"],
+      "purchase_price": ["purchaseprice", "buyprice", "cost"],
+      "company": ["company", "companyid", "company_name"],
+      "branch": ["branch", "branchid", "branch_name"]
+    }
+  }
+}

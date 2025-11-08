@@ -45,7 +45,6 @@ const FIELD_DEFS = [
 
 export default function LedgersPage() {
   const router = useRouter()
-  const token = useAuth(s => s.token)
   const user = useAuth(s => s.user)
   const [items, setItems] = useState([])
   const [page, setPage] = useState(1)
@@ -64,7 +63,7 @@ export default function LedgersPage() {
   const userCompany = user?.company || ''
   const userBranch = user?.branch || ''
 
-  useEffect(() => { if (!token) router.replace('/admin/login') }, [token])
+  // Guard behavior is handled per-request: if backend returns 401/403 we redirect below.
   useEffect(() => {
     (async () => {
       try {
@@ -324,6 +323,21 @@ export default function LedgersPage() {
   const formFields = useMemo(() => {
     const baseFields = [
       {
+        key: 'type',
+        label: 'Type',
+        type: 'select',
+        required: true,
+        options: [
+          { value: 'employee', label: 'Employee' },
+          { value: 'customer', label: 'Customer' },
+          { value: 'supplier', label: 'Supplier' },
+          { value: 'bank', label: 'Bank' },
+          { value: 'cash', label: 'Cash' },
+          { value: 'other', label: 'Other' },
+        ],
+        placeholder: 'Select Type'
+      },
+      {
         key: 'account_group_id',
         label: 'Account Group',
         type: 'select',
@@ -371,23 +385,23 @@ export default function LedgersPage() {
   const formSections = useMemo(() => [
     {
       title: 'Basic Information',
-      fields: formFields.slice(0, 7)
+      fields: formFields.slice(0, 8)
     },
     {
       title: 'Additional Details',
-      fields: formFields.slice(7, 15)
+      fields: formFields.slice(8, 16)
     },
     {
       title: 'Bank Details',
-      fields: formFields.slice(15, 22)
+      fields: formFields.slice(16, 23)
     },
     {
       title: 'Address Information',
-      fields: formFields.slice(22, 30)
+      fields: formFields.slice(23, 31)
     },
     {
       title: 'Other Information',
-      fields: formFields.slice(30)
+      fields: formFields.slice(31)
     }
   ], [formFields])
 
@@ -422,6 +436,7 @@ export default function LedgersPage() {
   const getInitialFormData = () => {
     if (editing) {
       const base = {
+        type: editing.type || 'customer',
         title: editing.title || '',
         email: editing.email || '',
         mobile_no: editing.mobile_no || '',
@@ -435,6 +450,7 @@ export default function LedgersPage() {
       return { ...base, ...extra }
     }
     return {
+      type: 'customer',
       title: '',
       email: '',
       mobile_no: '',
@@ -443,7 +459,7 @@ export default function LedgersPage() {
     }
   }
 
-  if (!token) return null
+  // Render page (data loader will redirect on 401/403). If you prefer a guard, check `user` instead of token.
 
   return (
     <div className="min-h-screen flex bg-gray-50">

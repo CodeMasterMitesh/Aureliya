@@ -8,6 +8,7 @@ import { useAuth } from '../../src/store/auth'
 export default function AdminLogin(){
   const router = useRouter()
   const loginStore = useAuth(s=>s.login)
+  const currentUser = useAuth(s=>s.user)
   const [companies, setCompanies] = useState([])
   const [branches, setBranches] = useState([])
   const [form, setForm] = useState({ identifier:'', password:'', companyId:'', branchId:'' })
@@ -16,13 +17,15 @@ export default function AdminLogin(){
   useEffect(()=>{
     async function init(){
       try {
+        // If already logged in, go straight to dashboard
+        if (currentUser){ router.replace('/admin/dashboard'); return }
         // Fetch CSRF token then companies
         await api.get('/csrf')
         fetchCompanies().then(setCompanies).catch(()=>{})
       } catch (e){ /* ignore token fetch failure - login will fail gracefully */ }
     }
     init()
-  }, [])
+  }, [currentUser])
 
   useEffect(()=>{
     if (!form.companyId){ setBranches([]); setForm(f=>({ ...f, branchId:'' })); return }
@@ -47,7 +50,7 @@ export default function AdminLogin(){
         position: 'top-end'
       })
       
-      router.push('/admin/dashboard')
+      router.replace('/admin/dashboard')
     } catch (e) {
       const errorMsg = e?.response?.data?.error || 'Login failed. Please check your credentials.'
       await Swal.fire({

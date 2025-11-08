@@ -1,0 +1,85 @@
+import mongoose from 'mongoose'
+const { Schema } = mongoose
+
+const GrnSchema = new Schema({
+  id: { type: Number }, // id int(11)
+  grnnumber: { type: String }, // grnnumber varchar(20)
+  grndatetime: { type: Date }, // grndatetime datetime
+  qcdatetime: { type: Date }, // qcdatetime datetime
+  purchasenumber: { type: String }, // purchasenumber varchar(11)
+  supplier: { type: Number }, // supplier int(11)
+  area: { type: String }, // area varchar(255)
+  suppliermobile: { type: String }, // suppliermobile varchar(255)
+  supplieremail: { type: String }, // supplieremail varchar(255)
+  remark: { type: String }, // remark text
+  grnby: { type: Number }, // grnby int(11)
+  qcby: { type: Number }, // qcby int(11)
+  reason: { type: String }, // reason varchar(255)
+  salesid: { type: String }, // salesid varchar(255)
+  typeField: { type: String }, // type varchar(25)
+  deleteField: { type: Number }, // delete int(11)
+  lock: { type: Number }, // lock int(11)
+  enterby: { type: Number }, // enterby int(11)
+  enterdatetime: { type: Date }, // enterdatetime datetime
+  modifiedby: { type: Number }, // modifiedby int(11)
+  modifieddatetime: { type: Date }, // modifieddatetime datetime
+  active: { type: Number }, // active int(11)
+  branch: { type: Number }, // branch int(11)
+  company: { type: Number }, // company int(11)
+  action: { type: String }, // action varchar(25)
+  views: { type: Number }, // views int(11)
+  gtotal: { type: Number }, // gtotal decimal(15
+  godown: { type: Number }, // godown int(11)
+  approved: { type: String }, // approved varchar(255)
+  costcenter: { type: Number }, // costcenter int(11)
+  panfdisc: { type: String }, // panfdisc varchar(20)
+  pandfamount: { type: Number }, // pandfamount float
+  pandf: { type: Number }, // pandf float
+  cgstperpandf: { type: Number }, // cgstperpandf float
+  cgstpandf: { type: Number }, // cgstpandf float
+  sgstperpandf: { type: Number }, // sgstperpandf float
+  sgstpandf: { type: Number }, // sgstpandf float
+  igstperpandf: { type: Number }, // igstperpandf float
+  igstpandf: { type: Number }, // igstpandf float
+  netpandf: { type: Number }, // netpandf float
+  freight: { type: Number }, // freight float
+  cgstperfreight: { type: Number }, // cgstperfreight float
+  cgstfreight: { type: Number }, // cgstfreight float
+  sgstperfreight: { type: Number }, // sgstperfreight float
+  sgstfreight: { type: Number }, // sgstfreight float
+  igstperfreight: { type: Number }, // igstperfreight float
+  igstfreight: { type: Number }, // igstfreight float
+  netfreight: { type: Number }, // netfreight float
+  roundoff: { type: Number }, // roundoff float
+  subtotal: { type: Number }, // subtotal float
+  totalcgst: { type: Number }, // totalcgst float
+  totalsgst: { type: Number }, // totalsgst float
+  totaligst: { type: Number }, // totaligst float
+  gross: { type: Number }, // gross double
+  invnumber: { type: String }, // invnumber varchar(100)
+  invdate: { type: Date }, // invdate datetime
+  approvedby: { type: Number }, // approvedby int(11)
+  currency: { type: String }, // currency varchar(255)
+  tally: { type: Number }, // tally int(11)
+  salechallanno: { type: String }, // salechallanno varchar(255)
+  salechallandate: { type: Date }, // salechallandate date
+  branchstate: { type: String }, // branchstate varchar(50)
+  supplierstate: { type: String }, // supplierstate varchar(50)
+  voucherno: { type: Number }, // voucherno int(11)
+  purchaseacid: { type: Number }, // purchaseacid int(11)
+  qcreleasedate: { type: Date }, // qcreleasedate date
+  ponotext: { type: String }, // ponotext text
+  totaltaxamount: { type: Number }, // totaltaxamount decimal(15
+  qcgrndatetime: { type: Date }, // qcgrndatetime date
+  grnno: { type: Number }, // grnno int(11)
+  headquarter: { type: Number }, // headquarter int(11)
+  issuenotext: { type: String }, // issuenotext varchar(255)
+  totalqty: { type: Number }, // totalqty decimal(15
+  auditremarks: { type: String }, // auditremarks varchar(255)
+  project: { type: Number }, // project int(11)
+  type2: { type: String }, // type2 varchar(50)
+  guid: { type: String }, // guid varchar(100)
+  attachment: { type: String }, // attachment varchar(50)
+}, { timestamps: false })
+
+export default mongoose.model('Grn', GrnSchema, 'grn')
