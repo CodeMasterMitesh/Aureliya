@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import Swal from 'sweetalert2'
 import { fetchCompanies, fetchBranches } from '../../src/api/companies'
-import api, { setCsrfToken } from '../../src/api/axios'
+import api, { fetchCsrf } from '../../src/api/axios'
 import { useAuth } from '../../src/store/auth'
 
 export default function AdminLogin(){
@@ -19,10 +19,8 @@ export default function AdminLogin(){
       try {
         // If already logged in, go straight to dashboard
   if (currentUser){ router.replace('/dashboard'); return }
-        // Fetch CSRF token then companies
-  const res = await api.get('/csrf')
-  if (res?.data?.csrfToken) setCsrfToken(res.data.csrfToken)
-        fetchCompanies().then(setCompanies).catch(()=>{})
+  // Only load companies on init; CSRF token will be fetched on submit
+  fetchCompanies().then(setCompanies).catch(()=>{})
       } catch (e){ /* ignore token fetch failure - login will fail gracefully */ }
     }
     init()
@@ -37,7 +35,9 @@ export default function AdminLogin(){
     e.preventDefault()
     setLoading(true)
     try {
-  const { data } = await api.post('/auth/login', form)
+      // Ensure CSRF token is present before login
+      await fetchCsrf()
+      const { data } = await api.post('/auth/login', form)
   loginStore({ user: data.user })
       
       // Show success alert
@@ -53,7 +53,9 @@ export default function AdminLogin(){
       
   router.replace('/dashboard')
     } catch (e) {
-      const errorMsg = e?.response?.data?.error || 'Login failed. Please check your credentials.'
+      const errObj = e?.response?.data
+      const code = errObj?.error?.code || errObj?.code
+      const errorMsg = typeof errObj?.error === 'string' ? errObj.error : (code ? `${code}: invalid or expired CSRF token` : 'Login failed. Please check your credentials.')
       await Swal.fire({
         icon: 'error',
         title: 'Login Failed',

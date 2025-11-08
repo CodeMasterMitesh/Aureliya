@@ -1,1 +1,7 @@
-{"/_app":"pages/_app.js","/_error":"pages/_error.js","/admin/branches":"pages/admin/branches.html","/admin/companies":"pages/admin/companies.html","/admin/login":"pages/admin/login.html","/admin/main-menus":"pages/admin/main-menus.html","/admin/masters/accounts/ledger":"pages/admin/masters/accounts/ledger.html","/admin/setup":"pages/admin/setup.html","/admin/dashboard":"pages/admin/dashboard.html","/admin/sub-menus":"pages/admin/sub-menus.html","/dashboard":"pages/dashboard.html","/admin/masters/accounts/groups":"pages/admin/masters/accounts/groups.html","/":"pages/index.html","/masters/[...slug]":"pages/masters/[...slug].html","/product/[slug]":"pages/product/[slug].js","/profile":"pages/profile.js","/_document":"pages/_document.js","/404":"pages/404.html"}
+{
+  "/_app": "pages/_app.js",
+  "/_error": "pages/_error.js",
+  "/_document": "pages/_document.js",
+  "/dashboard": "pages/dashboard.js",
+  "/": "pages/index.js"
+}

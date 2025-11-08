@@ -40,7 +40,7 @@ app.use(
         'script-src': ["'self'", "'unsafe-inline'"],
         'style-src': ["'self'", "'unsafe-inline'"],
         'img-src': ["'self'", 'data:', 'blob:'],
-        'connect-src': ["'self'", env.FRONTEND_URL.replace(/\/$/, ''), 'http://localhost:3000'],
+  'connect-src': ["'self'", env.FRONTEND_URL.replace(/\/$/, ''), 'http://localhost:3000', 'http://localhost:3001'],
         'object-src': ["'none'"],
         'frame-ancestors': ["'self'"],
       },
@@ -70,21 +70,39 @@ app.use(
   })
 )
 
-// CSRF protection using double-submit cookie pattern
-const csrfProtection = csrf({ cookie: { key: 'XSRF-TOKEN', sameSite: 'lax', secure: env.isProduction, httpOnly: false } })
-// Apply CSRF middleware under API prefix (GET/HEAD/OPTIONS ignored by default)
-app.use(env.API_PREFIX, csrfProtection)
-// Provide explicit endpoint to fetch token and also set cookie on GETs
-app.get(`${env.API_PREFIX}/csrf`, (req, res) => {
-  res.cookie('XSRF-TOKEN', req.csrfToken(), { sameSite: 'lax', secure: env.isProduction, httpOnly: false })
-  res.json({ csrfToken: req.csrfToken() })
+// CSRF protection (apply to all API routes so GET initializes secret properly)
+// Use separate secret cookie (httpOnly) and a readable token cookie we set manually.
+const csrfProtection = csrf({
+  cookie: {
+    key: '_csrf', // secret cookie name (not exposed to frontend JS)
+    sameSite: 'lax',
+    secure: env.isProduction,
+    httpOnly: true,
+    signed: false,
+  },
 })
-// For convenience, set XSRF-TOKEN on other GET requests under API prefix
-app.use((req, res, next) => {
-  if (req.method === 'GET' && req.path.startsWith(env.API_PREFIX)) {
-    try { res.cookie('XSRF-TOKEN', req.csrfToken(), { sameSite: 'lax', secure: env.isProduction, httpOnly: false }) } catch {}
-  }
-  next()
+// Apply CSRF protection only to unsafe methods; allow safe reads without token
+app.use(env.API_PREFIX, (req, res, next) => {
+  if (['GET','HEAD','OPTIONS'].includes(req.method)) return next()
+  return csrfProtection(req, res, next)
+})
+
+// Endpoint to issue a CSRF token (frontend reads XSRF-TOKEN cookie or response)
+app.get(`${env.API_PREFIX}/csrf`, (req, res) => {
+  // Initialize middleware explicitly for GET to seed secret then issue token
+  csrfProtection(req, res, () => {
+    try {
+      const token = req.csrfToken()
+      res.cookie('XSRF-TOKEN', token, {
+        sameSite: 'lax',
+        secure: env.isProduction,
+        httpOnly: false,
+      })
+      return res.json({ csrfToken: token })
+    } catch (e) {
+      return res.status(500).json({ error: 'Failed to issue CSRF token', detail: e.message })
+    }
+  })
 })
 
 app.get('/health', (_, res) => res.json({ ok: true }))
@@ -129,6 +147,20 @@ if (env.ENABLE_LEGACY_API) {
 
 // 404 and error handler
 app.use(notFound)
+
+// Explicit CSRF error handler (placed before generic error handler)
+app.use((err, req, res, next) => {
+  if (err.code === 'EBADCSRFTOKEN') {
+    return res.status(403).json({
+      error: {
+        code: 'EBADCSRFTOKEN',
+        message: 'Invalid or missing CSRF token',
+      },
+    })
+  }
+  return next(err)
+})
+
 app.use(errorHandler)
 
 export default app
