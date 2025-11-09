@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken'
-import User from '../models/User.js'
+import { env } from '../config/index.js'
+import { getById as getContactById } from '../repositories/contactsRepository.js'
 
 function getTokenFromCookie(req) {
   const cookieHeader = req.headers.cookie || ''
@@ -26,7 +27,12 @@ export function auth(req, res, next) {
 
 export async function admin(req, res, next) {
   if (!req.user) return res.status(401).json({ error: 'Unauthorized' })
-  const user = await User.findById(req.user.id).lean()
-  if (!user || user.role !== 'admin') return res.status(403).json({ error: 'Forbidden' })
-  next()
+  // MySQL-only: rely on token role or contact_type in contacts table
+  const role = req.user.role
+  if (role === 'admin') return next()
+  try {
+    const c = await getContactById(req.user.id)
+    if (c && (c.contact_type === 'admin' || c.contact_type === 'other')) return next()
+  } catch {}
+  return res.status(403).json({ error: 'Forbidden' })
 }

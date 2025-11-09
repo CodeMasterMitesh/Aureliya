@@ -1,6 +1,8 @@
 import { Router } from 'express'
 import { body, param, query, validationResult } from 'express-validator'
 import AccountGroup from '../models/AccountGroup.js'
+import { env } from '../config/index.js'
+import { listAccountGroups as listAccountGroupsSql } from '../repositories/orgMysqlRepository.js'
 import { auth, admin } from '../middleware/auth.js'
 
 const r = Router()
@@ -23,8 +25,14 @@ r.get(
     query('page').optional().isInt({ min: 1 }),
   query('limit').optional().custom(v => { if (v==='ALL') return true; const n=parseInt(v,10); return Number.isInteger(n)&&n>=1&&n<=5000 }),
     query('search').optional().isString(),
-    query('company').optional().isMongoId(),
-    query('branch').optional().isMongoId(),
+    query('company').optional().custom(v => {
+      if (env.MYSQL_ENABLED && env.MYSQL_ORGS) return /^\d+$/.test(v)
+      return /^[a-f\d]{24}$/i.test(v)
+    }),
+    query('branch').optional().custom(v => {
+      if (env.MYSQL_ENABLED && env.MYSQL_ORGS) return /^\d+$/.test(v)
+      return /^[a-f\d]{24}$/i.test(v)
+    }),
   ],
   async (req, res) => {
     if (!v(req, res)) return
@@ -36,15 +44,20 @@ r.get(
     if (search) q.name = { $regex: search, $options: 'i' }
     if (company) q.company = company
     if (branch) q.branch = branch
-    const [items, total] = await Promise.all([
-      AccountGroup.find(q)
-        .sort({ name: 1 })
-        .skip((page - 1) * limit)
-        .limit(limit)
-        .lean(),
-      AccountGroup.countDocuments(q),
-    ])
-    res.json({ items, total, page, pages: Math.ceil(total / limit) })
+    if (env.MYSQL_ENABLED && env.MYSQL_ORGS) {
+      const { items, total } = await listAccountGroupsSql({ companyId: company ? Number(company) : undefined, page, limit, search, type: undefined })
+      return res.json({ items, total, page: limit === 5000 ? 1 : page, pages: limit === 5000 ? 1 : Math.ceil(total / limit) })
+    } else {
+      const [items, total] = await Promise.all([
+        AccountGroup.find(q)
+          .sort({ name: 1 })
+          .skip((page - 1) * limit)
+          .limit(limit)
+          .lean(),
+        AccountGroup.countDocuments(q),
+      ])
+      return res.json({ items, total, page, pages: Math.ceil(total / limit) })
+    }
   }
 )
 

@@ -2,6 +2,8 @@ import { Router } from 'express'
 import { body, param, query, validationResult } from 'express-validator'
 import MainMenu from '../models/MainMenu.js'
 import SubMenu from '../models/SubMenu.js'
+import { env } from '../config/index.js'
+import { buildMenuTree, listMainMenus as listMainMenusSql, listSubMenus as listSubMenusSql } from '../repositories/menusMysqlRepository.js'
 
 const r = Router()
 
@@ -26,6 +28,10 @@ function handleValidation(req, res) {
 // GET /api/menus -> nested structure
 r.get('/menus', async (req, res) => {
   try {
+    if (env.MYSQL_ENABLED && env.MYSQL_MENUS) {
+      const items = await buildMenuTree()
+      return res.json({ items })
+    }
     const mains = await MainMenu.aggregate([
       { $sort: { order: 1, name: 1 } },
       {
@@ -101,6 +107,10 @@ r.get(
   let limit = req.query.limit === 'ALL' ? 5000 : parseInt(req.query.limit || '20')
   if (limit > 5000) limit = 5000
     const search = req.query.search?.trim()
+    if (env.MYSQL_ENABLED && env.MYSQL_MENUS) {
+      const { items, total } = await listMainMenusSql({ page, limit, search })
+      return res.json({ items, total, page: limit === 5000 ? 1 : page, pages: limit === 5000 ? 1 : Math.ceil(total / limit) })
+    }
     const q = search ? { name: { $regex: search, $options: 'i' } } : {}
     const [items, total] = await Promise.all([
       MainMenu.find(q)
@@ -175,8 +185,14 @@ r.get(
     query('page').optional().isInt({ min: 1 }),
   query('limit').optional().custom(v => { if (v==='ALL') return true; const n=parseInt(v,10); return Number.isInteger(n)&&n>=1&&n<=5000 }),
     query('search').optional().isString(),
-    query('main_menu_id').optional().isMongoId(),
-    query('parent_id').optional().isMongoId(),
+    query('main_menu_id').optional().custom(v => {
+      if (env.MYSQL_ENABLED && env.MYSQL_MENUS) return /^\d+$/.test(v)
+      return /^[a-f\d]{24}$/i.test(v)
+    }),
+    query('parent_id').optional().custom(v => {
+      if (env.MYSQL_ENABLED && env.MYSQL_MENUS) return /^\d+$/.test(v)
+      return /^[a-f\d]{24}$/i.test(v)
+    }),
   ],
   async (req, res) => {
     if (handleValidation(req, res)) return
@@ -184,6 +200,10 @@ r.get(
   let limit = req.query.limit === 'ALL' ? 5000 : parseInt(req.query.limit || '20')
   if (limit > 5000) limit = 5000
     const { search, main_menu_id, parent_id } = req.query
+    if (env.MYSQL_ENABLED && env.MYSQL_MENUS) {
+      const { items, total } = await listSubMenusSql({ mainMenuId: main_menu_id ? Number(main_menu_id) : undefined, parentId: parent_id ? Number(parent_id) : undefined, search, page, limit })
+      return res.json({ items, total, page: limit === 5000 ? 1 : page, pages: limit === 5000 ? 1 : Math.ceil(total / limit) })
+    }
     const q = {}
     if (search) q.name = { $regex: search, $options: 'i' }
     if (main_menu_id) q.main_menu_id = main_menu_id

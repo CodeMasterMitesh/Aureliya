@@ -4,10 +4,12 @@ This backend now supports an optional MySQL connection (MariaDB 10.6) alongside 
 
 ### Enabling MySQL
 Set `MYSQL_ENABLED=true` in the backend environment. Docker compose already defines a MariaDB service with initial schema seeded from `project.sql` mounted into the container's `/docker-entrypoint-initdb.d`.
+If you want auth/users to use MySQL `contacts`, also set `MYSQL_USERS=true`.
 
 ### Environment Variables
 ```
 MYSQL_ENABLED=true
+MYSQL_USERS=false
 MYSQL_HOST=mysql
 MYSQL_PORT=3306
 MYSQL_DB=aureliya
@@ -82,6 +84,7 @@ Config files:
 - npm run import:contacts
 - npm run import:products
 - npm run import:transactions
+- npm run db:unique-contacts-email  # optional: add unique(email) to contacts when ready
 
 Set environment variables in `.env`:
 - MONGODB_URI

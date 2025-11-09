@@ -1,10 +1,6 @@
 import { useEffect, useState } from 'react'
-import Link from 'next/link'
-import Button from '@/components/ui/Button'
 import { useAuth } from '@/src/store/auth'
 import { getMe, updateMe, changePassword, addAddress, updateAddress, deleteAddress } from '@/src/api/profile'
-import { uploadProfile } from '@/src/api/uploads'
-import { fetchOrders } from '@/src/api/orders'
 
 function DeprecatedProfile(){
   const token = useAuth((s)=>s.token)

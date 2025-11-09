@@ -11,13 +11,8 @@ import { requestId, httpLogger } from './middleware/logger.js'
 import { notFound, errorHandler } from './middleware/error.js'
 
 import authRoutes from './routes/auth.js'
-import productRoutes from './routes/products.js'
-import categoryRoutes from './routes/categories.js'
-import cartRoutes from './routes/cart.js'
-import orderRoutes from './routes/orders.js'
 import adminRoutes from './routes/admin.js'
-import blogRoutes from './routes/blogs.js'
-import paymentRoutes from './routes/payments.js'
+// Mongo-dependent routes removed
 import uploadRoutes from './routes/uploads.js'
 import menuRoutes from './routes/menus.js'
 import companyRoutes from './routes/companies.js'
@@ -123,13 +118,8 @@ app.use('/uploads', express.static(path.join(rootDir, 'uploads')))
 // Versioned routes
 const api = env.API_PREFIX
 app.use(`${api}/auth`, authRoutes)
-app.use(`${api}/products`, productRoutes)
-app.use(`${api}/categories`, categoryRoutes)
-app.use(`${api}/cart`, cartRoutes)
-app.use(`${api}/orders`, orderRoutes)
 app.use(`${api}/admin`, adminRoutes)
-app.use(`${api}/blogs`, blogRoutes)
-app.use(`${api}/payments`, paymentRoutes)
+// Removed: products, categories, cart, orders, blogs, payments
 app.use(`${api}/uploads`, uploadRoutes)
 app.use(`${api}`, menuRoutes)
 app.use(`${api}`, companyRoutes)
@@ -139,13 +129,8 @@ app.use(`${api}`, ledgerRoutes)
 // Optional legacy mounts for smooth transition
 if (env.ENABLE_LEGACY_API) {
   app.use('/api/auth', authRoutes)
-  app.use('/api/products', productRoutes)
-  app.use('/api/categories', categoryRoutes)
-  app.use('/api/cart', cartRoutes)
-  app.use('/api/orders', orderRoutes)
   app.use('/api/admin', adminRoutes)
-  app.use('/api/blogs', blogRoutes)
-  app.use('/api/payments', paymentRoutes)
+  // Removed legacy mounts for Mongo-backed routes
   app.use('/api/uploads', uploadRoutes)
   app.use('/api', menuRoutes)
   app.use('/api', companyRoutes)

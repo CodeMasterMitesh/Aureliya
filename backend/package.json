@@ -12,9 +12,9 @@
     "seed": "node src/scripts/seed.js",
     "seed:menus": "node src/scripts/seedMenus.js",
     "db:inspect": "node src/scripts/dbInspect.js",
-  "db:gen-remaining-sql": "node backend/scripts/generateRemainingSql.js",
-  "db:add-indexes": "node backend/scripts/addIndexesAndFKs.js",
-  "migrate:users-to-contacts": "node backend/scripts/migrateUsersToContacts.js",
+    "db:gen-remaining-sql": "node scripts/generateRemainingSql.js",
+    "db:add-indexes": "node scripts/addIndexesAndFKs.js",
+    "migrate:users-to-contacts": "node scripts/migrateUsersToContacts.js",
     "migrate:ledgers-to-users": "node src/scripts/migrateLedgersToUsers.js",
     "import:contacts": "node src/scripts/importContactsToUsers.js",
     "generate:schemas": "node src/scripts/generateSchemasFromSql.js",
@@ -26,7 +26,10 @@
     "db:create-collections": "node src/scripts/createCollections.js",
     "db:create-collections:dry": "cross-env DRY_RUN=true node src/scripts/createCollections.js",
     "db:create-collections:indexes": "cross-env BUILD_INDEXES=true node src/scripts/createCollections.js",
-    "db:seed-placeholders": "node src/scripts/seedPlaceholders.js"
+    "db:seed-placeholders": "node src/scripts/seedPlaceholders.js",
+    "db:unique-contacts-email": "node scripts/alterContactsUnique.js",
+    "migrate:menus-to-mysql": "node scripts/migrateMenusToMysql.js",
+    "migrate:orgs-to-mysql": "node scripts/migrateOrgsToMysql.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -38,7 +41,6 @@
     "express-session": "^1.18.2",
     "express-validator": "^7.0.1",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.8.0",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.15",
     "pino": "^9.2.0",
@@ -53,7 +55,6 @@
   "devDependencies": {
     "cross-env": "^7.0.3",
     "jest": "^29.7.0",
-    "mongodb-memory-server": "^10.1.4",
     "nodemon": "^3.1.7",
     "pino-pretty": "^11.2.2",
     "supertest": "^7.0.0",

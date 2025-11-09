@@ -16,7 +16,7 @@ export default function Footer() {
           <ul className="mt-3 space-y-1 text-neutral-600 dark:text-neutral-400">
             <li><a href="/shipping" className="hover:underline">Shipping</a></li>
             <li><a href="/brands" className="hover:underline">Shop by Brand</a></li>
-            <li><a href="/orders/track" className="hover:underline">Track order</a></li>
+            <li><a href="/dashboard" className="hover:underline">Track order</a></li>
             <li><a href="/terms" className="hover:underline">Terms &amp; Conditions</a></li>
             <li><a href="/size-guide" className="hover:underline">Size Guide</a></li>
             <li><a href="/wishlist" className="hover:underline">My Wishlist</a></li>

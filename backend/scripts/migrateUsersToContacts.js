@@ -28,13 +28,19 @@ async function upsertContact(conn, u) {
   const opening = null
   const closing = null
 
-  const sql = `INSERT INTO contacts (
-    contact_type, salutation, first_name, middle_name, last_name, email, mobile,
+  const columns = `contact_type, salutation, first_name, middle_name, last_name, email, mobile,
     status, is_active, is_deleted, company_id, branch_id, group_id,
     opening_balance, closing_balance, balance_type, credit_limit, due_days,
     username, password_hash, last_login, last_logout, nationality, religion, caste,
-    birth_date, pan, gst_no, tin_no, notes, remarks, created_by, updated_by
-  ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`
+    birth_date, pan, gst_no, tin_no, notes, remarks, created_by, updated_by`
+  const placeholders = '(' + new Array(33).fill('?').join(',') + ')'
+  const sql = `INSERT INTO contacts (${columns}) VALUES ${placeholders}
+  ON DUPLICATE KEY UPDATE
+    email = VALUES(email),
+    first_name = VALUES(first_name),
+    last_name = VALUES(last_name),
+    mobile = VALUES(mobile),
+    contact_type = VALUES(contact_type)`
 
   const params = [
     contactType, null, first, null, last, email, mobile,
@@ -45,7 +51,11 @@ async function upsertContact(conn, u) {
   ]
 
   const res = await runQuery(sql, params)
-  const contactId = res.insertId
+  const contactId = res.insertId || (await (async () => {
+    // If duplicate (username unique), fetch the existing id
+    const rows = await runQuery('SELECT id FROM contacts WHERE username = ? OR email = ? LIMIT 1', [username, email])
+    return rows[0]?.id
+  })())
 
   // Address from ledger snapshot
   const addr = u.ledger

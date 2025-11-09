@@ -2,6 +2,8 @@ import { Router } from 'express'
 import { body, param, query, validationResult } from 'express-validator'
 import Company from '../models/Company.js'
 import Branch from '../models/Branch.js'
+import { env } from '../config/index.js'
+import { listCompanies as listCompaniesSql, listBranches as listBranchesSql } from '../repositories/orgMysqlRepository.js'
 
 const r = Router()
 
@@ -45,23 +47,38 @@ r.get(
       ]
     if (name) q.name = { $regex: name, $options: 'i' }
     if (code) q.code = { $regex: code, $options: 'i' }
-    const [items, total] = await Promise.all([
-      Company.find(q)
-        .sort({ name: 1 })
-        .skip((page - 1) * limit)
-        .limit(limit)
-        .lean(),
-      Company.countDocuments(q),
-    ])
-    res.json({ items, total, page, pages: Math.ceil(total / limit) })
+    if (env.MYSQL_ENABLED && env.MYSQL_ORGS) {
+      const { items, total } = await listCompaniesSql({ page, limit, search, code })
+      return res.json({ items, total, page: limit === 5000 ? 1 : page, pages: limit === 5000 ? 1 : Math.ceil(total / limit) })
+    } else {
+      const [items, total] = await Promise.all([
+        Company.find(q)
+          .sort({ name: 1 })
+          .skip((page - 1) * limit)
+          .limit(limit)
+          .lean(),
+        Company.countDocuments(q),
+      ])
+      return res.json({ items, total, page, pages: Math.ceil(total / limit) })
+    }
   }
 )
 
 // List branches by company
-r.get('/companies/:id/branches', [param('id').isMongoId()], async (req, res) => {
+r.get('/companies/:id/branches', [
+  param('id').custom(v => {
+    if (env.MYSQL_ENABLED && env.MYSQL_ORGS) return /^\d+$/.test(v)
+    return /^[a-f\d]{24}$/i.test(v)
+  })
+], async (req, res) => {
   if (!handleValidation(req, res)) return
-  const items = await Branch.find({ company: req.params.id }).sort({ name: 1 }).lean()
-  res.json({ items })
+  if (env.MYSQL_ENABLED && env.MYSQL_ORGS) {
+    const { items, total } = await listBranchesSql({ companyId: Number(req.params.id), page: 1, limit: 5000 })
+    return res.json({ items, total, page: 1, pages: 1 })
+  } else {
+    const items = await Branch.find({ company: req.params.id }).sort({ name: 1 }).lean()
+    return res.json({ items })
+  }
 })
 
 // Minimal CRUD (optional: for admin setup)
@@ -84,6 +101,12 @@ r.post(
 // Company detail
 r.get('/companies/:id', [param('id').isMongoId()], async (req, res) => {
   if (!handleValidation(req, res)) return
+  if (env.MYSQL_ENABLED && env.MYSQL_ORGS && /^\d+$/.test(req.params.id)) {
+    const rows = await listCompaniesSql({ page:1, limit:1, search: undefined, code: undefined })
+    const item = rows.items.find(i => String(i.id) === req.params.id)
+    if (!item) return res.status(404).json({ error: 'Not found' })
+    return res.json(item)
+  }
   const c = await Company.findById(req.params.id)
   if (!c) return res.status(404).json({ error: 'Not found' })
   res.json(c)
@@ -143,7 +166,10 @@ r.get(
     query('search').optional().isString(),
     query('name').optional().isString(),
     query('code').optional().isString(),
-    query('company').optional().isMongoId(),
+    query('company').optional().custom(v => {
+      if (env.MYSQL_ENABLED && env.MYSQL_ORGS) return /^\d+$/.test(v)
+      return /^[a-f\d]{24}$/i.test(v)
+    }),
   ],
   async (req, res) => {
     if (!handleValidation(req, res)) return
@@ -161,22 +187,33 @@ r.get(
       ]
     if (name) q.name = { $regex: name, $options: 'i' }
     if (code) q.code = { $regex: code, $options: 'i' }
-    const [items, total] = await Promise.all([
-      Branch.find(q)
-        .sort({ name: 1 })
-        .skip((page - 1) * limit)
-        .limit(limit)
-        .populate('company', 'name code')
-        .lean(),
-      Branch.countDocuments(q),
-    ])
-    res.json({ items, total, page, pages: Math.ceil(total / limit) })
+    if (env.MYSQL_ENABLED && env.MYSQL_ORGS) {
+      const { items, total } = await listBranchesSql({ companyId: company ? Number(company) : undefined, page, limit, search, code })
+      return res.json({ items, total, page: limit === 5000 ? 1 : page, pages: limit === 5000 ? 1 : Math.ceil(total / limit) })
+    } else {
+      const [items, total] = await Promise.all([
+        Branch.find(q)
+          .sort({ name: 1 })
+          .skip((page - 1) * limit)
+          .limit(limit)
+          .populate('company', 'name code')
+          .lean(),
+        Branch.countDocuments(q),
+      ])
+      return res.json({ items, total, page, pages: Math.ceil(total / limit) })
+    }
   }
 )
 
 // Branch detail
 r.get('/branches/:id', [param('id').isMongoId()], async (req, res) => {
   if (!handleValidation(req, res)) return
+  if (env.MYSQL_ENABLED && env.MYSQL_ORGS && /^\d+$/.test(req.params.id)) {
+    const { items } = await listBranchesSql({ page:1, limit:1, companyId: undefined, search: undefined, code: undefined })
+    const item = items.find(i => String(i.id) === req.params.id)
+    if (!item) return res.status(404).json({ error: 'Not found' })
+    return res.json(item)
+  }
   const b = await Branch.findById(req.params.id)
   if (!b) return res.status(404).json({ error: 'Not found' })
   res.json(b)

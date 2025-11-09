@@ -2,6 +2,8 @@ import { Router } from 'express'
 import { admin, auth } from '../middleware/auth.js'
 import Order from '../models/Order.js'
 import User from '../models/User.js'
+import { env } from '../config/index.js'
+import { runQuery } from '../db/mysql.js'
 import Product from '../models/Product.js'
 const r = Router()
 
@@ -17,7 +19,12 @@ r.get('/dashboard', auth, admin, async (req, res) => {
     Order.countDocuments({ createdAt: { $gte: startOfDay } }),
     Order.countDocuments({ createdAt: { $gte: startOfWeek } }),
     Order.countDocuments({ createdAt: { $gte: startOfMonth } }),
-    User.countDocuments(),
+    env.MYSQL_ENABLED && env.MYSQL_USERS
+      ? (async () => {
+          const rows = await runQuery('SELECT COUNT(*) AS c FROM contacts')
+          return rows[0].c
+        })()
+      : User.countDocuments(),
     Product.countDocuments({ stock: { $lt: 5 } }),
     // sales by day for current month
     Order.aggregate([
@@ -68,8 +75,23 @@ export default r
 
 // Admin: list users (basic)
 r.get('/users', auth, admin, async (req, res) => {
-  const users = await User.find().select('name email role createdAt').sort({ createdAt: -1 }).lean()
-  res.json({ items: users })
+  if (env.MYSQL_ENABLED && env.MYSQL_USERS) {
+    const rows = await runQuery(
+      `SELECT id, email, username, contact_type, first_name, last_name, created_at
+       FROM contacts ORDER BY id DESC LIMIT 500` // pagination later
+    )
+    const items = rows.map((r) => ({
+      id: r.id,
+      name: [r.first_name, r.last_name].filter(Boolean).join(' ').trim(),
+      email: r.email,
+      role: r.contact_type,
+      createdAt: r.created_at,
+    }))
+    return res.json({ items })
+  } else {
+    const users = await User.find().select('name email role createdAt').sort({ createdAt: -1 }).lean()
+    return res.json({ items: users })
+  }
 })
 
 // Admin: list orders and update status

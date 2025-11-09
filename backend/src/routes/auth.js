@@ -1,22 +1,38 @@
 import { Router } from 'express'
 import jwt from 'jsonwebtoken'
-import User from '../models/User.js'
-import Cart from '../models/Cart.js'
+import { env } from '../config/index.js'
+import {
+  findByIdentifier,
+  createContact,
+  getById as getContactById,
+  updateProfile as updateContactProfile,
+  changePassword as changeContactPassword,
+  listAddresses as listContactAddresses,
+  addAddress as addContactAddress,
+  updateAddress as updateContactAddress,
+  deleteAddress as deleteContactAddress,
+  toAuthUserPayload,
+  comparePassword as compareContactPassword,
+} from '../repositories/contactsRepository.js'
+// Mongo models removed; auth now uses MySQL contacts only
 import { auth } from '../middleware/auth.js'
 import { loginLimiter } from '../middleware/rateLimit.js'
 const r = Router()
 
-function sign(user, req, res) {
-  const payload = {
-    id: user._id,
-    email: user.email,
-    role: user.role,
-    type: user.type || 'customer',
-    name: user.name,
-    username: user.username,
-    company: user.company,
-    branch: user.branch,
-  }
+function sign(rawUser, req, res) {
+  // rawUser may be a Mongo User document or a contacts row shaped into payload already
+  const payload = rawUser._id
+    ? {
+        id: rawUser._id,
+        email: rawUser.email,
+        role: rawUser.role,
+        type: rawUser.type || 'customer',
+        name: rawUser.name,
+        username: rawUser.username,
+        company: rawUser.company,
+        branch: rawUser.branch,
+      }
+    : toAuthUserPayload(rawUser)
   const token = jwt.sign(payload, process.env.JWT_SECRET || 'dev_secret', { expiresIn: '7d' })
   // Also set secure HttpOnly cookie to move away from localStorage over time
   if (res) {
@@ -31,31 +47,21 @@ function sign(user, req, res) {
 
   // Store user data in session
   if (req && req.session) {
-    req.session.user = {
-      id: user._id,
-      email: user.email,
-      name: user.name,
-      role: user.role,
-      type: user.type || 'customer',
-      username: user.username,
-      company: user.company,
-      branch: user.branch,
-      profileImage: user.profileImage,
-    }
+    req.session.user = payload
   }
 
   return { token, user: payload }
 }
 
+// Register (Mongo legacy or MySQL contacts depending on flag)
 r.post('/register', async (req, res) => {
   try {
     const { name, email, password } = req.body
     if (!name || !email || !password) return res.status(400).json({ error: 'Missing fields' })
-    const exists = await User.findOne({ email })
-    if (exists) return res.status(400).json({ error: 'Email already registered' })
-    const user = await User.create({ name, email, password })
-    await Cart.create({ user: user._id, items: [] })
-    res.json(sign(user, req, res))
+    const existing = await findByIdentifier({ email })
+    if (existing) return res.status(400).json({ error: 'Email already registered' })
+    const created = await createContact({ name, email, password, role: 'user', type: 'customer' })
+    return res.json(sign(created, req, res))
   } catch (e) {
     res.status(500).json({ error: 'Registration failed' })
   }
@@ -64,32 +70,14 @@ r.post('/register', async (req, res) => {
 r.post('/login', loginLimiter, async (req, res) => {
   try {
     const { email, username, identifier, password, companyId, branchId } = req.body
-    const query = identifier
-      ? { $or: [{ email: identifier }, { username: identifier }] }
-      : username
-        ? { username }
-        : { email }
-    const user = await User.findOne(query)
-    if (!user) return res.status(401).json({ error: 'Invalid credentials' })
-    const ok = await user.comparePassword(password)
+    const contact = await findByIdentifier({ email, username, identifier })
+    if (!contact) return res.status(401).json({ error: 'Invalid credentials' })
+    const ok = await compareContactPassword(contact.password_hash, password)
     if (!ok) return res.status(401).json({ error: 'Invalid credentials' })
-    // If company/branch provided, ensure match or set on user for employees
-    if (companyId || branchId) {
-      if (user.company && companyId && String(user.company) !== String(companyId)) {
-        return res.status(401).json({ error: 'Company mismatch' })
-      }
-      if (user.branch && branchId && String(user.branch) !== String(branchId)) {
-        return res.status(401).json({ error: 'Branch mismatch' })
-      }
-      // Optionally persist selection for employee users if empty
-      const updates = {}
-      if (!user.company && companyId) updates.company = companyId
-      if (!user.branch && branchId) updates.branch = branchId
-      if (Object.keys(updates).length) {
-        await User.updateOne({ _id: user._id }, { $set: updates })
-      }
+    if ((companyId && contact.company_id && contact.company_id !== companyId) || (branchId && contact.branch_id && contact.branch_id !== branchId)) {
+      return res.status(401).json({ error: 'Company/Branch mismatch' })
     }
-    res.json(sign(user, req, res))
+    return res.json(sign(contact, req, res))
   } catch (e) {
     res.status(500).json({ error: 'Login failed' })
   }
@@ -114,31 +102,16 @@ r.post('/logout', async (req, res) => {
   }
 })
 
-r.post('/merge-cart', async (req, res) => {
-  // Accept items to merge upon login
-  try {
-    const { userId, items = [] } = req.body
-    const cart = await Cart.findOne({ user: userId })
-    if (!cart) return res.status(404).json({ error: 'Cart not found' })
-    for (const it of items) {
-      const idx = cart.items.findIndex((x) => String(x.product) === String(it.product))
-      if (idx >= 0) cart.items[idx].qty += it.qty || 1
-      else cart.items.push({ product: it.product, qty: it.qty || 1, price: it.price || 0 })
-    }
-    await cart.save()
-    res.json({ merged: true })
-  } catch (e) {
-    res.status(500).json({ error: 'Merge failed' })
-  }
-})
+// merge-cart removed since cart feature is removed
 
 // Authenticated user profile endpoints
 r.get('/me', auth, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).lean()
-    if (!user) return res.status(404).json({ error: 'User not found' })
-    const { _id, name, email, role, profileImage, addresses, createdAt } = user
-    return res.json({ id: _id, name, email, role, profileImage, addresses, createdAt })
+    const contact = await getContactById(req.user.id)
+    if (!contact) return res.status(404).json({ error: 'User not found' })
+    const addresses = await listContactAddresses(contact.id)
+    const name = [contact.first_name, contact.last_name].filter(Boolean).join(' ').trim()
+    return res.json({ id: contact.id, name, email: contact.email, role: contact.contact_type, profileImage: null, addresses, createdAt: null })
   } catch (e) {
     return res.status(401).json({ error: 'Unauthorized' })
   }
@@ -147,19 +120,11 @@ r.get('/me', auth, async (req, res) => {
 r.put('/me', auth, async (req, res) => {
   try {
     const { name, email, profileImage } = req.body
-    const user = await User.findByIdAndUpdate(
-      req.user.id,
-      { $set: { name, email, profileImage } },
-      { new: true }
-    )
-    return res.json({
-      id: user._id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-      profileImage: user.profileImage,
-      addresses: user.addresses,
-    })
+    const updated = await updateContactProfile(req.user.id, { name, email })
+    if (!updated) return res.status(404).json({ error: 'User not found' })
+    const addresses = await listContactAddresses(updated.id)
+    const nameFull = [updated.first_name, updated.last_name].filter(Boolean).join(' ').trim()
+    return res.json({ id: updated.id, name: nameFull, email: updated.email, role: updated.contact_type, profileImage: null, addresses })
   } catch (e) {
     return res.status(400).json({ error: 'Update failed' })
   }
@@ -168,12 +133,11 @@ r.put('/me', auth, async (req, res) => {
 r.put('/change-password', auth, async (req, res) => {
   try {
     const { oldPassword, newPassword } = req.body
-    const user = await User.findById(req.user.id)
-    if (!user) return res.status(404).json({ error: 'User not found' })
-    const ok = await user.comparePassword(oldPassword)
+    const contact = await findByIdentifier({ identifier: req.user.email }) || await getContactById(req.user.id)
+    if (!contact) return res.status(404).json({ error: 'User not found' })
+    const ok = await compareContactPassword(contact.password_hash, oldPassword)
     if (!ok) return res.status(400).json({ error: 'Invalid current password' })
-    user.password = newPassword
-    await user.save()
+    await changeContactPassword(contact.id, newPassword)
     return res.json({ ok: true })
   } catch (e) {
     return res.status(400).json({ error: 'Change password failed' })
@@ -183,11 +147,8 @@ r.put('/change-password', auth, async (req, res) => {
 // Addresses
 r.post('/me/addresses', auth, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id)
-    if (!user) return res.status(404).json({ error: 'User not found' })
-    user.addresses.push(req.body)
-    await user.save()
-    res.status(201).json(user.addresses[user.addresses.length - 1])
+    const addr = await addContactAddress(req.user.id, req.body)
+    return res.status(201).json(addr)
   } catch (e) {
     res.status(400).json({ error: 'Add address failed' })
   }
@@ -195,12 +156,9 @@ r.post('/me/addresses', auth, async (req, res) => {
 
 r.put('/me/addresses/:id', auth, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id)
-    const addr = user.addresses.id(req.params.id)
-    if (!addr) return res.status(404).json({ error: 'Address not found' })
-    Object.assign(addr, req.body)
-    await user.save()
-    res.json(addr)
+    const updated = await updateContactAddress(Number(req.params.id), req.body)
+    if (!updated) return res.status(404).json({ error: 'Address not found' })
+    return res.json(updated)
   } catch (e) {
     res.status(400).json({ error: 'Update address failed' })
   }
@@ -208,12 +166,8 @@ r.put('/me/addresses/:id', auth, async (req, res) => {
 
 r.delete('/me/addresses/:id', auth, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id)
-    const addr = user.addresses.id(req.params.id)
-    if (!addr) return res.status(404).json({ error: 'Address not found' })
-    addr.deleteOne()
-    await user.save()
-    res.json({ ok: true })
+    await deleteContactAddress(Number(req.params.id))
+    return res.json({ ok: true })
   } catch (e) {
     res.status(400).json({ error: 'Delete address failed' })
   }
