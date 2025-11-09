@@ -1,12 +1,42 @@
 import { useState, useMemo } from 'react'
 import * as XLSX from 'xlsx'
 
+// Lightweight CSV parser (supports commas inside quotes) without extra dependency
+function parseCSV(text) {
+  const rows = []
+  let cur = ''
+  let inQuotes = false
+  const push = () => { rows[rows.length - 1].push(cur); cur = '' }
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i]
+    if (c === '"') {
+      if (inQuotes && text[i + 1] === '"') { cur += '"'; i++; continue }
+      inQuotes = !inQuotes
+      continue
+    }
+    if (!inQuotes && (c === '\n' || c === '\r')) {
+      if (cur !== '' || rows[rows.length - 1]?.length) { push() }
+      if (rows[rows.length - 1]?.length) { /* row complete */ } else if (cur === '' && !rows.length) {}
+      if (rows[rows.length - 1]?.length === 0) rows.pop()
+      if (rows.length === 0 || rows[rows.length - 1].length) rows.push([])
+      if (c === '\r' && text[i + 1] === '\n') i++
+      continue
+    }
+    if (!inQuotes && c === ',') { push(); continue }
+    if (!rows.length) rows.push([])
+    cur += c
+  }
+  if (cur !== '' || (rows.length && rows[rows.length - 1].length)) { if (!rows.length) rows.push([]); rows[rows.length - 1].push(cur) }
+  return rows.filter(r => r.length && r.some(c => c !== ''))
+}
+
 export default function AdvancedDataTable({
   columns = [],
   data = [],
   loading = false,
   pagination = { page: 1, pages: 1, total: 0, limit: 20 },
   onPageChange,
+  onLimitChange,
   onFilterChange,
   filters = [],
   selectable = false,
@@ -21,7 +51,11 @@ export default function AdvancedDataTable({
   onBulkDelete,
   showSearch = true,
   searchPlaceholder = 'Search...',
-  showColumnFilters = true
+  showColumnFilters = true,
+  pageSizeOptions = [10,20,50,100,500,1000,2000,5000,'ALL'],
+  enableImport = true,
+  importSampleColumns = [], // e.g. ['name','code']
+  onImportRows, // async (rowsArray) => {}
 }) {
   const [columnFilters, setColumnFilters] = useState({})
   const [globalSearch, setGlobalSearch] = useState('')
@@ -91,6 +125,34 @@ export default function AdvancedDataTable({
     }
   }
 
+  const handleImport = async (file) => {
+    if (!file) return
+    const text = await file.text()
+    const rows = parseCSV(text)
+    if (!rows.length) return alert('Empty CSV')
+    const headers = rows[0].map(h => h.trim())
+    const dataRows = rows.slice(1).map(r => {
+      const obj = {}
+      headers.forEach((h, i) => { obj[h] = r[i] || '' })
+      return obj
+    })
+    if (onImportRows) await onImportRows(dataRows)
+  }
+
+  const downloadSample = () => {
+    if (!importSampleColumns.length) return
+    const header = importSampleColumns.join(',')
+    const blob = new Blob([header + '\n'], { type: 'text/csv;charset=utf-8;' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `sample_${exportFileName}.csv`
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+  }
+
   const allSelected = filteredData.length > 0 && filteredData.every(row => selectedIds.has(row._id))
   const someSelected = filteredData.some(row => selectedIds.has(row._id))
 
@@ -117,6 +179,38 @@ export default function AdvancedDataTable({
               </div>
             )}
             <div className="flex items-center gap-2 flex-wrap">
+              {enableImport && (
+                <div className="flex items-center gap-2">
+                  <input
+                    id="adt-import-file"
+                    type="file"
+                    accept=".csv,text/csv"
+                    className="hidden"
+                    onChange={(e) => {
+                      const f = e.target.files?.[0]
+                      if (f) handleImport(f)
+                      e.target.value = ''
+                    }}
+                  />
+                  <button
+                    onClick={() => document.getElementById('adt-import-file').click()}
+                    className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium flex items-center gap-2"
+                    type="button"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3" />
+                    </svg>
+                    Import CSV
+                  </button>
+                  {importSampleColumns.length > 0 && (
+                    <button
+                      onClick={downloadSample}
+                      type="button"
+                      className="px-3 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-xs font-medium"
+                    >Sample</button>
+                  )}
+                </div>
+              )}
               {selectable && selectedIds.size > 0 && (
                 <button
                   onClick={handleBulkDelete}
@@ -266,56 +360,87 @@ export default function AdvancedDataTable({
       </div>
 
       {/* Pagination */}
-      {pagination && pagination.pages > 1 && (
+      {pagination && (
         <div className="p-4 border-t border-gray-200 bg-gray-50">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div className="text-sm text-gray-700">
-              Showing <span className="font-medium">{(pagination.page - 1) * pagination.limit + 1}</span> to{' '}
-              <span className="font-medium">{Math.min(pagination.page * pagination.limit, pagination.total)}</span> of{' '}
-              <span className="font-medium">{pagination.total}</span> results
+              {pagination.total > 0 ? (
+                <>
+                  Showing <span className="font-medium">{(pagination.page - 1) * pagination.limit + 1}</span> to{' '}
+                  <span className="font-medium">{Math.min(pagination.page * pagination.limit, pagination.total)}</span> of{' '}
+                  <span className="font-medium">{pagination.total}</span> results
+                </>
+              ) : (
+                'No results'
+              )}
             </div>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => onPageChange && onPageChange(pagination.page - 1)}
-                disabled={pagination.page === 1}
-                className="px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Previous
-              </button>
-              <div className="flex items-center gap-1">
-                {Array.from({ length: Math.min(5, pagination.pages) }, (_, i) => {
-                  let pageNum
-                  if (pagination.pages <= 5) {
-                    pageNum = i + 1
-                  } else if (pagination.page <= 3) {
-                    pageNum = i + 1
-                  } else if (pagination.page >= pagination.pages - 2) {
-                    pageNum = pagination.pages - 4 + i
-                  } else {
-                    pageNum = pagination.page - 2 + i
-                  }
-                  return (
-                    <button
-                      key={pageNum}
-                      onClick={() => onPageChange && onPageChange(pageNum)}
-                      className={`px-3 py-2 border rounded-lg text-sm font-medium ${
-                        pagination.page === pageNum
-                          ? 'bg-blue-600 text-white border-blue-600'
-                          : 'border-gray-300 text-gray-700 hover:bg-gray-50'
-                      }`}
-                    >
-                      {pageNum}
-                    </button>
-                  )
-                })}
+            <div className="flex flex-wrap items-center gap-3">
+              {/* Page size selector */}
+              <div className="flex items-center gap-2">
+                <label className="text-xs font-medium text-gray-600">Rows / page</label>
+                <select
+                  className="px-2 py-1 border border-gray-300 rounded text-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  value={pageSizeOptions.includes(pagination.limit) ? pagination.limit : pagination.limit}
+                  onChange={(e) => {
+                    const val = e.target.value
+                    let nextLimit = val === 'ALL' ? pagination.total || pagination.limit : parseInt(val)
+                    if (!Number.isFinite(nextLimit) || nextLimit <= 0) nextLimit = 20
+                    if (onLimitChange) onLimitChange(nextLimit === (pagination.total || pagination.limit) && val === 'ALL' ? 'ALL' : nextLimit)
+                    // Reset to page 1 after size change
+                    if (onPageChange) onPageChange(1)
+                  }}
+                >
+                  {pageSizeOptions.map(opt => (
+                    <option key={opt} value={opt}>{opt === 'ALL' ? 'All' : opt}</option>
+                  ))}
+                </select>
               </div>
-              <button
-                onClick={() => onPageChange && onPageChange(pagination.page + 1)}
-                disabled={pagination.page >= pagination.pages}
-                className="px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Next
-              </button>
+              {/* Pagination buttons */}
+              {pagination.pages > 1 && (
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => onPageChange && onPageChange(pagination.page - 1)}
+                    disabled={pagination.page === 1}
+                    className="px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Previous
+                  </button>
+                  <div className="flex items-center gap-1">
+                    {Array.from({ length: Math.min(5, pagination.pages) }, (_, i) => {
+                      let pageNum
+                      if (pagination.pages <= 5) {
+                        pageNum = i + 1
+                      } else if (pagination.page <= 3) {
+                        pageNum = i + 1
+                      } else if (pagination.page >= pagination.pages - 2) {
+                        pageNum = pagination.pages - 4 + i
+                      } else {
+                        pageNum = pagination.page - 2 + i
+                      }
+                      return (
+                        <button
+                          key={pageNum}
+                          onClick={() => onPageChange && onPageChange(pageNum)}
+                          className={`px-3 py-2 border rounded-lg text-sm font-medium ${
+                            pagination.page === pageNum
+                              ? 'bg-blue-600 text-white border-blue-600'
+                              : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                          }`}
+                        >
+                          {pageNum}
+                        </button>
+                      )
+                    })}
+                  </div>
+                  <button
+                    onClick={() => onPageChange && onPageChange(pagination.page + 1)}
+                    disabled={pagination.page >= pagination.pages}
+                    className="px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Next
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>

@@ -8,6 +8,7 @@ import FormModal from '@/components/FormModal'
 import Breadcrumb from '@/components/Breadcrumb'
 import { useAuth } from '@/src/store/auth'
 import { listSubMenus, listMainMenus, createSubMenu, updateSubMenu, deleteSubMenu } from '@/src/api/menus'
+import { importSubMenus } from '@/src/api/import'
 
 export default function SubMenusPage() {
   const router = useRouter()
@@ -17,7 +18,7 @@ export default function SubMenusPage() {
   const [page, setPage] = useState(1)
   const [pages, setPages] = useState(1)
   const [total, setTotal] = useState(0)
-  const [limit] = useState(20)
+  const [limit, setLimit] = useState(20)
   const [search, setSearch] = useState('')
   const [mainFilter, setMainFilter] = useState('')
   const [parentFilter, setParentFilter] = useState('')
@@ -35,12 +36,12 @@ export default function SubMenusPage() {
     })()
   }, [])
 
-  async function load(p = page) {
+  async function load(p = page, l = limit) {
     setLoading(true)
     try {
       const { items, pages, total, page: cur } = await listSubMenus({
         page: p,
-        limit,
+        limit: l,
         search,
         main_menu_id: mainFilter || undefined,
         parent_id: parentFilter || undefined
@@ -49,6 +50,7 @@ export default function SubMenusPage() {
       setPages(pages)
       setTotal(total)
       setPage(cur)
+      setLimit(l)
       setSelected(new Set())
     } catch (e) {
       const code = e?.response?.status
@@ -214,14 +216,16 @@ export default function SubMenusPage() {
       label: 'Main Menu',
       type: 'select',
       value: mainFilter,
-      options: [{ value: '', label: 'All Main Menus' }, ...mains.map(m => ({ value: m._id, label: m.name }))]
+      // Removed "All Main Menus" label per request
+      options: [{ value: '', label: '' }, ...mains.map(m => ({ value: m._id, label: m.name }))]
     },
     {
       key: 'parent_id',
       label: 'Parent',
       type: 'select',
       value: parentFilter,
-      options: [{ value: '', label: 'All Parents' }, ...items.filter(i => !i.parent_id).map(i => ({ value: i._id, label: i.name }))]
+      // Removed "All Parents" label per request
+      options: [{ value: '', label: '' }, ...items.filter(i => !i.parent_id).map(i => ({ value: i._id, label: i.name }))]
     }
   ], [mainFilter, parentFilter, mains, items])
 
@@ -304,6 +308,11 @@ export default function SubMenusPage() {
             loading={loading}
             pagination={{ page, pages, total, limit }}
             onPageChange={(p) => { setPage(p); load(p) }}
+            onLimitChange={(val) => {
+              const next = val === 'ALL' ? (total || limit) : val
+              setLimit(next)
+              load(1, next)
+            }}
             filters={filters}
             onFilterChange={handleFilterChange}
             selectable
@@ -311,6 +320,17 @@ export default function SubMenusPage() {
             onToggleRow={toggleRow}
             onToggleAll={toggleAll}
             exportFileName="sub-menus"
+            enableImport
+            importSampleColumns={['main_menu','parent','name','slug','path','order']}
+            onImportRows={async (rows) => {
+              try {
+                const { data } = await importSubMenus(rows)
+                await Swal.fire({ icon: data.errors.length ? 'warning' : 'success', title: 'Import Complete', html: `Created: <b>${data.created}</b><br/>Errors: <b>${data.errors.length}</b>` })
+                load(1)
+              } catch (e) {
+                await Swal.fire({ icon: 'error', title: 'Import Failed', text: e.message })
+              }
+            }}
             showSearch
             searchPlaceholder="Search sub menus..."
             showTitle={false}

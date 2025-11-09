@@ -27,8 +27,16 @@ services:
       SESSION_SECRET: dev_session_secret_change
       API_PREFIX: /api/v1
       ENABLE_LEGACY_API: "false"
+      MYSQL_ENABLED: "true"
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_DB: aureliya
+      MYSQL_USER: aureliya
+      MYSQL_PASSWORD: aureliya_pass
     depends_on:
       mongo:
+        condition: service_healthy
+      mysql:
         condition: service_healthy
     ports:
       - "5000:5000"
@@ -78,6 +86,28 @@ services:
 
   # Seeding services were moved to docker-compose.seed.yml so they only run on demand.
 
+  mysql:
+    image: mariadb:10.6
+    container_name: aureliya-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root_pass_change
+      MYSQL_DATABASE: aureliya
+      MYSQL_USER: aureliya
+      MYSQL_PASSWORD: aureliya_pass
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./project.sql:/docker-entrypoint-initdb.d/01-project.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot_pass_change"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
 volumes:
   mongo_data:
+    driver: local
+  mysql_data:
     driver: local

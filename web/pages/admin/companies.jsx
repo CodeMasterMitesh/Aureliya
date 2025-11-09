@@ -8,6 +8,7 @@ import FormModal from '@/components/FormModal'
 import Breadcrumb from '@/components/Breadcrumb'
 import { useAuth } from '@/src/store/auth'
 import { listCompanies, createCompany, updateCompany, deleteCompany, bulkDeleteCompanies } from '@/src/api/companies'
+import { importCompanies } from '@/src/api/import'
 
 export default function CompaniesPage() {
   const router = useRouter()
@@ -17,7 +18,7 @@ export default function CompaniesPage() {
   const [page, setPage] = useState(1)
   const [pages, setPages] = useState(1)
   const [total, setTotal] = useState(0)
-  const [limit] = useState(20)
+  const [limit, setLimit] = useState(20)
   const [search, setSearch] = useState('')
   const [nameFilter, setNameFilter] = useState('')
   const [codeFilter, setCodeFilter] = useState('')
@@ -28,12 +29,12 @@ export default function CompaniesPage() {
 
   useEffect(() => { if (ready && !user) router.replace('/login') }, [user, ready])
 
-  async function load(p = page) {
+  async function load(p = page, l = limit) {
     setLoading(true)
     try {
       const { items, pages, total, page: cur } = await listCompanies({
         page: p,
-        limit,
+        limit: l,
         search,
         name: nameFilter || undefined,
         code: codeFilter || undefined
@@ -42,6 +43,7 @@ export default function CompaniesPage() {
       setPages(pages)
       setTotal(total)
       setPage(cur)
+      setLimit(l)
       setSelected(new Set())
     } catch (e) {
   const code = e?.response?.status
@@ -293,6 +295,11 @@ export default function CompaniesPage() {
             loading={loading}
             pagination={{ page, pages, total, limit }}
             onPageChange={(p) => { setPage(p); load(p) }}
+            onLimitChange={(val) => {
+              const next = val === 'ALL' ? (total || limit) : val
+              setLimit(next)
+              load(1, next)
+            }}
             filters={filters}
             onFilterChange={handleFilterChange}
             selectable
@@ -301,6 +308,21 @@ export default function CompaniesPage() {
             onToggleAll={toggleAll}
             onBulkDelete={handleBulkDelete}
             exportFileName="companies"
+              enableImport
+              importSampleColumns={['name','code','address']}
+              onImportRows={async (rows) => {
+                try {
+                  const { data } = await importCompanies(rows)
+                  await Swal.fire({
+                    icon: data.errors.length ? 'warning' : 'success',
+                    title: 'Import Complete',
+                    html: `Created: <b>${data.created}</b><br/>Errors: <b>${data.errors.length}</b>`
+                  })
+                  load(1)
+                } catch (e) {
+                  await Swal.fire({ icon: 'error', title: 'Import Failed', text: e.message })
+                }
+              }}
             showSearch
             searchPlaceholder="Search companies..."
             showTitle={false}

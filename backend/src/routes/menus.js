@@ -87,17 +87,19 @@ r.get('/menus', async (req, res) => {
 })
 
 // CRUD: Main menus
+// Increase max limit for main menus to 5000 (though typical counts are low)
 r.get(
   '/main-menus',
   [
     query('page').optional().isInt({ min: 1 }),
-    query('limit').optional().isInt({ min: 1, max: 200 }),
+  query('limit').optional().custom(v => { if (v==='ALL') return true; const n=parseInt(v,10); return Number.isInteger(n)&&n>=1&&n<=5000 }),
     query('search').optional().isString(),
   ],
   async (req, res) => {
     if (handleValidation(req, res)) return
     const page = parseInt(req.query.page || '1')
-    const limit = parseInt(req.query.limit || '20')
+  let limit = req.query.limit === 'ALL' ? 5000 : parseInt(req.query.limit || '20')
+  if (limit > 5000) limit = 5000
     const search = req.query.search?.trim()
     const q = search ? { name: { $regex: search, $options: 'i' } } : {}
     const [items, total] = await Promise.all([
@@ -166,11 +168,12 @@ r.delete('/main-menus/:id', [param('id').isMongoId()], async (req, res) => {
 })
 
 // CRUD: Sub menus
+// Increase sub menus limit to 5000
 r.get(
   '/sub-menus',
   [
     query('page').optional().isInt({ min: 1 }),
-    query('limit').optional().isInt({ min: 1, max: 200 }),
+  query('limit').optional().custom(v => { if (v==='ALL') return true; const n=parseInt(v,10); return Number.isInteger(n)&&n>=1&&n<=5000 }),
     query('search').optional().isString(),
     query('main_menu_id').optional().isMongoId(),
     query('parent_id').optional().isMongoId(),
@@ -178,7 +181,8 @@ r.get(
   async (req, res) => {
     if (handleValidation(req, res)) return
     const page = parseInt(req.query.page || '1')
-    const limit = parseInt(req.query.limit || '20')
+  let limit = req.query.limit === 'ALL' ? 5000 : parseInt(req.query.limit || '20')
+  if (limit > 5000) limit = 5000
     const { search, main_menu_id, parent_id } = req.query
     const q = {}
     if (search) q.name = { $regex: search, $options: 'i' }
@@ -278,3 +282,68 @@ r.delete('/sub-menus/:id', [param('id').isMongoId()], async (req, res) => {
 })
 
 export default r
+
+// Import main menus: { rows: [{ name, slug, icon, order }] }
+r.post('/main-menus/import', [body('rows').isArray({ min: 1 })], async (req, res) => {
+  if (handleValidation(req, res)) return
+  const rows = req.body.rows
+  const created = []
+  const errors = []
+  for (let i = 0; i < rows.length; i++) {
+    const raw = rows[i] || {}
+    const name = (raw.name || raw.Name || '').toString().trim()
+    if (!name) { errors.push({ row: i + 2, error: 'Missing name' }); continue }
+    const payload = {
+      name,
+      slug: (raw.slug || '').toString().trim() || slugify(name),
+      icon: (raw.icon || '').toString().trim() || undefined,
+      order: parseInt(raw.order || 0) || 0,
+    }
+    try {
+      const doc = await MainMenu.create(payload)
+      created.push(doc._id)
+    } catch (e) {
+      errors.push({ row: i + 2, error: e.message })
+    }
+  }
+  res.json({ ok: true, created: created.length, errors })
+})
+
+// Import sub menus: { rows: [{ main_menu, parent, name, slug, path, order }] }
+r.post('/sub-menus/import', [body('rows').isArray({ min: 1 })], async (req, res) => {
+  if (handleValidation(req, res)) return
+  const rows = req.body.rows
+  const created = []
+  const errors = []
+  for (let i = 0; i < rows.length; i++) {
+    const raw = rows[i] || {}
+    const name = (raw.name || raw.Name || '').toString().trim()
+    if (!name) { errors.push({ row: i + 2, error: 'Missing name' }); continue }
+    let main = null
+    if (raw.main_menu_id) main = await MainMenu.findById(raw.main_menu_id)
+    if (!main) {
+      const mainName = (raw.main_menu || raw.main || '').toString().trim()
+      if (mainName) main = await MainMenu.findOne({ name: mainName })
+    }
+    if (!main) { errors.push({ row: i + 2, error: 'Main menu unresolved' }); continue }
+    let parent = null
+    const parentName = (raw.parent || '').toString().trim()
+    if (parentName) parent = await SubMenu.findOne({ name: parentName, main_menu_id: main._id })
+    const payload = {
+      main_menu_id: main._id,
+      parent_id: parent?._id || null,
+      name,
+      slug: (raw.slug || '').toString().trim() || slugify(name),
+      path: (raw.path || '').toString().trim() || undefined,
+      order: parseInt(raw.order || 0) || 0,
+      meta: {},
+    }
+    try {
+      const doc = await SubMenu.create(payload)
+      created.push(doc._id)
+    } catch (e) {
+      errors.push({ row: i + 2, error: e.message })
+    }
+  }
+  res.json({ ok: true, created: created.length, errors })
+})

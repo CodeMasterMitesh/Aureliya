@@ -15,12 +15,13 @@ function v(req, res) {
 }
 
 // List with pagination/search and company/branch filters
+// NOTE: Raised max limit to 5000 for bulk viewing scenarios.
 r.get(
   '/account-groups',
   auth,
   [
     query('page').optional().isInt({ min: 1 }),
-    query('limit').optional().isInt({ min: 1, max: 200 }),
+  query('limit').optional().custom(v => { if (v==='ALL') return true; const n=parseInt(v,10); return Number.isInteger(n)&&n>=1&&n<=5000 }),
     query('search').optional().isString(),
     query('company').optional().isMongoId(),
     query('branch').optional().isMongoId(),
@@ -28,7 +29,8 @@ r.get(
   async (req, res) => {
     if (!v(req, res)) return
     const page = parseInt(req.query.page || '1')
-    const limit = parseInt(req.query.limit || '20')
+  let limit = req.query.limit === 'ALL' ? 5000 : parseInt(req.query.limit || '20')
+  if (limit > 5000) limit = 5000
     const { search, company, branch } = req.query
     const q = {}
     if (search) q.name = { $regex: search, $options: 'i' }
@@ -114,3 +116,29 @@ r.delete('/account-groups', auth, [body('ids').isArray({ min: 1 })], async (req,
 })
 
 export default r
+
+// Bulk import account groups: { rows: [{ name, code, description, is_active }] }
+r.post('/account-groups/import', auth, [body('rows').isArray({ min: 1 })], async (req, res) => {
+  if (!v(req, res)) return
+  const rows = req.body.rows
+  const created = []
+  const errors = []
+  for (let i = 0; i < rows.length; i++) {
+    const raw = rows[i] || {}
+    const name = (raw.name || raw.Name || '').toString().trim()
+    if (!name) { errors.push({ row: i + 2, error: 'Missing name' }); continue }
+    const docData = {
+      name,
+      code: (raw.code || raw.Code || '').toString().trim() || undefined,
+      description: (raw.description || raw.Description || '').toString().trim() || undefined,
+      is_active: raw.is_active === 'false' ? false : true,
+    }
+    try {
+      const doc = await AccountGroup.create(docData)
+      created.push(doc._id)
+    } catch (e) {
+      errors.push({ row: i + 2, error: e.message })
+    }
+  }
+  res.json({ ok: true, created: created.length, errors })
+})

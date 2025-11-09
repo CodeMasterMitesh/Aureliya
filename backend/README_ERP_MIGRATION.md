@@ -1,3 +1,50 @@
+## MySQL Dual-Run Migration Overview
+
+This backend now supports an optional MySQL connection (MariaDB 10.6) alongside the existing MongoDB database to enable a phased migration.
+
+### Enabling MySQL
+Set `MYSQL_ENABLED=true` in the backend environment. Docker compose already defines a MariaDB service with initial schema seeded from `project.sql` mounted into the container's `/docker-entrypoint-initdb.d`.
+
+### Environment Variables
+```
+MYSQL_ENABLED=true
+MYSQL_HOST=mysql
+MYSQL_PORT=3306
+MYSQL_DB=aureliya
+MYSQL_USER=aureliya
+MYSQL_PASSWORD=aureliya_pass
+```
+
+### Connection Lifecycle
+`src/server.js` connects to Mongo first (to preserve all current functionality) and then attempts MySQL initialization via `initMysqlIfEnabled()`. Failures in MySQL do NOT abort startup while migrating—logs will indicate issues so they can be fixed without halting existing operations.
+
+### Pool Utility
+`src/db/mysql.js` exports:
+- `initMysqlIfEnabled()` – initializes the pool if the flag is set.
+- `getMysqlPool()` – retrieves the pool (throws if disabled/uninitialized).
+- `runQuery(sql, params)` – convenience wrapper with timing & error logging.
+
+### Recommended Phased Migration Steps
+1. Read-only shadow: Implement parallel read endpoints hitting MySQL (`/shadow/companies`) to compare responses with Mongo.
+2. Data backfill: Script export from Mongo → transform → bulk insert into MySQL tables matching `project.sql` structure.
+3. Dual-write: On create/update in core entities, write to both Mongo and MySQL; log divergences.
+4. Cut-over: Flip API handlers to serve from MySQL primary; retain Mongo for rollback window.
+5. Decommission: After validation period, archive Mongo data and disable dual writes.
+
+### Error Handling Strategy
+MySQL initialization errors are logged but non-fatal. Individual query errors should be surfaced via existing Express error middleware while tagging them as SQL-related for quick triage.
+
+### Next Actions
+1. Create repository modules (e.g., `repositories/companyRepo.{mongo,mysql}.js`).
+2. Introduce an abstraction & feature flag `DATA_SOURCE=Mongo|MySQL|Dual`.
+3. Implement comparison script (`scripts/compareCompanies.js`) to diff record counts & sample rows.
+
+### Security & Credentials
+Change the sample passwords (`root_pass_change`, `aureliya_pass`) for any non-local usage. Use Docker secrets or environment files excluded from version control in production.
+
+### Performance Note
+Default pool size = 10. Adjust `connectionLimit` based on concurrency; add indexes in MySQL replicating high-frequency Mongo query patterns.
+
 # ERP Migration (MySQL → Mongo)
 
 This document outlines the ERP-first consolidation and import into canonical Mongo models.

@@ -8,6 +8,7 @@ import FormModal from '@/components/FormModal'
 import Breadcrumb from '@/components/Breadcrumb'
 import { useAuth } from '@/src/store/auth'
 import { listAccountGroups, createAccountGroup, updateAccountGroup, deleteAccountGroup, bulkDeleteAccountGroups } from '@/src/api/accountGroups'
+import { importAccountGroups } from '@/src/api/import'
 
 export default function AccountGroupsPage() {
   const router = useRouter()
@@ -17,7 +18,7 @@ export default function AccountGroupsPage() {
   const [page, setPage] = useState(1)
   const [pages, setPages] = useState(1)
   const [total, setTotal] = useState(0)
-  const [limit] = useState(20)
+  const [limit, setLimit] = useState(20)
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(true)
   const [editing, setEditing] = useState(null)
@@ -30,12 +31,12 @@ export default function AccountGroupsPage() {
 
   useEffect(() => { if (ready && !user) router.replace('/login') }, [user, ready])
 
-  async function load(p = page) {
+  async function load(p = page, l = limit) {
     setLoading(true)
     try {
       const { items, pages, total, page: cur } = await listAccountGroups({
         page: p,
-        limit,
+        limit: l,
         search,
         company: userCompany || undefined,
         branch: userBranch || undefined
@@ -44,6 +45,7 @@ export default function AccountGroupsPage() {
       setPages(pages)
       setTotal(total)
       setPage(cur)
+      setLimit(l)
       setSelected(new Set())
     } catch (e) {
   const code = e?.response?.status
@@ -297,6 +299,11 @@ export default function AccountGroupsPage() {
             loading={loading}
             pagination={{ page, pages, total, limit }}
             onPageChange={(p) => { setPage(p); load(p) }}
+            onLimitChange={(val) => {
+              const next = val === 'ALL' ? (total || limit) : val
+              setLimit(next)
+              load(1, next)
+            }}
             filters={[]}
             selectable
             selectedIds={selected}
@@ -304,6 +311,17 @@ export default function AccountGroupsPage() {
             onToggleAll={toggleAll}
             onBulkDelete={handleBulkDelete}
             exportFileName="account-groups"
+            enableImport
+            importSampleColumns={['name','code','description','is_active']}
+            onImportRows={async (rows) => {
+              try {
+                const { data } = await importAccountGroups(rows)
+                await Swal.fire({ icon: data.errors.length ? 'warning' : 'success', title: 'Import Complete', html: `Created: <b>${data.created}</b><br/>Errors: <b>${data.errors.length}</b>` })
+                load(1)
+              } catch (e) {
+                await Swal.fire({ icon: 'error', title: 'Import Failed', text: e.message })
+              }
+            }}
             showSearch
             searchPlaceholder="Search account groups..."
             showTitle={false}

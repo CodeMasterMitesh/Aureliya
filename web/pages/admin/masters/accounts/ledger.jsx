@@ -8,6 +8,7 @@ import FormModal from '@/components/FormModal'
 import Breadcrumb from '@/components/Breadcrumb'
 import { useAuth } from '@/src/store/auth'
 import { listLedgers, createLedger, updateLedger, deleteLedger, bulkDeleteLedgers } from '@/src/api/ledgers'
+import { importLedgers } from '@/src/api/import'
 import { listAccountGroups } from '@/src/api/accountGroups'
 import { fetchCompanies, listBranches } from '@/src/api/companies'
 
@@ -51,7 +52,7 @@ export default function LedgersPage() {
   const [page, setPage] = useState(1)
   const [pages, setPages] = useState(1)
   const [total, setTotal] = useState(0)
-  const [limit] = useState(20)
+  const [limit, setLimit] = useState(20)
   const [search, setSearch] = useState('')
   const [groupFilter, setGroupFilter] = useState('')
   const [groups, setGroups] = useState([])
@@ -85,12 +86,12 @@ export default function LedgersPage() {
     if (ready && !user) router.replace('/login')
   }, [ready, user])
 
-  async function load(p = page) {
+  async function load(p = page, l = limit) {
     setLoading(true)
     try {
       const { items, pages, total, page: cur } = await listLedgers({
         page: p,
-        limit,
+        limit: l,
         search,
         company: userCompany || undefined,
         branch: userBranch || undefined,
@@ -100,6 +101,7 @@ export default function LedgersPage() {
       setPages(pages)
       setTotal(total)
       setPage(cur)
+      setLimit(l)
       setSelected(new Set())
     } catch (e) {
       const code = e?.response?.status
@@ -416,7 +418,7 @@ export default function LedgersPage() {
       label: 'Account Group',
       type: 'select',
       value: groupFilter,
-      options: [{ value: '', label: 'All Groups' }, ...groups.map(g => ({ value: g._id, label: g.name }))]
+      options: [{ value: '', label: '' }, ...groups.map(g => ({ value: g._id, label: g.name }))]
     }
   ], [groupFilter, groups])
 
@@ -504,6 +506,11 @@ export default function LedgersPage() {
             loading={loading}
             pagination={{ page, pages, total, limit }}
             onPageChange={(p) => { setPage(p); load(p) }}
+            onLimitChange={(val) => {
+              const next = val === 'ALL' ? (total || limit) : val
+              setLimit(next)
+              load(1, next)
+            }}
             filters={filters}
             onFilterChange={handleFilterChange}
             selectable
@@ -512,6 +519,17 @@ export default function LedgersPage() {
             onToggleAll={toggleAll}
             onBulkDelete={handleBulkDelete}
             exportFileName="ledgers"
+            enableImport
+            importSampleColumns={['title','account_group','email','gstin','pan_no','is_active']}
+            onImportRows={async (rows) => {
+              try {
+                const { data } = await importLedgers(rows)
+                await Swal.fire({ icon: data.errors.length ? 'warning' : 'success', title: 'Import Complete', html: `Created: <b>${data.created}</b><br/>Errors: <b>${data.errors.length}</b>` })
+                load(1)
+              } catch (e) {
+                await Swal.fire({ icon: 'error', title: 'Import Failed', text: e.message })
+              }
+            }}
             showSearch
             searchPlaceholder="Search ledgers..."
             showTitle={false}

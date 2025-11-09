@@ -8,6 +8,7 @@ import FormModal from '@/components/FormModal'
 import Breadcrumb from '@/components/Breadcrumb'
 import { useAuth } from '@/src/store/auth'
 import { listBranches, fetchCompanies, createBranch, updateBranch, deleteBranch, bulkDeleteBranches } from '@/src/api/companies'
+import { importBranches } from '@/src/api/import'
 
 export default function BranchesPage() {
   const router = useRouter()
@@ -17,7 +18,7 @@ export default function BranchesPage() {
   const [page, setPage] = useState(1)
   const [pages, setPages] = useState(1)
   const [total, setTotal] = useState(0)
-  const [limit] = useState(20)
+  const [limit, setLimit] = useState(20)
   const [search, setSearch] = useState('')
   const [nameFilter, setNameFilter] = useState('')
   const [codeFilter, setCodeFilter] = useState('')
@@ -31,12 +32,12 @@ export default function BranchesPage() {
   useEffect(() => { if (ready && !user) router.replace('/login') }, [user, ready])
   useEffect(() => { fetchCompanies('').then(setCompanies) }, [])
 
-  async function load(p = page) {
+  async function load(p = page, l = limit) {
     setLoading(true)
     try {
       const { items, pages, total, page: cur } = await listBranches({
         page: p,
-        limit,
+        limit: l,
         search,
         name: nameFilter || undefined,
         code: codeFilter || undefined,
@@ -46,6 +47,7 @@ export default function BranchesPage() {
       setPages(pages)
       setTotal(total)
       setPage(cur)
+      setLimit(l)
       setSelected(new Set())
     } catch (e) {
   const code = e?.response?.status
@@ -226,7 +228,7 @@ export default function BranchesPage() {
       label: 'Company',
       type: 'select',
       value: companyFilter,
-      options: [{ value: '', label: 'All Companies' }, ...companies.map(c => ({ value: c._id, label: c.name }))]
+      options: [{ value: '', label: '' }, ...companies.map(c => ({ value: c._id, label: c.name }))]
     },
     {
       key: 'name',
@@ -321,6 +323,11 @@ export default function BranchesPage() {
             loading={loading}
             pagination={{ page, pages, total, limit }}
             onPageChange={(p) => { setPage(p); load(p) }}
+            onLimitChange={(val) => {
+              const next = val === 'ALL' ? (total || limit) : val
+              setLimit(next)
+              load(1, next)
+            }}
             filters={filters}
             onFilterChange={handleFilterChange}
             selectable
@@ -329,6 +336,15 @@ export default function BranchesPage() {
             onToggleAll={toggleAll}
             onBulkDelete={handleBulkDelete}
             exportFileName="branches"
+            enableImport
+            importSampleColumns={['company','name','code','address']}
+            onImportRows={async (rows) => {
+              const { ok, data, error } = await (async () => {
+                try { const { data } = await importBranches(rows); return { ok: true, data } } catch (e) { return { ok: false, error: e.message } } })()
+              if (!ok) return Swal.fire({ icon: 'error', title: 'Import Failed', text: error })
+              await Swal.fire({ icon: data.errors.length ? 'warning' : 'success', title: 'Import Complete', html: `Created: <b>${data.created}</b><br/>Errors: <b>${data.errors.length}</b>` })
+              load(1)
+            }}
             showSearch
             searchPlaceholder="Search branches..."
             showTitle={false}

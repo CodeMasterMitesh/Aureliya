@@ -15,11 +15,17 @@ function handleValidation(req, res) {
 }
 
 // List companies with pagination and per-field filters
+// Increased max limit to 5000; 'ALL' will be coerced to 5000.
 r.get(
   '/companies',
   [
     query('page').optional().isInt({ min: 1 }),
-    query('limit').optional().isInt({ min: 1, max: 200 }),
+    // Accept numeric or 'ALL'
+    query('limit').optional().custom(v => {
+      if (v === 'ALL') return true
+      const n = parseInt(v,10)
+      return Number.isInteger(n) && n >= 1 && n <= 5000
+    }),
     query('search').optional().isString(),
     query('name').optional().isString(),
     query('code').optional().isString(),
@@ -27,7 +33,9 @@ r.get(
   async (req, res) => {
     if (!handleValidation(req, res)) return
     const page = parseInt(req.query.page || '1')
-    const limit = parseInt(req.query.limit || '20')
+    let limit = req.query.limit === 'ALL' ? 5000 : parseInt(req.query.limit || '20')
+    if (!Number.isInteger(limit) || limit < 1) limit = 20
+    if (limit > 5000) limit = 5000
     const { search, name, code } = req.query
     const q = {}
     if (search)
@@ -122,11 +130,16 @@ r.delete('/companies', [body('ids').isArray({ min: 1 })], async (req, res) => {
 })
 
 // Branches listing (paginated)
+// Increased max limit for branches listing as well.
 r.get(
   '/branches',
   [
     query('page').optional().isInt({ min: 1 }),
-    query('limit').optional().isInt({ min: 1, max: 200 }),
+    query('limit').optional().custom(v => {
+      if (v === 'ALL') return true
+      const n = parseInt(v,10)
+      return Number.isInteger(n) && n >= 1 && n <= 5000
+    }),
     query('search').optional().isString(),
     query('name').optional().isString(),
     query('code').optional().isString(),
@@ -135,7 +148,9 @@ r.get(
   async (req, res) => {
     if (!handleValidation(req, res)) return
     const page = parseInt(req.query.page || '1')
-    const limit = parseInt(req.query.limit || '20')
+    let limit = req.query.limit === 'ALL' ? 5000 : parseInt(req.query.limit || '20')
+    if (!Number.isInteger(limit) || limit < 1) limit = 20
+    if (limit > 5000) limit = 5000
     const { search, name, code, company } = req.query
     const q = {}
     if (company) q.company = company
@@ -199,3 +214,54 @@ r.delete('/branches', [body('ids').isArray({ min: 1 })], async (req, res) => {
   res.json({ ok: true })
 })
 export default r
+
+// CSV/JSON import endpoints
+// Accepts { rows: [{ name, code, address }] }
+r.post('/companies/import', [body('rows').isArray({ min: 1 })], async (req, res) => {
+  if (!handleValidation(req, res)) return
+  const rows = req.body.rows
+  const created = []
+  const errors = []
+  for (let i = 0; i < rows.length; i++) {
+    const raw = rows[i] || {}
+    const name = (raw.name || raw.Name || '').toString().trim()
+    const code = (raw.code || raw.Code || '').toString().trim() || undefined
+    const address = (raw.address || raw.Address || '').toString().trim() || undefined
+    if (!name) { errors.push({ row: i + 2, error: 'Missing name' }); continue }
+    try {
+      const doc = await Company.create({ name, code, address })
+      created.push(doc._id)
+    } catch (e) {
+      errors.push({ row: i + 2, error: e.message })
+    }
+  }
+  res.json({ ok: true, created: created.length, errors })
+})
+
+// Accepts { rows: [{ company, company_code, name, code, address }] }
+r.post('/branches/import', [body('rows').isArray({ min: 1 })], async (req, res) => {
+  if (!handleValidation(req, res)) return
+  const rows = req.body.rows
+  const created = []
+  const errors = []
+  for (let i = 0; i < rows.length; i++) {
+    const raw = rows[i] || {}
+    const companyName = (raw.company || raw.company_name || '').toString().trim()
+    const companyCode = (raw.company_code || '').toString().trim()
+    const name = (raw.name || raw.branch || raw.Branch || '').toString().trim()
+    const code = (raw.code || raw.BranchCode || '').toString().trim() || undefined
+    const address = (raw.address || '').toString().trim() || undefined
+    if (!name) { errors.push({ row: i + 2, error: 'Missing branch name' }); continue }
+    let company = null
+    if (raw.company_id) company = await Company.findById(raw.company_id).lean()
+    if (!company && companyCode) company = await Company.findOne({ code: companyCode }).lean()
+    if (!company && companyName) company = await Company.findOne({ name: companyName }).lean()
+    try {
+      const doc = await Branch.create({ company: company?._id, name, code, address })
+      created.push(doc._id)
+    } catch (e) {
+      errors.push({ row: i + 2, error: e.message })
+    }
+  }
+  res.json({ ok: true, created: created.length, errors })
+})

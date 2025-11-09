@@ -25,7 +25,7 @@ r.get(
   auth,
   [
     query('page').optional().isInt({ min: 1 }),
-    query('limit').optional().isInt({ min: 1, max: 200 }),
+  query('limit').optional().custom(v => { if (v==='ALL') return true; const n=parseInt(v,10); return Number.isInteger(n)&&n>=1&&n<=5000 }),
     query('search').optional().isString(),
     query('company').optional().isMongoId(),
     query('branch').optional().isMongoId(),
@@ -35,7 +35,8 @@ r.get(
   async (req, res) => {
     if (!v(req, res)) return
     const page = parseInt(req.query.page || '1')
-    const limit = parseInt(req.query.limit || '20')
+  let limit = req.query.limit === 'ALL' ? 5000 : parseInt(req.query.limit || '20')
+    if (limit > 5000) limit = 5000
     const { search, company, branch, account_group_id, is_active } = req.query
     const q = {}
     // filter inside embedded ledger subdocument
@@ -240,3 +241,57 @@ r.delete('/ledgers', auth, [body('ids').isArray({ min: 1 })], async (req, res) =
 })
 
 export default r
+
+// Import ledgers: { rows: [{ title, account_group, account_group_id, email, company, branch, gstin, pan_no }] }
+r.post('/ledgers/import', auth, [body('rows').isArray({ min: 1 })], async (req, res) => {
+  if (!v(req, res)) return
+  const rows = req.body.rows
+  const created = []
+  const errors = []
+  for (let i = 0; i < rows.length; i++) {
+    const raw = rows[i] || {}
+    const title = (raw.title || raw.Title || '').toString().trim()
+    if (!title) { errors.push({ row: i + 2, error: 'Missing title' }); continue }
+    let ag = null
+    if (raw.account_group_id) ag = await AccountGroup.findById(raw.account_group_id).lean()
+    if (!ag) {
+      const agName = (raw.account_group || raw.group || '').toString().trim()
+      if (agName) ag = await AccountGroup.findOne({ name: agName }).lean()
+    }
+    let company = null
+    if (raw.company_id) company = await Company.findById(raw.company_id).lean()
+    if (!company) {
+      const cName = (raw.company || '').toString().trim()
+      if (cName) company = await Company.findOne({ name: cName }).lean()
+    }
+    let branch = null
+    if (raw.branch_id) branch = await Branch.findById(raw.branch_id).lean()
+    if (!branch) {
+      const bName = (raw.branch || '').toString().trim()
+      if (bName) branch = await Branch.findOne({ name: bName }).lean()
+    }
+    try {
+      const email = (raw.email || '').toString().trim() || undefined
+      const user = await User.create({
+        name: title,
+        email,
+        password: 'Temp#' + Math.random().toString(36).slice(2,10),
+        company: company?._id,
+        branch: branch?._id,
+        type: raw.type || 'customer',
+        ledger: {
+          title,
+          account_group_id: ag?._id,
+          account_group_name: ag?.name,
+          gstin: (raw.gstin || '').toString().trim() || undefined,
+          pan_no: (raw.pan_no || raw.pan || '').toString().trim() || undefined,
+          is_active: raw.is_active === 'false' ? false : true,
+        }
+      })
+      created.push(user._id)
+    } catch (e) {
+      errors.push({ row: i + 2, error: e.message })
+    }
+  }
+  res.json({ ok: true, created: created.length, errors })
+})
